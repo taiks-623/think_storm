@@ -1,0 +1,64 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- ヘッダー部分 -->
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <div class="flex justify-between items-start mb-4">
+      <div class="flex-grow">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2"><%= @brainstorm.title %></h1>
+        <% if @brainstorm.description.present? %>
+          <p class="text-gray-600 mb-4"><%= @brainstorm.description %></p>
+        <% end %>
+        <p class="text-sm text-gray-500">作成日: <%= @brainstorm.created_at.strftime("%Y年%m月%d日") %></p>
+      </div>
+      
+      <div class="flex space-x-2">
+        <%= link_to "編集", edit_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
+        <%= link_to "削除", brainstorm_path(@brainstorm), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- アイデア一覧セクション -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">アイデア一覧</h2>
+      <div class="space-x-2">
+        <%= link_to "アイデアを手動追加", "#", class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
+        <%= link_to "AIでアイデア生成", "#", class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition" %>
+      </div>
+    </div>
+
+    <% if @brainstorm.ideas.any? %>
+      <div class="space-y-4">
+        <% @brainstorm.ideas.each do |idea| %>
+          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex justify-between items-start">
+              <div class="flex-grow">
+                <p class="text-gray-800"><%= idea.content %></p>
+                <% if idea.memo.present? %>
+                  <p class="text-sm text-gray-500 mt-2"><%= idea.memo %></p>
+                <% end %>
+              </div>
+              <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
+                <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-12 bg-gray-50 rounded-lg">
+        <p class="text-gray-600 mb-4">まだアイデアがありません</p>
+        <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
+        <div class="space-x-4">
+          <%= link_to "AIでアイデア生成", "#", class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition inline-block" %>
+          <%= link_to "手動で追加", "#", class: "px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition inline-block" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 戻るボタン -->
+  <div class="mt-6">
+    <%= link_to "← ダッシュボードに戻る", dashboard_path, class: "text-indigo-600 hover:text-indigo-800" %>
+  </div>
+</div>

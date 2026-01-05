@@ -1,0 +1,37 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">マイブレスト</h1>
+    <%= link_to "新規作成", new_brainstorm_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition" %>
+  </div>
+
+  <% if @brainstorms.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @brainstorms.each do |brainstorm| %>
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">
+            <%= link_to brainstorm.title, brainstorm_path(brainstorm), class: "hover:text-indigo-600" %>
+          </h2>
+          
+          <% if brainstorm.description.present? %>
+            <p class="text-gray-600 mb-4 line-clamp-2">
+              <%= brainstorm.description %>
+            </p>
+          <% end %>
+          
+          <div class="flex justify-between items-center text-sm text-gray-500">
+            <span><%= brainstorm.created_at.strftime("%Y/%m/%d") %></span>
+            <div class="space-x-2">
+              <%= link_to "詳細", brainstorm_path(brainstorm), class: "text-indigo-600 hover:text-indigo-800" %>
+              <%= link_to "削除", brainstorm_path(brainstorm), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "text-red-600 hover:text-red-800" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-gray-50 rounded-lg p-12 text-center">
+      <p class="text-gray-600 text-lg mb-4">まだブレストがありません</p>
+      <%= link_to "最初のブレストを作成", new_brainstorm_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition inline-block" %>
+    </div>
+  <% end %>
+</div>

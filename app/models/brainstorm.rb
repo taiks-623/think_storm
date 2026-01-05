@@ -5,5 +5,6 @@ class Brainstorm < ApplicationRecord
   has_many :groups, dependent: :destroy
 
   # Validations
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :description, length: { maximum: 500 }, allow_blank: true
 end
