@@ -22,14 +22,36 @@
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-bold text-gray-800">アイデア一覧</h2>
       <div class="space-x-2">
-        <%= link_to "アイデアを手動追加", "#", class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
+        <button onclick="document.getElementById('add-idea-form').classList.toggle('hidden')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition">
+          アイデアを手動追加
+        </button>
         <%= link_to "AIでアイデア生成", "#", class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition" %>
       </div>
     </div>
 
-    <% if @brainstorm.ideas.any? %>
+    <!-- 手動追加フォーム（デフォルトは非表示） -->
+    <div id="add-idea-form" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
+      <%= form_with(model: [@brainstorm, @brainstorm.ideas.build], local: true) do |f| %>
+        <div class="mb-4">
+          <%= f.label :content, "アイデア内容", class: "block text-gray-700 font-semibold mb-2" %>
+          <%= f.text_area :content, rows: 3, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "アイデアを入力してください" %>
+        </div>
+        <div class="mb-4">
+          <%= f.label :memo, "メモ（任意）", class: "block text-gray-700 font-semibold mb-2" %>
+          <%= f.text_area :memo, rows: 2, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "補足や詳細など" %>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" onclick="document.getElementById('add-idea-form').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+            キャンセル
+          </button>
+          <%= f.submit "追加", class: "px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @brainstorm.ideas.where.not(id: nil).any? %>
       <div class="space-y-4">
-        <% @brainstorm.ideas.each do |idea| %>
+        <% @brainstorm.ideas.where.not(id: nil).each do |idea| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
             <div class="flex justify-between items-start">
               <div class="flex-grow">
@@ -38,9 +60,12 @@
                   <p class="text-sm text-gray-500 mt-2"><%= idea.memo %></p>
                 <% end %>
               </div>
-              <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
-                <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
-              </span>
+              <div class="flex items-center space-x-2">
+                <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
+                  <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
+                </span>
+                <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+              </div>
             </div>
           </div>
         <% end %>
@@ -51,7 +76,9 @@
         <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
         <div class="space-x-4">
           <%= link_to "AIでアイデア生成", "#", class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition inline-block" %>
-          <%= link_to "手動で追加", "#", class: "px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition inline-block" %>
+          <button onclick="document.getElementById('add-idea-form').classList.remove('hidden')" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+            手動で追加
+          </button>
         </div>
       </div>
     <% end %>

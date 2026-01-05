@@ -21,6 +21,7 @@ class BrainstormsController < ApplicationController
   end
 
   def show
+    @brainstorm.ideas.reload
   end
 
   def edit
