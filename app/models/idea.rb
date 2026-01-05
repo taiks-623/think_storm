@@ -5,7 +5,7 @@ class Idea < ApplicationRecord
   has_many :groups, through: :idea_groups
 
   # Validations
-  validates :content, presence: true
+  validates :content, presence: true, length: { maximum: 500 }
   validates :source, presence: true, inclusion: { in: %w[ai user] }
 
 end
