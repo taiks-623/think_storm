@@ -41,4 +41,5 @@
 
 /ER図.drawio
 
-.github/
+.github/workflows/*
+.github/dependabot.yml
