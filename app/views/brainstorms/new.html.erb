@@ -1,0 +1,32 @@
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+  <h1 class="text-3xl font-bold text-gray-800 mb-8">新規ブレスト作成</h1>
+
+  <%= form_with(model: @brainstorm, local: true, class: "bg-white rounded-lg shadow p-8") do |f| %>
+    <% if @brainstorm.errors.any? %>
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+        <p class="font-bold mb-2"><%= pluralize(@brainstorm.errors.count, "error") %> prohibited this brainstorm from being saved:</p>
+        <ul class="list-disc list-inside">
+          <% @brainstorm.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-6">
+      <%= f.label :title, "タイトル", class: "block text-gray-700 font-semibold mb-2" %>
+      <%= f.text_field :title, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "例：新サービスのアイデア出し", autofocus: true %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :description, "説明・課題（任意）", class: "block text-gray-700 font-semibold mb-2" %>
+      <%= f.text_area :description, rows: 5, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "例：20代向けの健康管理サービスのアイデアを考えたい" %>
+      <p class="text-sm text-gray-500 mt-1">後でAIにアイデアを生成させる際の参考になります</p>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <%= link_to "キャンセル", dashboard_path, class: "px-6 py-2 text-gray-600 hover:text-gray-800" %>
+      <%= f.submit "作成する", class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+    </div>
+  <% end %>
+</div>
