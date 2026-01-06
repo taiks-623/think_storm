@@ -14,8 +14,21 @@ class IdeasController < ApplicationController
     end
   end
 
+  def generate
+    service = IdeaGeneratorService.new(@brainstorm)
+    ideas_data = service.generate_ideas(count: 15)
+    
+    if ideas_data.any?
+      ideas_data.each do |idea_data|
+        @brainstorm.ideas.create(idea_data)
+      end
+      redirect_to brainstorm_path(@brainstorm), notice: "#{ideas_data.count}個のアイデアを生成しました"
+    else
+      redirect_to brainstorm_path(@brainstorm), alert: "アイデアの生成に失敗しました"
+    end
+  end
+
   def edit
-    # 編集ページを表示
   end
 
   def update

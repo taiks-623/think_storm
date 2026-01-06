@@ -47,6 +47,7 @@ gem 'devise'
 
 # AI API連携
 gem 'anthropic', '~> 0.3.0'
+gem 'dotenv-rails', groups: [:development, :test]
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
