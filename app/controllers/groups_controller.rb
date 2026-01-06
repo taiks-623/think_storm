@@ -1,0 +1,53 @@
+class GroupsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_brainstorm
+  before_action :set_group, only: [:update, :destroy]
+
+  def cluster
+    service = IdeaClusteringService.new(@brainstorm)
+    result = service.cluster_ideas
+    
+    if result[:success]
+      redirect_to brainstorm_path(@brainstorm), notice: result[:message]
+    else
+      redirect_to brainstorm_path(@brainstorm), alert: result[:message]
+    end
+  end
+
+  def create
+    @group = @brainstorm.groups.build(group_params)
+    
+    if @group.save
+      redirect_to brainstorm_path(@brainstorm), notice: "グループを作成しました"
+    else
+      redirect_to brainstorm_path(@brainstorm), alert: "グループの作成に失敗しました"
+    end
+  end
+
+  def update
+    if @group.update(group_params)
+      redirect_to brainstorm_path(@brainstorm), notice: "グループ名を更新しました"
+    else
+      redirect_to brainstorm_path(@brainstorm), alert: "グループ名の更新に失敗しました"
+    end
+  end
+
+  def destroy
+    @group.destroy
+    redirect_to brainstorm_path(@brainstorm), notice: "グループを削除しました"
+  end
+
+  private
+
+  def set_brainstorm
+    @brainstorm = current_user.brainstorms.find(params[:brainstorm_id])
+  end
+
+  def set_group
+    @group = @brainstorm.groups.find(params[:id])
+  end
+
+  def group_params
+    params.require(:group).permit(:name)
+  end
+end

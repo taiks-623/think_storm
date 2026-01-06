@@ -16,6 +16,12 @@ Rails.application.routes.draw do
     resources :ideas, only: [:create, :edit, :update, :destroy] do
       post 'generate', on: :collection
     end
+
+    patch 'ideas/:id/update_group', to: 'idea_groups#update_group', as: 'update_group_idea'
+
+    resources :groups, only: [:create, :update, :destroy] do
+      post 'cluster', on: :collection
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

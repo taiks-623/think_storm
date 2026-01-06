@@ -25,18 +25,24 @@
         <button onclick="document.getElementById('add-idea-form').classList.toggle('hidden')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition">
           アイデアを手動追加
         </button>
-
-        <!-- AI生成ボタン（ローディング対応） -->
-        <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, id: "ai-generate-form", class: "inline-block" do |f| %>
+        
+        <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
           <%= f.submit "AIでアイデア生成", 
-              id: "ai-generate-btn",
               class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer",
               onclick: "this.value='生成中...'; this.disabled=true; this.form.submit();" %>
+        <% end %>
+        
+        <% if @brainstorm.ideas.any? %>
+          <%= form_with url: cluster_brainstorm_groups_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
+            <%= f.submit "AIクラスタリング実行", 
+                class: "px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition cursor-pointer",
+                onclick: "this.value='クラスタリング中...'; this.disabled=true; this.form.submit();" %>
+          <% end %>
         <% end %>
       </div>
     </div>
 
-    <!-- 手動追加フォーム（デフォルトは非表示） -->
+    <!-- 手動追加フォーム -->
     <div id="add-idea-form" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
       <%= form_with(model: [@brainstorm, @brainstorm.ideas.build], local: true) do |f| %>
         <div class="mb-4">
@@ -57,39 +63,145 @@
     </div>
 
     <% if @brainstorm.ideas.where.not(id: nil).any? %>
-      <div class="space-y-4">
-        <% @brainstorm.ideas.where.not(id: nil).each do |idea| %>
-          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
-            <div class="flex justify-between items-start">
-              <div class="flex-grow">
-                <p class="text-gray-800"><%= idea.content %></p>
-                <% if idea.memo.present? %>
-                  <p class="text-sm text-gray-500 mt-2"><%= idea.memo %></p>
+      <% if @brainstorm.groups.any? %>
+        <!-- グループ表示 -->
+        <div class="space-y-6">
+          <% @brainstorm.groups.order(:position).each do |group| %>
+            <div class="border-2 border-gray-300 rounded-lg p-4">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800"><%= group.name %></h3>
+                <div class="space-x-2">
+                  <button onclick="document.getElementById('edit-group-<%= group.id %>').classList.toggle('hidden')" class="text-indigo-600 hover:text-indigo-800 text-sm">
+                    グループ名編集
+                  </button>
+                  <%= button_to "削除", brainstorm_group_path(@brainstorm, group), method: :delete, data: { turbo_confirm: "グループを削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+                </div>
+              </div>
+              
+              <!-- グループ名編集フォーム -->
+              <div id="edit-group-<%= group.id %>" class="hidden mb-4 bg-gray-50 p-3 rounded">
+                <%= form_with(model: [@brainstorm, group], local: true, class: "flex items-center space-x-2") do |f| %>
+                  <%= f.text_field :name, class: "flex-grow px-3 py-2 border rounded" %>
+                  <%= f.submit "更新", class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 cursor-pointer" %>
+                  <button type="button" onclick="document.getElementById('edit-group-<%= group.id %>').classList.add('hidden')" class="px-4 py-2 text-gray-600">
+                    キャンセル
+                  </button>
                 <% end %>
               </div>
-              <div class="flex items-center space-x-2">
-                <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
-                  <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
-                </span>
-                <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
-                <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+              
+              <!-- グループ内のアイデア -->
+              <div class="space-y-3">
+                <% group.ideas.each do |idea| %>
+                  <div class="bg-white border border-gray-200 rounded p-3">
+                    <div class="flex justify-between items-start">
+                      <div class="flex-grow">
+                        <p class="text-gray-800"><%= idea.content %></p>
+                        <% if idea.memo.present? %>
+                          <p class="text-sm text-gray-500 mt-1"><%= idea.memo %></p>
+                        <% end %>
+                      </div>
+                      <div class="flex items-center space-x-2 ml-4">
+                        <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
+                          <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
+                        </span>
+                        
+                        <!-- グループ移動セレクトボックス -->
+                        <%= form_with url: brainstorm_update_group_idea_path(@brainstorm, idea), method: :patch, local: true, class: "inline-block" do |f| %>
+                          <%= f.select :group_id, 
+                              options_for_select(
+                                [["グループなし", ""]] + @brainstorm.groups.map { |g| [g.name, g.id] },
+                                group.id
+                              ),
+                              {},
+                              class: "text-sm border rounded px-2 py-1",
+                              onchange: "this.form.submit();" %>
+                        <% end %>
+                        
+                        <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
+                        <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
+          <% end %>
+          
+          <!-- グループ化されていないアイデア -->
+          <% ungrouped_ideas = @brainstorm.ideas.where.not(id: nil).left_joins(:idea_groups).where(idea_groups: { id: nil }) %>
+          <% if ungrouped_ideas.any? %>
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <h3 class="text-xl font-bold text-gray-600 mb-4">未分類のアイデア</h3>
+              <div class="space-y-3">
+                <% ungrouped_ideas.each do |idea| %>
+                  <div class="bg-white border border-gray-200 rounded p-3">
+                    <div class="flex justify-between items-start">
+                      <div class="flex-grow">
+                        <p class="text-gray-800"><%= idea.content %></p>
+                        <% if idea.memo.present? %>
+                          <p class="text-sm text-gray-500 mt-1"><%= idea.memo %></p>
+                        <% end %>
+                      </div>
+                      <div class="flex items-center space-x-2 ml-4">
+                        <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
+                          <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
+                        </span>
+                        
+                        <%= form_with url: brainstorm_update_group_idea_path(@brainstorm, idea), method: :patch, local: true, class: "inline-block" do |f| %>
+                          <%= f.select :group_id, 
+                              options_for_select(
+                                [["グループなし", ""]] + @brainstorm.groups.map { |g| [g.name, g.id] }
+                              ),
+                              {},
+                              class: "text-sm border rounded px-2 py-1",
+                              onchange: "this.form.submit();" %>
+                        <% end %>
+                        
+                        <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
+                        <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <!-- グループがない場合は通常表示 -->
+        <div class="space-y-4">
+          <% @brainstorm.ideas.where.not(id: nil).each do |idea| %>
+            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+              <div class="flex justify-between items-start">
+                <div class="flex-grow">
+                  <p class="text-gray-800"><%= idea.content %></p>
+                  <% if idea.memo.present? %>
+                    <p class="text-sm text-gray-500 mt-2"><%= idea.memo %></p>
+                  <% end %>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
+                    <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
+                  </span>
+                  <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
+                  <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% else %>
       <div class="text-center py-12 bg-gray-50 rounded-lg">
         <p class="text-gray-600 mb-4">まだアイデアがありません</p>
         <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
         <div class="space-x-4">
-          <!-- AI生成ボタン（ローディング対応） -->
           <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
             <%= f.submit "AIでアイデア生成", 
                 class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer",
                 onclick: "this.value='生成中...'; this.disabled=true; this.form.submit();" %>
           <% end %>
-
+          
           <button onclick="document.getElementById('add-idea-form').classList.remove('hidden')" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
             手動で追加
           </button>
