@@ -1,11 +1,11 @@
 class IdeasController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
-  before_action :set_idea, only: [:update, :destroy]
+  before_action :set_idea, only: [:edit, :update, :destroy]
 
   def create
     @idea = @brainstorm.ideas.build(idea_params)
-    @idea.source = 'user' # 手動追加の場合
+    @idea.source = 'user'
 
     if @idea.save
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを追加しました"
@@ -14,11 +14,15 @@ class IdeasController < ApplicationController
     end
   end
 
+  def edit
+    # 編集ページを表示
+  end
+
   def update
     if @idea.update(idea_params)
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを更新しました"
     else
-      redirect_to brainstorm_path(@brainstorm), alert: "アイデアの更新に失敗しました"
+      render :edit, status: :unprocessable_entity
     end
   end
 

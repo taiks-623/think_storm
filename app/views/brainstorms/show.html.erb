@@ -64,6 +64,7 @@
                 <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
                   <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
                 </span>
+                <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
                 <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
               </div>
             </div>
