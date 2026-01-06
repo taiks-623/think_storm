@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   
   # ブレストのCRUD
   resources :brainstorms do
-    resources :ideas, only: [:create, :destroy]
+    resources :ideas, only: [:create, :edit, :update, :destroy]
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
