@@ -1,0 +1,2 @@
+module IdeaGroupsHelper
+end
