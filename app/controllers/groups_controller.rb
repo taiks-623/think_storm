@@ -16,6 +16,8 @@ class GroupsController < ApplicationController
 
   def create
     @group = @brainstorm.groups.build(group_params)
+    # 最後のpositionの次の番号を設定
+    @group.position = @brainstorm.groups.maximum(:position).to_i + 1
     
     if @group.save
       redirect_to brainstorm_path(@brainstorm), notice: "グループを作成しました"
