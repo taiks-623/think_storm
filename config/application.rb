@@ -20,5 +20,10 @@ module Myapp
       'X-Permitted-Cross-Domain-Policies' => 'none',
       'Referrer-Policy' => 'strict-origin-when-cross-origin'
     }
+
+    # app/libをZeitwerkの自動ロード対象から除外
+    Rails.autoloaders.each do |autoloader|
+      autoloader.ignore(Rails.root.join("app/lib"))
+    end
   end
 end
