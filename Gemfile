@@ -44,6 +44,9 @@ gem "image_processing", "~> 1.2"
 
 # 認証
 gem "devise"
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"  # CSRF対策（Rails必須）
 
 # AI API連携
 gem "anthropic", "~> 0.3.0"
