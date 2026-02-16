@@ -5,10 +5,10 @@ class IdeaGroupsController < ApplicationController
 
   def update_group
     new_group = @brainstorm.groups.find_by(id: params[:group_id])
-    
+
     # 既存の関連を削除
     @idea.idea_groups.destroy_all
-    
+
     # 新しいグループに関連付け（group_idがあれば）
     if new_group
       @idea.groups << new_group

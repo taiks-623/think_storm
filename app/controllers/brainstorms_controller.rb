@@ -1,6 +1,6 @@
 class BrainstormsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_brainstorm, only: [:show, :edit, :update, :destroy]
+  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @brainstorms = current_user.brainstorms.order(created_at: :desc)
@@ -12,7 +12,7 @@ class BrainstormsController < ApplicationController
 
   def create
     @brainstorm = current_user.brainstorms.build(brainstorm_params)
-    
+
     if @brainstorm.save
       redirect_to @brainstorm, notice: "ブレストを作成しました"
     else
