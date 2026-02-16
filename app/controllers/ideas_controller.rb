@@ -1,11 +1,11 @@
 class IdeasController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
-  before_action :set_idea, only: [:edit, :update, :destroy]
+  before_action :set_idea, only: [ :edit, :update, :destroy ]
 
   def create
     @idea = @brainstorm.ideas.build(idea_params)
-    @idea.source = 'user'
+    @idea.source = "user"
 
     if @idea.save
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを追加しました"
@@ -17,7 +17,7 @@ class IdeasController < ApplicationController
   def generate
     service = IdeaGeneratorService.new(@brainstorm)
     ideas_data = service.generate_ideas(count: 15)
-    
+
     if ideas_data.any?
       ideas_data.each do |idea_data|
         @brainstorm.ideas.create(idea_data)

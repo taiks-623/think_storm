@@ -7,5 +7,4 @@ class Idea < ApplicationRecord
   # Validations
   validates :content, presence: true, length: { maximum: 500 }
   validates :source, presence: true, inclusion: { in: %w[ai user] }
-
 end

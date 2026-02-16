@@ -1,12 +1,12 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
-  before_action :set_group, only: [:update, :destroy]
+  before_action :set_group, only: [ :update, :destroy ]
 
   def cluster
     service = IdeaClusteringService.new(@brainstorm)
     result = service.cluster_ideas
-    
+
     if result[:success]
       redirect_to brainstorm_path(@brainstorm), notice: result[:message]
     else
@@ -18,7 +18,7 @@ class GroupsController < ApplicationController
     @group = @brainstorm.groups.build(group_params)
     # 最後のpositionの次の番号を設定
     @group.position = @brainstorm.groups.maximum(:position).to_i + 1
-    
+
     if @group.save
       redirect_to brainstorm_path(@brainstorm), notice: "グループを作成しました"
     else

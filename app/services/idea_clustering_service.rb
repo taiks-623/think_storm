@@ -9,21 +9,21 @@ class IdeaClusteringService
     return { success: false, message: "クラスタリングするアイデアがありません" } if ideas.empty?
 
     prompt = build_clustering_prompt(ideas)
-    
+
     begin
       response = @client.messages(
         parameters: {
-          model: 'claude-sonnet-4-20250514',
+          model: "claude-sonnet-4-20250514",
           max_tokens: 4000,
           messages: [
-            { role: 'user', content: prompt }
+            { role: "user", content: prompt }
           ]
         }
       )
-      
-      clustering_result = response.dig('content', 0, 'text')
+
+      clustering_result = response.dig("content", 0, "text")
       apply_clustering(clustering_result, ideas)
-      
+
       { success: true, message: "クラスタリングが完了しました" }
     rescue StandardError => e
       Rails.logger.error "AI Clustering Error: #{e.message}"
@@ -37,7 +37,7 @@ class IdeaClusteringService
     ideas_list = ideas.map.with_index(1) do |idea, index|
       "#{index}. #{idea.content}"
     end.join("\n")
-    
+
     <<~PROMPT
       以下のアイデア群を類似性に基づいて3-5個のグループにクラスタリングしてください。
 
@@ -62,7 +62,7 @@ class IdeaClusteringService
         ]
       }
 
-      注意: 
+      注意:#{' '}
       - idea_indicesは上記のアイデア一覧の番号（1から始まる）を指定してください
       - すべてのアイデアをいずれかのグループに含めてください
       - JSONのみを出力してください
@@ -72,24 +72,24 @@ class IdeaClusteringService
   def apply_clustering(clustering_result, ideas)
     # 既存のグループとアイデアグループの関連を削除
     @brainstorm.groups.destroy_all
-    
+
     # JSONをパース
-    json_start = clustering_result.index('{')
-    json_end = clustering_result.rindex('}')
+    json_start = clustering_result.index("{")
+    json_end = clustering_result.rindex("}")
     return unless json_start && json_end
-    
+
     json_str = clustering_result[json_start..json_end]
     result = JSON.parse(json_str)
-    
+
     ideas_array = ideas.to_a
-    
-    result['clusters'].each_with_index do |cluster, position|
+
+    result["clusters"].each_with_index do |cluster, position|
       group = @brainstorm.groups.create!(
-        name: cluster['name'],
+        name: cluster["name"],
         position: position
       )
-      
-      cluster['idea_indices'].each do |index|
+
+      cluster["idea_indices"].each do |index|
         idea = ideas_array[index - 1] # 1-indexedなので-1
         group.ideas << idea if idea
       end
