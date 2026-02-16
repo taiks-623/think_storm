@@ -1,3 +1,7 @@
+<% content_for :og_title, "#{@brainstorm.title} | ThinkStorm" %>
+<% content_for :og_description, "#{@brainstorm.ideas.count}個のアイデアが生成されました" %>
+<% content_for :og_type, "article" %>
+
 <div class="container mx-auto px-4 py-8">
   <!-- ヘッダー部分 -->
   <div class="bg-white rounded-lg shadow p-6 mb-6">
