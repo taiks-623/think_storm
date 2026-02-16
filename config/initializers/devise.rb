@@ -316,4 +316,9 @@ Devise.setup do |config|
                   ENV["GOOGLE_CLIENT_ID"],
                   ENV["GOOGLE_CLIENT_SECRET"],
                   scope: "email, profile"
+
+  require Rails.root.join("app/lib/omniauth/strategies/line")
+  config.omniauth :line,
+                  ENV["LINE_CLIENT_ID"],
+                  ENV["LINE_CLIENT_SECRET"]
 end
