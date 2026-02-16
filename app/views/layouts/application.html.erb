@@ -6,6 +6,21 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# OGP基本タグ %>
+    <meta property="og:site_name" content="ThinkStorm">
+    <meta property="og:title" content="ThinkStorm">
+    <meta property="og:description" content="AIと協働するブレインストーミング支援プラットフォーム">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thinkstorm.jp">
+    <meta property="og:image" content="<%= image_url('ogp.png') %>">
+    <meta property="og:locale" content="ja_JP">
+
+    <%# Twitter Card %>
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ThinkStorm">
+    <meta name="twitter:description" content="AIと協働するブレインストーミング支援プラットフォーム">
+    <meta name="twitter:image" content="<%= image_url('ogp.png') %>">
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%# <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
