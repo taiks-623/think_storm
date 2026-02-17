@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get "brainstorms/new"
   get "brainstorms/show"
   get "pages/home"
+  get "terms", to: "pages#terms"
+  get "privacy", to: "pages#privacy"
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks"
   }
