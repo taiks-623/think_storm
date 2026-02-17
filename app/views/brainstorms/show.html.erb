@@ -30,20 +30,22 @@
           アイデアを手動追加
         </button>
         
-        <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
-          <%= f.submit "AIでアイデア生成", 
-              class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer",
-              onclick: "this.value='生成中...'; this.disabled=true; this.form.submit();" %>
+        <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block", id: "generate-form" do |f| %>
+          <button type="button"
+              class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer"
+              onclick="showLoading('AIがアイデアを生成中です...'); document.getElementById('generate-form').submit();">
+            AIでアイデア生成
+          </button>
         <% end %>
         
         <% if @brainstorm.ideas.any? %>
-          <%= form_with url: cluster_brainstorm_groups_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
-            <%= f.submit "AIクラスタリング実行", 
-                class: "px-4 py-2 rounded transition cursor-pointer",
-                style: "background-color: #9333ea; color: white; border: none;",
-                onmouseover: "this.style.backgroundColor='#7e22ce'",
-                onmouseout: "this.style.backgroundColor='#9333ea'",
-                onclick: "this.value='クラスタリング中...'; this.disabled=true; this.form.submit();" %>
+          <%= form_with url: cluster_brainstorm_groups_path(@brainstorm), method: :post, class: "inline-block", id: "cluster-form" do |f| %>
+            <button type="button"
+                class="px-4 py-2 rounded transition cursor-pointer"
+                style="background-color: #9333ea; color: white; border: none;"
+                onclick="showLoading('AIがアイデアを分類中です...'); document.getElementById('cluster-form').submit();">
+              AIクラスタリング実行
+            </button>
           <% end %>
         <% end %>
 
@@ -235,10 +237,12 @@
         <p class="text-gray-600 mb-4">まだアイデアがありません</p>
         <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
         <div class="space-x-4">
-          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block" do |f| %>
-            <%= f.submit "AIでアイデア生成", 
-                class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer",
-                onclick: "this.value='生成中...'; this.disabled=true; this.form.submit();" %>
+          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block", id: "generate-form-bottom" do |f| %>
+            <button type="button"
+                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer"
+                onclick="showLoading('AIがアイデアを生成中です...'); document.getElementById('generate-form-bottom').submit();">
+              AIでアイデア生成
+            </button>
           <% end %>
           
           <button onclick="document.getElementById('add-idea-form').classList.remove('hidden')" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
