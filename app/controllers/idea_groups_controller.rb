@@ -12,9 +12,14 @@ class IdeaGroupsController < ApplicationController
     # 新しいグループに関連付け（group_idがあれば）
     if new_group
       @idea.groups << new_group
-      redirect_to brainstorm_path(@brainstorm), notice: "アイデアを移動しました"
+      message = "アイデアを移動しました"
     else
-      redirect_to brainstorm_path(@brainstorm), notice: "アイデアをグループから外しました"
+      message = "アイデアをグループから外しました"
+    end
+
+    respond_to do |format|
+      format.html { redirect_to brainstorm_path(@brainstorm), notice: message }
+      format.json { head :no_content } # JSONリクエストの場合はリダイレクトせず204を返す
     end
   end
 
