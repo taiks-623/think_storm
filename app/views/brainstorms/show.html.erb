@@ -131,9 +131,9 @@
               </div>
               
               <!-- グループ内のアイデア -->
-              <div class="space-y-3">
+              <div class="space-y-3 sortable-ideas" data-group-id="<%= group.id %>" data-brainstorm-id="<%= @brainstorm.id %>">
                 <% group.ideas.each do |idea| %>
-                  <div class="bg-white border border-gray-200 rounded p-3">
+                  <div class="bg-white border border-gray-200 rounded p-3 idea-card" data-idea-id="<%= idea.id %>">
                     <div class="flex justify-between items-start">
                       <div class="flex-grow">
                         <p class="text-gray-800"><%= idea.content %></p>
@@ -173,9 +173,9 @@
           <% if ungrouped_ideas.any? %>
             <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
               <h3 class="text-xl font-bold text-gray-600 mb-4">未分類のアイデア</h3>
-              <div class="space-y-3">
+              <div class="space-y-3 sortable-ideas" data-group-id="" data-brainstorm-id="<%= @brainstorm.id %>">
                 <% ungrouped_ideas.each do |idea| %>
-                  <div class="bg-white border border-gray-200 rounded p-3">
+                  <div class="bg-white border border-gray-200 rounded p-3 idea-card" data-idea-id="<%= idea.id %>">
                     <div class="flex justify-between items-start">
                       <div class="flex-grow">
                         <p class="text-gray-800"><%= idea.content %></p>
@@ -257,4 +257,52 @@
   <div class="mt-6">
     <%= link_to "← ダッシュボードに戻る", dashboard_path, class: "text-indigo-600 hover:text-indigo-800" %>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sortableContainers = document.querySelectorAll('.sortable-ideas');
+      
+      sortableContainers.forEach(function(container) {
+        new Sortable(container, {
+          group: 'ideas',
+          animation: 150,
+          ghostClass: 'opacity-50',
+          draggable: '.idea-card',
+          onEnd: function(evt) {
+            const ideaId = evt.item.dataset.ideaId;
+            const newGroupId = evt.to.dataset.groupId;
+            const brainstormId = evt.to.dataset.brainstormId;
+            
+            console.log('Idea ID:', ideaId, 'New Group:', newGroupId, 'Brainstorm:', brainstormId);
+            
+            // URLを文字列連結で構築
+            const url = '/brainstorms/' + brainstormId + '/ideas/' + ideaId + '/update_group';
+            
+            // サーバーに更新を送信
+            fetch(url, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+              },
+              body: JSON.stringify({ group_id: newGroupId })
+            })
+            .then(response => {
+              if (response.ok) {
+                // 204の場合はJSONパースをスキップ
+                console.log('アイデアを移動しました');
+                // プルダウンの選択肢を更新
+                const selectElement = evt.item.querySelector('select');
+                if (selectElement) {
+                  selectElement.value = newGroupId || '';
+                }
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        });
+      });
+    });
+  </script>
 </div>
