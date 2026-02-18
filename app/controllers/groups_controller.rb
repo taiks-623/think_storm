@@ -39,6 +39,22 @@ class GroupsController < ApplicationController
     redirect_to brainstorm_path(@brainstorm), notice: "グループを削除しました"
   end
 
+  def reset_clustering
+    ActiveRecord::Base.transaction do
+      IdeaGroup.where(group_id: @brainstorm.groups.ids).delete_all
+      @brainstorm.groups.destroy_all
+    end
+
+    service = IdeaClusteringService.new(@brainstorm)
+    result = service.cluster_ideas
+
+    if result[:success]
+      redirect_to brainstorm_path(@brainstorm), notice: "クラスタリングをやり直しました"
+    else
+      redirect_to brainstorm_path(@brainstorm), alert: "やり直しに失敗しました: #{result[:message]}"
+    end
+  end
+
   private
 
   def set_brainstorm

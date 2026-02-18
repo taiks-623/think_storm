@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
     resources :groups, only: [:create, :update, :destroy] do
       post 'cluster', on: :collection
+      delete 'reset_clustering', on: :collection
     end
   end
 
