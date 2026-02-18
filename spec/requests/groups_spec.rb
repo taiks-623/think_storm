@@ -116,19 +116,17 @@ RSpec.describe "Groups", type: :request do
       before { login_as user, scope: :user }
 
       it "クラスタリングが成功するとブレスト詳細にリダイレクトされる" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: true,
-          message: "クラスタリングが完了しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: true, message: "クラスタリングが完了しました" })
+        )
         post cluster_brainstorm_groups_path(brainstorm)
         expect(response).to redirect_to(brainstorm_path(brainstorm))
       end
 
       it "クラスタリングが失敗するとalertでリダイレクトされる" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: false,
-          message: "クラスタリングに失敗しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: false, message: "クラスタリングに失敗しました" })
+        )
         post cluster_brainstorm_groups_path(brainstorm)
         expect(response).to redirect_to(brainstorm_path(brainstorm))
       end
@@ -161,10 +159,9 @@ RSpec.describe "Groups", type: :request do
       before { login_as user, scope: :user }
 
       it "グループとidea_groupsが削除される" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: true,
-          message: "クラスタリングが完了しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: true, message: "クラスタリングが完了しました" })
+        )
         expect {
           delete reset_clustering_brainstorm_groups_path(brainstorm)
         }.to change(Group, :count).by(-1)
@@ -172,29 +169,26 @@ RSpec.describe "Groups", type: :request do
       end
 
       it "アイデア自体は削除されない" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: true,
-          message: "クラスタリングが完了しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: true, message: "クラスタリングが完了しました" })
+        )
         expect {
           delete reset_clustering_brainstorm_groups_path(brainstorm)
         }.not_to change(Idea, :count)
       end
 
       it "成功するとブレスト詳細にリダイレクトされる" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: true,
-          message: "クラスタリングが完了しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: true, message: "クラスタリングが完了しました" })
+        )
         delete reset_clustering_brainstorm_groups_path(brainstorm)
         expect(response).to redirect_to(brainstorm_path(brainstorm))
       end
 
       it "AIクラスタリングが失敗してもブレスト詳細にリダイレクトされる" do
-        allow_any_instance_of(IdeaClusteringService).to receive(:cluster_ideas).and_return({
-          success: false,
-          message: "クラスタリングに失敗しました"
-        })
+        allow(IdeaClusteringService).to receive(:new).and_return(
+          instance_double(IdeaClusteringService, cluster_ideas: { success: false, message: "クラスタリングに失敗しました" })
+        )
         delete reset_clustering_brainstorm_groups_path(brainstorm)
         expect(response).to redirect_to(brainstorm_path(brainstorm))
       end
