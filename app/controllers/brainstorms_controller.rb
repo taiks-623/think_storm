@@ -4,6 +4,13 @@ class BrainstormsController < ApplicationController
 
   def index
     @brainstorms = current_user.brainstorms.order(created_at: :desc)
+
+    if params[:q].present?
+      keyword = "%#{params[:q]}%"
+      @brainstorms = @brainstorms.where(
+        "title LIKE :keyword OR description LIKE :keyword", keyword: keyword
+      )
+    end
   end
 
   def new

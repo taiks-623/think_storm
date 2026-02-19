@@ -4,6 +4,29 @@
     <%= link_to "新規作成", new_brainstorm_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition" %>
   </div>
 
+  <%# 検索フォーム %>
+  <%= form_with url: dashboard_path, method: :get, local: true, class: "mb-6" do |f| %>
+    <div class="flex gap-2">
+      <%= f.text_field :q,
+            value: params[:q],
+            placeholder: "ブレストを検索...",
+            class: "flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+      <%= f.submit "検索",
+            class: "px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+      <% if params[:q].present? %>
+        <%= link_to "クリア", dashboard_path,
+              class: "px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# 検索結果のメッセージ %>
+  <% if params[:q].present? %>
+    <p class="text-sm text-gray-500 mb-4">
+      「<%= params[:q] %>」の検索結果：<%= @brainstorms.count %>件
+    </p>
+  <% end %>
+
   <% if @brainstorms.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @brainstorms.each do |brainstorm| %>
