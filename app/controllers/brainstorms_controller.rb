@@ -47,6 +47,22 @@ class BrainstormsController < ApplicationController
     redirect_to dashboard_path, notice: "ブレストを削除しました"
   end
 
+  def search_suggestions
+    if params[:q].present?
+      keyword = "%#{params[:q]}%"
+      @suggestions = current_user.brainstorms
+        .where("title LIKE ?", keyword)
+        .order(created_at: :desc)
+        .limit(5)
+        .pluck(:title)
+    else
+      @suggestions = []
+    end
+
+    render json: @suggestions
+  end
+
+
   private
 
   def set_brainstorm
