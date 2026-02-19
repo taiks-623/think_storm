@@ -3,6 +3,8 @@ class Idea < ApplicationRecord
   belongs_to :brainstorm
   has_many :idea_groups, dependent: :destroy
   has_many :groups, through: :idea_groups
+  has_many :idea_tags, dependent: :destroy
+  has_many :tags, through: :idea_tags
 
   # Validations
   validates :content, presence: true, length: { maximum: 500 }

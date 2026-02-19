@@ -1,7 +1,8 @@
 <div class="container mx-auto px-4 py-8 max-w-2xl">
   <h1 class="text-3xl font-bold text-gray-800 mb-8">アイデアを編集</h1>
 
-  <%= form_with(model: [@brainstorm, @idea], local: true, class: "bg-white rounded-lg shadow p-8") do |f| %>
+  <%# アイデア編集フォーム %>
+  <%= form_with(model: [@brainstorm, @idea], local: true, class: "bg-white rounded-lg shadow p-8 mb-6") do |f| %>
     <% if @idea.errors.any? %>
       <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
         <p class="font-bold mb-2"><%= pluralize(@idea.errors.count, "error") %> prohibited this idea from being saved:</p>
@@ -28,4 +29,36 @@
       <%= f.submit "更新する", class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
     </div>
   <% end %>
+
+  <%# タグ管理（外側のフォームの外に出す） %>
+  <div class="bg-white rounded-lg shadow p-8">
+    <%= label_tag :tag_name, "タグ", class: "block text-gray-700 font-semibold mb-2" %>
+
+    <%# 既存タグの表示 %>
+    <div class="flex flex-wrap gap-2 mb-3">
+      <% @idea.tags.each do |tag| %>
+        <span class="inline-flex items-center gap-1 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
+          <%= tag.name %>
+          <%= button_to "×",
+                brainstorm_idea_tag_path(@brainstorm, @idea, tag),
+                method: :delete,
+                class: "text-indigo-400 hover:text-indigo-700 font-bold leading-none",
+                data: { turbo_confirm: "タグ「#{tag.name}」を削除しますか？" } %>
+        </span>
+      <% end %>
+      <% if @idea.tags.empty? %>
+        <span class="text-gray-400 text-sm">タグがありません</span>
+      <% end %>
+    </div>
+
+    <%# タグ追加フォーム %>
+    <%= form_with url: brainstorm_idea_tags_path(@brainstorm, @idea), method: :post, local: true, class: "flex gap-2" do |f| %>
+      <%= f.text_field :name,
+            placeholder: "タグを追加...",
+            name: "tag[name]",
+            class: "flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" %>
+      <%= f.submit "追加",
+            class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer text-sm" %>
+    <% end %>
+  </div>
 </div>
