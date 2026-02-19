@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   # ログイン後のダッシュボード
   get "dashboard", to: "brainstorms#index", as: :dashboard
+  get "dashboard/search_suggestions", to: "brainstorms#search_suggestions", as: :search_suggestions
   
   # ブレストのCRUD
   resources :brainstorms do

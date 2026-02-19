@@ -5,20 +5,36 @@
   </div>
 
   <%# 検索フォーム %>
-  <%= form_with url: dashboard_path, method: :get, local: true, class: "mb-6" do |f| %>
-    <div class="flex gap-2">
-      <%= f.text_field :q,
-            value: params[:q],
-            placeholder: "ブレストを検索...",
-            class: "flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
-      <%= f.submit "検索",
-            class: "px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
-      <% if params[:q].present? %>
-        <%= link_to "クリア", dashboard_path,
-              class: "px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" %>
-      <% end %>
-    </div>
-  <% end %>
+  <div data-controller="autocomplete"
+      data-action="click@window->autocomplete#clickOutside">
+    <%= form_with url: dashboard_path, method: :get, local: true do |f| %>
+      <div class="flex gap-2">
+        <div class="relative flex-grow">
+          <%= f.text_field :q,
+                value: params[:q],
+                placeholder: "ブレストを検索...",
+                autocomplete: "off",
+                data: {
+                  autocomplete_target: "input",
+                  action: "input->autocomplete#search"
+                },
+                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+
+          <%# 候補ドロップダウン %>
+          <div data-autocomplete-target="suggestions"
+              class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1">
+          </div>
+        </div>
+
+        <%= f.submit "検索",
+              class: "px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+        <% if params[:q].present? %>
+          <%= link_to "クリア", dashboard_path,
+                class: "px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 
   <%# 検索結果のメッセージ %>
   <% if params[:q].present? %>
