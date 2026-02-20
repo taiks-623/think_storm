@@ -5,7 +5,7 @@ RSpec.describe "Profiles", type: :request do
 
   describe "GET /profile" do
     context "ログイン済みの場合" do
-      before { sign_in user }
+      before { login_as user, scope: :user }
 
       it "正常にレスポンスが返る" do
         get profile_path
@@ -23,7 +23,7 @@ RSpec.describe "Profiles", type: :request do
 
   describe "GET /profile/edit" do
     context "ログイン済みの場合" do
-      before { sign_in user }
+      before { login_as user, scope: :user }
 
       it "正常にレスポンスが返る" do
         get edit_profile_path
@@ -41,7 +41,7 @@ RSpec.describe "Profiles", type: :request do
 
   describe "PATCH /profile" do
     context "ログイン済みの場合" do
-      before { sign_in user }
+      before { login_as user, scope: :user }
 
       it "メールアドレスが更新されてプロフィールページにリダイレクトされる" do
         patch profile_path, params: {
@@ -74,7 +74,7 @@ RSpec.describe "Profiles", type: :request do
 
   describe "DELETE /profile/cancel" do
     context "ログイン済みの場合" do
-      before { sign_in user }
+      before { login_as user, scope: :user }
 
       it "アカウントが削除されてトップページにリダイレクトされる" do
         expect {

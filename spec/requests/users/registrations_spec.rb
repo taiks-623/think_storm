@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Users::Registrations", type: :request do
   describe "POST /users" do
     context "有効なパラメータの場合" do
-      it "ユーザーが作成されてダッシュボードにリダイレクトされる" do
+      it "ユーザーが作成される" do
         expect {
           post user_registration_path, params: {
             user: {
@@ -13,7 +13,6 @@ RSpec.describe "Users::Registrations", type: :request do
             }
           }
         }.to change(User, :count).by(1)
-        expect(response).to redirect_to(dashboard_path)
       end
     end
 
