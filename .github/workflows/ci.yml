@@ -82,4 +82,5 @@ jobs:
           SKIP_ASSET_CHECK: true
         run: |
           bundle exec rails db:test:prepare
+          bundle exec rails assets:precompile
           bundle exec rspec
