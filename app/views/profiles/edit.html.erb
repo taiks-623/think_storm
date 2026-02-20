@@ -1,0 +1,47 @@
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 mb-8">プロフィール編集</h1>
+
+  <%= form_with model: current_user, url: profile_path, method: :patch, class: "space-y-6" do |f| %>
+    <% if current_user.errors.any? %>
+      <div class="bg-red-50 border border-red-200 rounded p-4">
+        <% current_user.errors.full_messages.each do |msg| %>
+          <p class="text-red-600 text-sm"><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="bg-white rounded-lg shadow p-6 space-y-4">
+      <h2 class="text-lg font-semibold text-gray-700">メールアドレス変更</h2>
+      <div>
+        <%= f.label :email, "メールアドレス", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.email_field :email, class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        <p class="text-xs text-gray-500 mt-1">変更すると確認メールが届きます</p>
+      </div>
+    </div>
+
+    <% unless current_user.provider.present? %>
+      <div class="bg-white rounded-lg shadow p-6 space-y-4">
+        <h2 class="text-lg font-semibold text-gray-700">パスワード変更</h2>
+        <div>
+          <%= f.label :password, "新しいパスワード", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          <p class="text-xs text-gray-500 mt-1">変更しない場合は空欄のままにしてください</p>
+        </div>
+        <div>
+          <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+        </div>
+        <div>
+          <%= f.label :current_password, "現在のパスワード", class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+          <p class="text-xs text-gray-500 mt-1">メールアドレスまたはパスワードを変更する場合は必須です</p>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="flex justify-between">
+      <%= link_to "キャンセル", profile_path, class: "text-gray-600 hover:underline" %>
+      <%= f.submit "保存する", class: "bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

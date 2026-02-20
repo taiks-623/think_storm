@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
   devise_for :users, controllers: {
-    omniauth_callbacks: "users/omniauth_callbacks"
+    omniauth_callbacks: "users/omniauth_callbacks",
+    registrations: "users/registrations"
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -31,6 +32,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # ユーザー設定
+  resource :profile, only: [:show, :edit, :update]
+  delete "profile/cancel", to: "profiles#cancel", as: :cancel_profile
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
@@ -41,4 +46,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
 end
