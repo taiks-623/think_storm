@@ -9,7 +9,7 @@ RSpec.describe "Profiles", type: :request do
 
       it "正常にレスポンスが返る" do
         get profile_path
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:success)
       end
     end
 
