@@ -9,10 +9,13 @@ class User < ApplicationRecord
   has_many :brainstorms, dependent: :destroy
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email.presence || "#{auth.uid}@line.thinkstorm.jp"
-      user.password = Devise.friendly_token[0, 20]  # ランダムパスワードを自動生成
-      user.skip_confirmation!
+    user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+      u.email = auth.info.email.presence || "#{auth.uid}@line.thinkstorm.jp"
+      u.password = Devise.friendly_token[0, 20]
+      u.skip_confirmation!
     end
+    user.skip_confirmation! if user.confirmed_at.nil?
+    user.save if user.confirmed_at_changed?
+    user
   end
 end
