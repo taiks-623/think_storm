@@ -1,0 +1,24 @@
+<%# ローディング表示を削除 %>
+<%= turbo_stream.remove "loading-message" %>
+
+<%= turbo_stream.append "messages" do %>
+  <%= render "conversations/message", message: @assistant_message %>
+<% end %>
+
+<%= turbo_stream.replace "conversation-form" do %>
+  <div id="conversation-form">
+    <%= form_with url: brainstorm_idea_conversation_path(@brainstorm, @idea),
+          method: :post,
+          id: "chat-form" do |f| %>
+      <div class="flex space-x-2">
+        <%= f.text_area :message,
+              id: "chat-input",
+              rows: 2,
+              placeholder: "質問や深掘りしたい点を入力... (Enterで送信、Shift+Enterで改行)",
+              class: "flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" %>
+        <%= f.submit "送信",
+              class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm cursor-pointer self-end" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

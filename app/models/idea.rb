@@ -5,6 +5,7 @@ class Idea < ApplicationRecord
   has_many :groups, through: :idea_groups
   has_many :idea_tags, dependent: :destroy
   has_many :tags, through: :idea_tags
+  has_many :conversations, dependent: :destroy
 
   # Validations
   validates :content, presence: true, length: { maximum: 500 }

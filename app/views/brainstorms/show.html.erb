@@ -163,46 +163,7 @@
               <!-- グループ内のアイデア -->
               <div class="space-y-3 sortable-ideas" data-group-id="<%= group.id %>" data-brainstorm-id="<%= @brainstorm.id %>">
                 <% group.ideas.each do |idea| %>
-                  <div class="bg-white border border-gray-200 rounded p-3 idea-card" data-idea-id="<%= idea.id %>">
-                    <div class="flex justify-between items-start">
-                      <div class="flex-grow">
-                        <p class="text-gray-800"><%= idea.content %></p>
-                        <% if idea.memo.present? %>
-                          <p class="text-sm text-gray-500 mt-1"><%= idea.memo %></p>
-                        <% end %>
-                        <%# タグ表示 %>
-                        <% if idea.tags.any? %>
-                          <div class="flex flex-wrap gap-1 mt-2">
-                            <% idea.tags.each do |tag| %>
-                              <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs">
-                                <%= tag.name %>
-                              </span>
-                            <% end %>
-                          </div>
-                        <% end %>
-                      </div>
-                      <div class="flex items-center space-x-2 ml-4">
-                        <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
-                          <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
-                        </span>
-                        
-                        <!-- グループ移動セレクトボックス -->
-                        <%= form_with url: brainstorm_update_group_idea_path(@brainstorm, idea), method: :patch, local: true, class: "inline-block" do |f| %>
-                          <%= f.select :group_id, 
-                            options_for_select(
-                              [["グループなし", ""]] + @brainstorm.groups.where.not(name: [nil, ""]).map { |g| [g.name, g.id] },
-                              group.id
-                            ),
-                            {},
-                            class: "text-sm border rounded px-2 py-1",
-                            onchange: "this.form.submit();" %>
-                        <% end %>
-                        
-                        <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
-                        <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
-                      </div>
-                    </div>
-                  </div>
+                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group %>
                 <% end %>
               </div>
             </div>
@@ -215,44 +176,7 @@
               <h3 class="text-xl font-bold text-gray-600 mb-4">未分類のアイデア</h3>
               <div class="space-y-3 sortable-ideas" data-group-id="" data-brainstorm-id="<%= @brainstorm.id %>">
                 <% ungrouped_ideas.each do |idea| %>
-                  <div class="bg-white border border-gray-200 rounded p-3 idea-card" data-idea-id="<%= idea.id %>">
-                    <div class="flex justify-between items-start">
-                      <div class="flex-grow">
-                        <p class="text-gray-800"><%= idea.content %></p>
-                        <% if idea.memo.present? %>
-                          <p class="text-sm text-gray-500 mt-1"><%= idea.memo %></p>
-                        <% end %>
-                        <%# タグ表示 %>
-                        <% if idea.tags.any? %>
-                          <div class="flex flex-wrap gap-1 mt-2">
-                            <% idea.tags.each do |tag| %>
-                              <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs">
-                                <%= tag.name %>
-                              </span>
-                            <% end %>
-                          </div>
-                        <% end %>
-                      </div>
-                      <div class="flex items-center space-x-2 ml-4">
-                        <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
-                          <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
-                        </span>
-                        
-                        <%= form_with url: brainstorm_update_group_idea_path(@brainstorm, idea), method: :patch, local: true, class: "inline-block" do |f| %>
-                          <%= f.select :group_id, 
-                            options_for_select(
-                              [["グループなし", ""]] + @brainstorm.groups.where.not(name: nil).where.not(name: "").order(:position).map { |g| [g.name, g.id] }
-                            ),
-                            {},
-                            class: "text-sm border rounded px-2 py-1",
-                            onchange: "this.form.submit();" %>
-                        <% end %>
-                        
-                        <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
-                        <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
-                      </div>
-                    </div>
-                  </div>
+                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
                 <% end %>
               </div>
             </div>
@@ -263,33 +187,7 @@
         <div class="space-y-4">
           <% ideas_to_show = @filtered_ideas || @brainstorm.ideas.where.not(id: nil) %>
           <% ideas_to_show.each do |idea| %>
-            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
-              <div class="flex justify-between items-start">
-                <div class="flex-grow">
-                  <p class="text-gray-800"><%= idea.content %></p>
-                  <% if idea.memo.present? %>
-                    <p class="text-sm text-gray-500 mt-1"><%= idea.memo %></p>
-                  <% end %>
-                  <%# タグ表示 %>
-                  <% if idea.tags.any? %>
-                    <div class="flex flex-wrap gap-1 mt-2">
-                      <% idea.tags.each do |tag| %>
-                        <span class="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs">
-                          <%= tag.name %>
-                        </span>
-                      <% end %>
-                    </div>
-                  <% end %>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
-                    <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
-                  </span>
-                  <%= link_to "編集", edit_brainstorm_idea_path(@brainstorm, idea), class: "text-indigo-600 hover:text-indigo-800 text-sm" %>
-                  <%= button_to "削除", brainstorm_idea_path(@brainstorm, idea), method: :delete, data: { turbo_confirm: "削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
-                </div>
-              </div>
-            </div>
+            <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
           <% end %>
         </div>
       <% end %>
