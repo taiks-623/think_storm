@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_20_063357) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_22_110217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_063357) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_brainstorms_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.bigint "brainstorm_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "idea_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brainstorm_id"], name: "index_conversations_on_brainstorm_id"
+    t.index ["idea_id"], name: "index_conversations_on_idea_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -66,6 +75,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_063357) do
     t.index ["position"], name: "index_ideas_on_position"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.text "content"
+    t.bigint "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.string "role"
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.bigint "brainstorm_id", null: false
     t.datetime "created_at", null: false
@@ -95,11 +113,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_20_063357) do
   end
 
   add_foreign_key "brainstorms", "users"
+  add_foreign_key "conversations", "brainstorms"
+  add_foreign_key "conversations", "ideas"
   add_foreign_key "groups", "brainstorms"
   add_foreign_key "idea_groups", "groups"
   add_foreign_key "idea_groups", "ideas"
   add_foreign_key "idea_tags", "ideas"
   add_foreign_key "idea_tags", "tags"
   add_foreign_key "ideas", "brainstorms"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "tags", "brainstorms"
 end

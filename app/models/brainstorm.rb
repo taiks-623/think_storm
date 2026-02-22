@@ -4,6 +4,7 @@ class Brainstorm < ApplicationRecord
   has_many :ideas, dependent: :destroy
   has_many :groups, dependent: :destroy
   has_many :tags, dependent: :destroy
+  has_many :conversations, dependent: :destroy
 
   # Validations
   validates :title, presence: true, length: { maximum: 100 }

@@ -1,0 +1,128 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+       id="conversation-modal">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl flex flex-col" style="height: 80vh;">
+      
+      <%# ヘッダー %>
+      <div class="flex justify-between items-start p-4 border-b">
+        <div>
+          <h2 class="text-lg font-bold text-gray-800">💬 深掘り対話</h2>
+          <p class="text-sm text-gray-500 mt-1"><%= @idea.content %></p>
+        </div>
+        <%= link_to "✕", brainstorm_path(@brainstorm),
+          class: "text-gray-400 hover:text-gray-600 text-xl",
+          data: { turbo_frame: "_top" } %>
+      </div>
+
+      <%# メッセージ一覧 %>
+      <div class="flex-1 overflow-y-auto p-4 space-y-4" id="messages">
+        <% if @messages.empty? %>
+          <p class="text-center text-gray-400 text-sm mt-8">
+            このアイデアについて何でも聞いてください
+          </p>
+        <% end %>
+        <% @messages.each do |message| %>
+          <%= render "conversations/message", message: message %>
+        <% end %>
+      </div>
+
+      <%# 入力フォーム %>
+      <div class="border-t p-4">
+        <div id="conversation-form">
+          <%= form_with url: brainstorm_idea_conversation_path(@brainstorm, @idea),
+                method: :post,
+                id: "chat-form" do |f| %>
+            <div class="flex space-x-2">
+              <%= f.text_area :message,
+                    id: "chat-input",
+                    rows: 2,
+                    placeholder: "質問や深掘りしたい点を入力... (Enterで送信、Shift+Enterで改行)",
+                    class: "flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" %>
+              <%= f.submit "送信",
+                    class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm cursor-pointer self-end" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <script>
+        function setupChatInput() {
+          const input = document.getElementById("chat-input");
+          if (!input || input.dataset.listenerAttached) return;
+          input.dataset.listenerAttached = "true";
+
+          input.addEventListener("keydown", function(e) {
+            if (e.isComposing || e.keyCode === 229) return;
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              const message = this.value.trim();
+              if (message === "") return;
+
+              appendUserMessage(message);
+              submitMessage(message);
+              this.value = "";
+            }
+          });
+        }
+
+        function submitMessage(message) {
+          const form = document.getElementById("chat-form");
+          const url = form.action;
+          const token = document.querySelector('meta[name="csrf-token"]').content;
+
+          const messages = document.getElementById("messages");
+          const loadingDiv = document.createElement("div");
+          loadingDiv.id = "loading-message";
+          loadingDiv.classList.add("flex", "justify-start");
+          loadingDiv.innerHTML = `
+            <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm bg-gray-100 text-gray-500">
+              <span class="animate-pulse">考え中...</span>
+            </div>
+          `;
+          messages.appendChild(loadingDiv);
+          messages.scrollTop = messages.scrollHeight;
+
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-CSRF-Token": token,
+              "Accept": "text/vnd.turbo-stream.html"
+            },
+            body: "message=" + encodeURIComponent(message)
+          })
+          .then(response => response.text())
+          .then(html => {
+            // ローディングを削除してからTurbo Stream適用
+            const loading = document.getElementById("loading-message");
+            if (loading) loading.remove();
+
+            Turbo.renderStreamMessage(html);
+            setTimeout(setupChatInput, 100);
+          })
+          .catch(error => {
+            const loading = document.getElementById("loading-message");
+            if (loading) loading.remove();
+            console.error("Error:", error);
+          });
+        }
+
+        function appendUserMessage(message) {
+          const messages = document.getElementById("messages");
+          if (!messages) return;
+          const div = document.createElement("div");
+          div.classList.add("flex", "justify-end");
+          div.innerHTML = '<div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm bg-indigo-600 text-white"><p>' + message.replace(/</g, "&lt;") + '</p></div>';
+          messages.appendChild(div);
+          messages.scrollTop = messages.scrollHeight;
+        }
+
+        setupChatInput();
+
+        document.addEventListener("turbo:before-stream-render", function() {
+          setTimeout(setupChatInput, 100);
+        });
+      </script>
+    </div>
+  </div>
+<% end %>
