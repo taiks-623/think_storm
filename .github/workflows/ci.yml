@@ -80,6 +80,7 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           SKIP_ASSET_CHECK: true
+          ANTHROPIC_API_KEY: test_dummy_key
         run: |
           bundle exec rails db:test:prepare
           bundle exec rails assets:precompile
