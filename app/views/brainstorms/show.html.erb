@@ -276,5 +276,51 @@
         });
       });
     });
+
+    function submitEvaluation(button) {
+      const ideaId = button.dataset.ideaId;
+      const axisId = button.dataset.axisId;
+      const score = button.dataset.score;
+      const evaluationId = button.dataset.evaluationId;
+      const brainstormId = "<%= @brainstorm.id %>";
+      const token = document.querySelector('meta[name="csrf-token"]').content;
+
+      const url = evaluationId
+        ? `/brainstorms/${brainstormId}/ideas/${ideaId}/evaluations/${evaluationId}`
+        : `/brainstorms/${brainstormId}/ideas/${ideaId}/evaluations`;
+      const method = evaluationId ? "PATCH" : "POST";
+
+      fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": token,
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ score: score, evaluation_axis_id: axisId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // ボタンの見た目を更新
+          const allButtons = document.querySelectorAll(`[data-idea-id="${ideaId}"][data-axis-id="${axisId}"]`);
+          allButtons.forEach(btn => {
+            const btnScore = parseInt(btn.dataset.score);
+            const selectedScore = parseInt(score);
+            if (btnScore === selectedScore) {
+              btn.classList.remove("bg-gray-100", "text-gray-500", "hover:bg-indigo-100");
+              btn.classList.add("bg-indigo-600", "text-white");
+            } else {
+              btn.classList.remove("bg-indigo-600", "text-white");
+              btn.classList.add("bg-gray-100", "text-gray-500", "hover:bg-indigo-100");
+            }
+            if (data.evaluation_id) {
+              btn.dataset.evaluationId = data.evaluation_id;
+            }
+          });
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    }
   </script>
 </div>

@@ -1,4 +1,6 @@
-<div class="bg-white border border-gray-200 rounded p-3 idea-card" data-idea-id="<%= idea.id %>">
+<div class="bg-white border border-gray-200 rounded p-3 idea-card" 
+     id="idea-card-<%= idea.id %>"
+     data-idea-id="<%= idea.id %>">
   <div class="flex justify-between items-start">
     <div class="flex-grow">
       <p class="text-gray-800"><%= idea.content %></p>
@@ -14,7 +16,34 @@
           <% end %>
         </div>
       <% end %>
+
+      <%# 評価軸スコア %>
+      <% if brainstorm.evaluation_axes.any? %>
+        <div class="mt-3 space-y-1" id="evaluations-idea-<%= idea.id %>">
+          <% brainstorm.evaluation_axes.order(:created_at).each do |axis| %>
+            <% evaluation = idea.evaluations.find { |e| e.evaluation_axis_id == axis.id } %>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-gray-500 w-24 truncate"><%= axis.name %></span>
+              <div class="flex space-x-1">
+                <% (1..5).each do |score| %>
+                  <button
+                    class="w-6 h-6 rounded text-xs font-medium transition
+                           <%= evaluation&.score == score ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500 hover:bg-indigo-100' %>"
+                    data-idea-id="<%= idea.id %>"
+                    data-axis-id="<%= axis.id %>"
+                    data-score="<%= score %>"
+                    data-evaluation-id="<%= evaluation&.id %>"
+                    onclick="submitEvaluation(this)">
+                    <%= score %>
+                  </button>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
+
     <div class="flex items-center space-x-2 ml-4">
       <span class="px-2 py-1 text-xs rounded <%= idea.source == 'ai' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' %>">
         <%= idea.source == 'ai' ? 'AI生成' : '手動追加' %>
@@ -33,7 +62,6 @@
         <% end %>
       <% end %>
 
-      <%# 深掘り対話ボタン %>
       <%= link_to "💬 深掘り",
             brainstorm_idea_conversation_path(brainstorm, idea),
             class: "px-2 py-1 bg-indigo-50 text-indigo-600 rounded text-sm hover:bg-indigo-100 transition",

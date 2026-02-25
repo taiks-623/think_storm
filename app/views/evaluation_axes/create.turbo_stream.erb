@@ -5,3 +5,10 @@
 <%= turbo_stream.replace "evaluation_axis_form" do %>
   <%= render "evaluation_axes/form", brainstorm: @brainstorm, evaluation_axis: EvaluationAxis.new %>
 <% end %>
+
+<%# 各アイデアカードを更新して評価ボタンを追加 %>
+<% @brainstorm.ideas.includes(:evaluations, :tags, :groups).each do |idea| %>
+  <%= turbo_stream.replace "idea-card-#{idea.id}" do %>
+    <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: idea.groups.first %>
+  <% end %>
+<% end %>

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       post 'generate', on: :collection
       resources :tags, only: [:create, :destroy]
       resource :conversation, only: [:create, :show]
+      resources :evaluations, only: [:create, :update]
     end
 
     patch 'ideas/:id/update_group', to: 'idea_groups#update_group', as: 'update_group_idea'
