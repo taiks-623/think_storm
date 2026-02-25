@@ -21,6 +21,19 @@
     </div>
   </div>
 
+  <%# 評価軸管理 %>
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">📊 評価軸</h2>
+    
+    <div id="evaluation_axes" class="space-y-2 mb-4">
+      <% @brainstorm.evaluation_axes.order(:position, :created_at).each do |axis| %>
+        <%= render "evaluation_axes/evaluation_axis", evaluation_axis: axis, brainstorm: @brainstorm %>
+      <% end %>
+    </div>
+
+    <%= render "evaluation_axes/form", brainstorm: @brainstorm, evaluation_axis: EvaluationAxis.new %>
+  </div>
+
   <!-- アイデア一覧セクション -->
   <div class="bg-white rounded-lg shadow p-6">
     <div class="flex justify-between items-center mb-6">

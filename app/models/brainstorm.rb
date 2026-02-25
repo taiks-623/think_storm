@@ -5,6 +5,7 @@ class Brainstorm < ApplicationRecord
   has_many :groups, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :conversations, dependent: :destroy
+  has_many :evaluation_axes, class_name: "EvaluationAxis", dependent: :destroy
 
   # Validations
   validates :title, presence: true, length: { maximum: 100 }

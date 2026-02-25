@@ -1,0 +1,7 @@
+<%= turbo_stream.append "evaluation_axes" do %>
+  <%= render "evaluation_axes/evaluation_axis", evaluation_axis: @evaluation_axis, brainstorm: @brainstorm %>
+<% end %>
+
+<%= turbo_stream.replace "evaluation_axis_form" do %>
+  <%= render "evaluation_axes/form", brainstorm: @brainstorm, evaluation_axis: EvaluationAxis.new %>
+<% end %>
