@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     resources :ideas, only: [:create, :edit, :update, :destroy] do
       post 'generate', on: :collection
       resources :tags, only: [:create, :destroy]
-
       resource :conversation, only: [:create, :show]
     end
 
@@ -32,6 +31,8 @@ Rails.application.routes.draw do
       post 'cluster', on: :collection
       delete 'reset_clustering', on: :collection
     end
+
+    resources :evaluation_axes, only: [:create, :update, :destroy]
   end
 
   # ユーザー設定

@@ -1,0 +1,10 @@
+<div id="<%= dom_id(evaluation_axis) %>" class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
+  <span class="text-sm font-medium text-gray-700"><%= evaluation_axis.name %></span>
+  <div class="flex space-x-2">
+    <%= button_to "削除",
+          brainstorm_evaluation_ax_path(brainstorm, evaluation_axis),
+          method: :delete,
+          data: { turbo_stream: true, confirm: "削除しますか？" },
+          class: "text-xs text-red-500 hover:text-red-700" %>
+  </div>
+</div>

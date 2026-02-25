@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_22_110217) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_013954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_110217) do
     t.datetime "updated_at", null: false
     t.index ["brainstorm_id"], name: "index_conversations_on_brainstorm_id"
     t.index ["idea_id"], name: "index_conversations_on_idea_id"
+  end
+
+  create_table "evaluation_axes", force: :cascade do |t|
+    t.bigint "brainstorm_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position"
+    t.datetime "updated_at", null: false
+    t.index ["brainstorm_id"], name: "index_evaluation_axes_on_brainstorm_id"
+  end
+
+  create_table "evaluations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "evaluation_axis_id", null: false
+    t.bigint "idea_id", null: false
+    t.integer "score", null: false
+    t.datetime "updated_at", null: false
+    t.index ["evaluation_axis_id"], name: "index_evaluations_on_evaluation_axis_id"
+    t.index ["idea_id", "evaluation_axis_id"], name: "index_evaluations_on_idea_id_and_evaluation_axis_id", unique: true
+    t.index ["idea_id"], name: "index_evaluations_on_idea_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -115,6 +135,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_22_110217) do
   add_foreign_key "brainstorms", "users"
   add_foreign_key "conversations", "brainstorms"
   add_foreign_key "conversations", "ideas"
+  add_foreign_key "evaluation_axes", "brainstorms"
+  add_foreign_key "evaluations", "evaluation_axes", column: "evaluation_axis_id"
+  add_foreign_key "evaluations", "ideas"
   add_foreign_key "groups", "brainstorms"
   add_foreign_key "idea_groups", "groups"
   add_foreign_key "idea_groups", "ideas"
