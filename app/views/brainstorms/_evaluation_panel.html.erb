@@ -1,0 +1,58 @@
+<% if brainstorm.evaluation_axes.count >= 2 %>
+  <% ideas_with_evaluations = brainstorm.ideas.select { |idea| idea.evaluations.any? } %>
+  <% if ideas_with_evaluations.any? %>
+    <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
+
+      <div class="flex flex-wrap gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
+        <div class="flex items-center space-x-2">
+          <label class="text-sm text-gray-600">評価軸：</label>
+          <select id="sort-axis" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
+            <option value="">すべて（合計）</option>
+            <% brainstorm.evaluation_axes.order(:created_at).each do |axis| %>
+              <option value="<%= axis.id %>"><%= axis.name %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="flex items-center space-x-2">
+          <label class="text-sm text-gray-600">並び順：</label>
+          <select id="sort-order" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
+            <option value="desc">スコア高い順</option>
+            <option value="asc">スコア低い順</option>
+          </select>
+        </div>
+        <div class="flex items-center space-x-2">
+          <label class="text-sm text-gray-600">最低スコア：</label>
+          <select id="min-score" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
+            <option value="0">指定なし</option>
+            <option value="1">1以上</option>
+            <option value="2">2以上</option>
+            <option value="3">3以上</option>
+            <option value="4">4以上</option>
+            <option value="5">5のみ</option>
+          </select>
+        </div>
+        <div class="flex items-center space-x-2">
+          <label class="text-sm text-gray-600 flex items-center space-x-1">
+            <input type="checkbox" id="hide-unevaluated" onchange="applyFilter()" class="rounded">
+            <span>未評価を除外</span>
+          </label>
+        </div>
+      </div>
+
+      <%= render "brainstorms/chart_grid", brainstorm: brainstorm %>
+    </div>
+  <% else %>
+    <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
+      <p class="text-sm text-gray-500">評価軸を設定してアイデアを評価すると、ここにレーダーチャートが表示されます。</p>
+      <div id="chart-grid"></div>
+    </div>
+  <% end %>
+<% else %>
+  <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
+    <p class="text-sm text-gray-500">評価軸を2つ以上設定すると、ここにレーダーチャートが表示されます。</p>
+    <div id="chart-grid"></div>
+  </div>
+<% end %>

@@ -26,16 +26,16 @@
               <span class="text-xs text-gray-500 w-24 truncate"><%= axis.name %></span>
               <div class="flex space-x-1">
                 <% (1..5).each do |score| %>
-                  <button
-                    class="w-6 h-6 rounded text-xs font-medium transition
-                           <%= evaluation&.score == score ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500 hover:bg-indigo-100' %>"
-                    data-idea-id="<%= idea.id %>"
-                    data-axis-id="<%= axis.id %>"
-                    data-score="<%= score %>"
-                    data-evaluation-id="<%= evaluation&.id %>"
-                    onclick="submitEvaluation(this)">
-                    <%= score %>
-                  </button>
+                  <%= form_with url: evaluation ? brainstorm_idea_evaluation_path(brainstorm, idea, evaluation) : brainstorm_idea_evaluations_path(brainstorm, idea),
+                        method: evaluation ? :patch : :post,
+                        data: { turbo_stream: true } do |f| %>
+                    <%= f.hidden_field :evaluation_axis_id, value: axis.id %>
+                    <%= f.hidden_field :score, value: score %>
+                    <%= f.button type: :submit,
+                          class: "w-6 h-6 rounded text-xs font-medium transition cursor-pointer #{evaluation&.score == score ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-500 hover:bg-indigo-100'}" do %>
+                      <%= score %>
+                    <% end %>
+                  <% end %>
                 <% end %>
               </div>
             </div>

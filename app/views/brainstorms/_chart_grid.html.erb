@@ -1,0 +1,22 @@
+<div id="chart-grid" class="grid grid-cols-2 gap-6">
+  <% brainstorm.ideas.includes(:evaluations).each do |idea| %>
+    <% scores = brainstorm.evaluation_axes.order(:created_at).map { |axis|
+        idea.evaluations.find { |e| e.evaluation_axis_id == axis.id }&.score || 0
+      } %>
+    <% total_score = scores.sum %>
+    <div class="chart-card border border-gray-200 rounded-lg p-4"
+         data-idea-id="<%= idea.id %>"
+         data-total-score="<%= total_score %>"
+         data-axis-scores="<%= brainstorm.evaluation_axes.order(:created_at).map { |axis| "#{axis.id}:#{idea.evaluations.find { |e| e.evaluation_axis_id == axis.id }&.score || 0}" }.join(',') %>"
+         data-has-evaluation="<%= idea.evaluations.any? %>">
+      <p class="text-sm font-medium text-gray-700 mb-1 truncate"><%= idea.content %></p>
+      <p class="text-xs text-gray-400 mb-3">合計スコア：<span class="total-score-label"><%= total_score %></span></p>
+      <div style="position: relative; height: 200px;">
+        <canvas id="radar-chart-<%= idea.id %>"
+                data-axis-ids="<%= brainstorm.evaluation_axes.order(:created_at).map(&:id).join(',') %>"
+                data-axis-labels="<%= brainstorm.evaluation_axes.order(:created_at).map(&:name).join(',') %>">
+        </canvas>
+      </div>
+    </div>
+  <% end %>
+</div>
