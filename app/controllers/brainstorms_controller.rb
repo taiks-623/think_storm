@@ -28,13 +28,14 @@ class BrainstormsController < ApplicationController
   end
 
   def show
-    @brainstorm.ideas.reload
     @tags = @brainstorm.tags.distinct.order(:name)
 
     if params[:tag_id].present?
       @selected_tag = @tags.find_by(id: params[:tag_id])
-      @filtered_ideas = @brainstorm.ideas.joins(:tags).where(tags: { id: params[:tag_id] })
+      @filtered_ideas = @brainstorm.ideas.includes(:evaluations, :tags).joins(:tags).where(tags: { id: params[:tag_id] })
     end
+
+    @brainstorm = Brainstorm.includes(ideas: [ :evaluations, :tags, :groups ], evaluation_axes: []).find(@brainstorm.id)
   end
 
   def edit
