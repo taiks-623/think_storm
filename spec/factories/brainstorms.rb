@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :brainstorm do
-    user { nil }
+    association :user
     title { "MyString" }
     description { "MyText" }
   end
