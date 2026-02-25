@@ -12,12 +12,9 @@ class EvaluationsController < ApplicationController
     if @evaluation.save
       respond_to do |format|
         format.turbo_stream
-        format.json { render json: { success: true, score: @evaluation.score, evaluation_id: @evaluation.id } }
       end
     else
-      respond_to do |format|
-        format.json { render json: { success: false }, status: :unprocessable_entity }
-      end
+      head :unprocessable_entity
     end
   end
 
@@ -26,12 +23,9 @@ class EvaluationsController < ApplicationController
     if @evaluation.update(score: params[:score])
       respond_to do |format|
         format.turbo_stream
-        format.json { render json: { success: true, score: @evaluation.score, evaluation_id: @evaluation.id } }
       end
     else
-      respond_to do |format|
-        format.json { render json: { success: false }, status: :unprocessable_entity }
-      end
+      head :unprocessable_entity
     end
   end
 

@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "idea-card-#{@idea.id}" do %>
+  <%= render "ideas/idea_card", idea: @idea, brainstorm: @brainstorm, current_group: @idea.groups.first %>
+<% end %>
+
+<%= turbo_stream.replace "evaluation-panel" do %>
+  <%= render "brainstorms/evaluation_panel", brainstorm: @brainstorm %>
+<% end %>
+
+<%= turbo_stream.replace "chart-reinit-flag" do %>
+  <span id="chart-reinit-flag" data-reinit="true"></span>
+<% end %>
