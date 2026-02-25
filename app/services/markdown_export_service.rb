@@ -52,7 +52,7 @@ class MarkdownExportService
   private
 
   def idea_lines(idea)
-    result = ["- #{idea.content}"]
+    result = [ "- #{idea.content}" ]
     result << "  - メモ: #{idea.memo}" if idea.memo.present?
     if @brainstorm.evaluation_axes.any?
       scores = @brainstorm.evaluation_axes.order(:created_at).map do |axis|
