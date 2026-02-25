@@ -16,6 +16,7 @@
       
       <div class="flex space-x-2">
         <%= link_to "編集", edit_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
+        <%= link_to "MDエクスポート", export_markdown_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition" %>
         <%= button_to "削除", brainstorm_path(@brainstorm), method: :delete, form: { onsubmit: "return confirm('本当に削除しますか？')" }, class: "px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition" %>
       </div>
     </div>

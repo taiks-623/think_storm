@@ -1,6 +1,6 @@
 class BrainstormsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown ]
 
   def index
     @brainstorms = current_user.brainstorms.order(created_at: :desc)
@@ -69,6 +69,13 @@ class BrainstormsController < ApplicationController
     render json: @suggestions
   end
 
+  def export_markdown
+    content = MarkdownExportService.new(@brainstorm).call
+    send_data content,
+      filename: "#{@brainstorm.title}.md",
+      type: "text/markdown",
+      disposition: "attachment"
+  end
 
   private
 
