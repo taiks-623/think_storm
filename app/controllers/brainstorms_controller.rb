@@ -35,7 +35,7 @@ class BrainstormsController < ApplicationController
       @filtered_ideas = @brainstorm.ideas.includes(:evaluations, :tags).joins(:tags).where(tags: { id: params[:tag_id] })
     end
 
-    @brainstorm = Brainstorm.includes(ideas: [:evaluations, :tags, :groups], evaluation_axes: []).find(@brainstorm.id)
+    @brainstorm = Brainstorm.includes(ideas: [ :evaluations, :tags, :groups ], evaluation_axes: []).find(@brainstorm.id)
   end
 
   def edit
