@@ -7,6 +7,8 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [ :google_oauth2, :line ]
 
   has_many :brainstorms, dependent: :destroy
+  has_many :brainstorm_members, dependent: :destroy
+  has_many :shared_brainstorms, through: :brainstorm_members, source: :brainstorm
 
   def self.from_omniauth(auth)
     user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|

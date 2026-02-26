@@ -1,6 +1,7 @@
 class Idea < ApplicationRecord
   # Associations
   belongs_to :brainstorm
+  belongs_to :user, optional: true
   has_many :idea_groups, dependent: :destroy
   has_many :groups, through: :idea_groups
   has_many :idea_tags, dependent: :destroy
