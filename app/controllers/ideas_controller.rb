@@ -1,11 +1,13 @@
 class IdeasController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
+  before_action :require_editor!
   before_action :set_idea, only: [ :edit, :update, :destroy ]
 
   def create
     @idea = @brainstorm.ideas.build(idea_params)
     @idea.source = "user"
+    @idea.user = current_user  # 誰が追加したか記録
 
     if @idea.save
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを追加しました"
@@ -47,7 +49,16 @@ class IdeasController < ApplicationController
   private
 
   def set_brainstorm
-    @brainstorm = current_user.brainstorms.find(params[:brainstorm_id])
+    @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])
+    unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
+      redirect_to brainstorms_path, alert: "ブレストが見つかりません"
+    end
+  end
+
+  def require_editor!
+    unless @brainstorm.editor?(current_user)
+      redirect_to @brainstorm, alert: "編集権限がありません"
+    end
   end
 
   def set_idea
