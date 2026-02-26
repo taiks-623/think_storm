@@ -1,0 +1,62 @@
+<div class="max-w-2xl mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-6">招待リンク管理</h1>
+  <p class="text-gray-600 mb-8"><%= @brainstorm.title %></p>
+
+  <%# 編集者用リンク %>
+  <div class="bg-white rounded-lg border p-6 mb-4">
+    <h2 class="font-semibold text-lg mb-2">編集者用リンク</h2>
+    <p class="text-sm text-gray-500 mb-4">アイデアの追加・編集ができます</p>
+
+    <% if @editor_invitation.persisted? %>
+      <div class="flex items-center gap-2 mb-4">
+        <input type="text"
+               value="<%= join_brainstorm_url(@editor_invitation.token) %>"
+               readonly
+               class="flex-1 border rounded px-3 py-2 text-sm bg-gray-50"
+               id="editor-link">
+        <button onclick="copyToClipboard('editor-link')"
+                class="px-4 py-2 bg-blue-600 text-white rounded text-sm">
+          コピー
+        </button>
+      </div>
+    <% else %>
+      <%= button_to "リンクを生成する", invite_brainstorm_path(@brainstorm),
+            params: { role: "editor" },
+            class: "px-4 py-2 bg-blue-600 text-white rounded text-sm" %>
+    <% end %>
+  </div>
+
+  <%# 閲覧者用リンク %>
+  <div class="bg-white rounded-lg border p-6 mb-4">
+    <h2 class="font-semibold text-lg mb-2">閲覧者用リンク</h2>
+    <p class="text-sm text-gray-500 mb-4">アイデアの閲覧のみできます</p>
+
+    <% if @viewer_invitation.persisted? %>
+      <div class="flex items-center gap-2 mb-4">
+        <input type="text"
+               value="<%= join_brainstorm_url(@viewer_invitation.token) %>"
+               readonly
+               class="flex-1 border rounded px-3 py-2 text-sm bg-gray-50"
+               id="viewer-link">
+        <button onclick="copyToClipboard('viewer-link')"
+                class="px-4 py-2 bg-gray-600 text-white rounded text-sm">
+          コピー
+        </button>
+      </div>
+    <% else %>
+      <%= button_to "リンクを生成する", invite_brainstorm_path(@brainstorm),
+            params: { role: "viewer" },
+            class: "px-4 py-2 bg-gray-600 text-white rounded text-sm" %>
+    <% end %>
+  </div>
+
+  <%= link_to "← ブレストに戻る", @brainstorm, class: "text-sm text-gray-500 hover:underline" %>
+</div>
+
+<script>
+  function copyToClipboard(inputId) {
+    const input = document.getElementById(inputId);
+    navigator.clipboard.writeText(input.value);
+    alert("コピーしました");
+  }
+</script>
