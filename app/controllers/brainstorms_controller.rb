@@ -3,6 +3,8 @@ class BrainstormsController < ApplicationController
   before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown ]
   before_action :require_editor!, only: [ :edit, :update ]
   before_action :require_owner!, only: [ :destroy ]
+  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown, :invite, :create_invitation ]
+  before_action :require_owner!, only: [ :destroy, :invite, :create_invitation ]
 
   def index
     owned_ids = current_user.brainstorms.pluck(:id)
@@ -82,6 +84,22 @@ class BrainstormsController < ApplicationController
       filename: "#{@brainstorm.title}.md",
       type: "text/markdown",
       disposition: "attachment"
+  end
+
+  def invite
+    @editor_invitation = @brainstorm.brainstorm_invitations.find_or_initialize_by(role: "editor")
+    @viewer_invitation = @brainstorm.brainstorm_invitations.find_or_initialize_by(role: "viewer")
+  end
+
+  def create_invitation
+    role = params[:role].presence_in(%w[editor viewer])
+    unless role
+      redirect_to invite_brainstorm_path(@brainstorm), alert: "無効なロールです"
+      return
+    end
+
+    invitation = @brainstorm.brainstorm_invitations.find_or_create_by!(role: role)
+    redirect_to invite_brainstorm_path(@brainstorm), notice: "#{role == 'editor' ? '編集者' : '閲覧者'}用の招待リンクを生成しました"
   end
 
   private

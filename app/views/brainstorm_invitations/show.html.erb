@@ -1,0 +1,15 @@
+  <div class="bg-white rounded-lg border p-8 text-center">
+    <h1 class="text-2xl font-bold mb-2">ブレストへの招待</h1>
+    <p class="text-gray-600 mb-6">
+      <span class="font-semibold"><%= @invitation.brainstorm.title %></span>
+      に<%= @invitation.role == "editor" ? "編集者" : "閲覧者" %>として招待されています
+    </p>
+
+    <%= button_to "参加する", join_brainstorm_confirm_path(@invitation.token),
+          method: :post,
+          class: "w-full py-3 bg-blue-600 text-white rounded-lg font-semibold mb-3" %>
+
+    <%= link_to "キャンセル", brainstorms_path,
+          class: "block text-sm text-gray-500 hover:underline" %>
+  </div>
+</div>

@@ -35,6 +35,11 @@ Rails.application.routes.draw do
     end
 
     resources :evaluation_axes, only: [:create, :update, :destroy]
+
+    member do
+      get  :invite
+      post :invite, action: :create_invitation
+    end
   end
 
   # ユーザー設定
@@ -51,6 +56,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # 招待リンクからの参加
+  get  '/join/:token', to: 'brainstorm_invitations#show', as: :join_brainstorm
+  post '/join/:token', to: 'brainstorm_invitations#join', as: :join_brainstorm_confirm
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
