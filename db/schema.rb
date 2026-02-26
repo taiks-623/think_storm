@@ -10,9 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_013954) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_26_090435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "brainstorm_invitations", force: :cascade do |t|
+    t.bigint "brainstorm_id", null: false
+    t.datetime "created_at", null: false
+    t.string "role", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brainstorm_id", "role"], name: "index_brainstorm_invitations_on_brainstorm_id_and_role", unique: true
+    t.index ["brainstorm_id"], name: "index_brainstorm_invitations_on_brainstorm_id"
+    t.index ["token"], name: "index_brainstorm_invitations_on_token", unique: true
+  end
+
+  create_table "brainstorm_members", force: :cascade do |t|
+    t.bigint "brainstorm_id", null: false
+    t.datetime "created_at", null: false
+    t.string "role", default: "viewer", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["brainstorm_id", "user_id"], name: "index_brainstorm_members_on_brainstorm_id_and_user_id", unique: true
+    t.index ["brainstorm_id"], name: "index_brainstorm_members_on_brainstorm_id"
+    t.index ["user_id"], name: "index_brainstorm_members_on_user_id"
+  end
 
   create_table "brainstorms", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -91,8 +113,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_013954) do
     t.integer "position"
     t.string "source", default: "user", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["brainstorm_id"], name: "index_ideas_on_brainstorm_id"
     t.index ["position"], name: "index_ideas_on_position"
+    t.index ["user_id"], name: "index_ideas_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -132,6 +156,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_013954) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "brainstorm_invitations", "brainstorms"
+  add_foreign_key "brainstorm_members", "brainstorms"
+  add_foreign_key "brainstorm_members", "users"
   add_foreign_key "brainstorms", "users"
   add_foreign_key "conversations", "brainstorms"
   add_foreign_key "conversations", "ideas"
@@ -144,6 +171,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_013954) do
   add_foreign_key "idea_tags", "ideas"
   add_foreign_key "idea_tags", "tags"
   add_foreign_key "ideas", "brainstorms"
+  add_foreign_key "ideas", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "tags", "brainstorms"
 end
