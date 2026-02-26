@@ -1,9 +1,14 @@
 class BrainstormsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown ]
+  before_action :require_editor!, only: [ :edit, :update ]
+  before_action :require_owner!, only: [ :destroy ]
 
   def index
-    @brainstorms = current_user.brainstorms.order(created_at: :desc)
+    owned_ids = current_user.brainstorms.pluck(:id)
+    shared_ids = current_user.shared_brainstorms.pluck(:id)
+    @brainstorms = Brainstorm.where(id: owned_ids + shared_ids)
+                            .order(created_at: :desc)
 
     if params[:q].present?
       keyword = "%#{params[:q]}%"
@@ -57,11 +62,13 @@ class BrainstormsController < ApplicationController
   def search_suggestions
     if params[:q].present?
       keyword = "%#{params[:q]}%"
-      @suggestions = current_user.brainstorms
-        .where("title LIKE ?", keyword)
-        .order(created_at: :desc)
-        .limit(5)
-        .pluck(:title)
+      owned_ids = current_user.brainstorms.pluck(:id)
+      shared_ids = current_user.shared_brainstorms.pluck(:id)
+      @suggestions = Brainstorm.where(id: owned_ids + shared_ids)
+                              .where("title LIKE ?", keyword)
+                              .order(created_at: :desc)
+                              .limit(5)
+                              .pluck(:title)
     else
       @suggestions = []
     end
@@ -80,7 +87,22 @@ class BrainstormsController < ApplicationController
   private
 
   def set_brainstorm
-    @brainstorm = current_user.brainstorms.find(params[:id])
+    @brainstorm = Brainstorm.find_by(id: params[:id])
+    unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
+      redirect_to brainstorms_path, alert: "ブレストが見つかりません"
+    end
+  end
+
+  def require_editor!
+    unless @brainstorm.editor?(current_user)
+      redirect_to @brainstorm, alert: "編集権限がありません"
+    end
+  end
+
+  def require_owner!
+    unless @brainstorm.owner?(current_user)
+      redirect_to @brainstorm, alert: "オーナー権限が必要です"
+    end
   end
 
   def brainstorm_params
