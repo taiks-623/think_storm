@@ -3,7 +3,7 @@
 <% content_for :og_type, "article" %>
 <span id="chart-reinit-flag"></span>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-8" data-brainstorm-id="<%= @brainstorm.id %>">
   <!-- ヘッダー部分 -->
   <div class="bg-white rounded-lg shadow p-6 mb-6">
     <div class="flex justify-between items-start mb-4">
@@ -228,7 +228,7 @@
         </div>
       <% else %>
         <!-- グループがない場合は通常表示 -->
-        <div class="space-y-4">
+        <div class="space-y-4" id="ideas-list">
           <% ideas_to_show = @filtered_ideas || @brainstorm.ideas.where.not(id: nil) %>
           <% ideas_to_show.each do |idea| %>
             <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
@@ -236,7 +236,7 @@
         </div>
       <% end %>
     <% else %>
-      <div class="text-center py-12 bg-gray-50 rounded-lg">
+      <div id="empty-state" class="text-center py-12 bg-gray-50 rounded-lg">
         <p class="text-gray-600 mb-4">まだアイデアがありません</p>
         <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
         <div class="space-x-4">
