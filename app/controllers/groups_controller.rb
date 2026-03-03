@@ -80,7 +80,7 @@ class GroupsController < ApplicationController
   def set_brainstorm
     @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])
     unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
-      redirect_to brainstorms_path, alert: "ブレストが見つかりません"
+      render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
     end
   end
 
