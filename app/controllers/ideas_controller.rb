@@ -7,9 +7,15 @@ class IdeasController < ApplicationController
   def create
     @idea = @brainstorm.ideas.build(idea_params)
     @idea.source = "user"
-    @idea.user = current_user  # 誰が追加したか記録
+    @idea.user = current_user
 
     if @idea.save
+      # ブロードキャスト
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "idea_created",
+        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil })
+      )
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを追加しました"
     else
       redirect_to brainstorm_path(@brainstorm), alert: "アイデアの追加に失敗しました"
@@ -35,6 +41,13 @@ class IdeasController < ApplicationController
 
   def update
     if @idea.update(idea_params)
+      # ブロードキャスト
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "idea_updated",
+        idea_id: @idea.id.to_s,
+        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil })
+      )
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを更新しました"
     else
       render :edit, status: :unprocessable_entity
@@ -43,6 +56,12 @@ class IdeasController < ApplicationController
 
   def destroy
     @idea.destroy
+    # ブロードキャスト
+    BrainstormChannel.broadcast_to(
+      @brainstorm,
+      event: "idea_destroyed",
+      idea_id: @idea.id.to_s
+    )
     redirect_to brainstorm_path(@brainstorm), notice: "アイデアを削除しました"
   end
 
