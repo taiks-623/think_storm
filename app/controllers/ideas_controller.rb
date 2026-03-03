@@ -30,6 +30,13 @@ class IdeasController < ApplicationController
       ideas_data.each do |idea_data|
         @brainstorm.ideas.create(idea_data)
       end
+
+      # ブロードキャスト（ページリロードで対応）
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "group_updated"
+      )
+
       redirect_to brainstorm_path(@brainstorm), notice: "#{ideas_data.count}個のアイデアを生成しました"
     else
       redirect_to brainstorm_path(@brainstorm), alert: "アイデアの生成に失敗しました"

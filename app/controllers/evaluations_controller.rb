@@ -10,6 +10,7 @@ class EvaluationsController < ApplicationController
       score: params[:score]
     )
     if @evaluation.save
+      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
       respond_to do |format|
         format.turbo_stream
       end
@@ -21,6 +22,7 @@ class EvaluationsController < ApplicationController
   def update
     @evaluation = @idea.evaluations.find(params[:id])
     if @evaluation.update(score: params[:score])
+      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
       respond_to do |format|
         format.turbo_stream
       end
@@ -32,9 +34,10 @@ class EvaluationsController < ApplicationController
   private
 
   def set_brainstorm
-    @brainstorm = current_user.brainstorms.find(params[:brainstorm_id])
-  rescue ActiveRecord::RecordNotFound
-    render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
+    @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])
+    unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
+      render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
+    end
   end
 
   def set_idea
