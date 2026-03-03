@@ -5,6 +5,7 @@ class EvaluationAxesController < ApplicationController
   def create
     @evaluation_axis = @brainstorm.evaluation_axes.build(evaluation_axis_params)
     if @evaluation_axis.save
+      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @brainstorm }
@@ -20,6 +21,7 @@ class EvaluationAxesController < ApplicationController
   def update
     @evaluation_axis = @brainstorm.evaluation_axes.find(params[:id])
     if @evaluation_axis.update(evaluation_axis_params)
+      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @brainstorm }
@@ -34,6 +36,7 @@ class EvaluationAxesController < ApplicationController
   def destroy
     @evaluation_axis = @brainstorm.evaluation_axes.find(params[:id])
     @evaluation_axis.destroy
+    BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @brainstorm }
@@ -43,9 +46,10 @@ class EvaluationAxesController < ApplicationController
   private
 
   def set_brainstorm
-    @brainstorm = current_user.brainstorms.find(params[:brainstorm_id])
-  rescue ActiveRecord::RecordNotFound
-    render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
+    @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])
+    unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
+      redirect_to brainstorms_path, alert: "ブレストが見つかりません"
+    end
   end
 
   def evaluation_axis_params

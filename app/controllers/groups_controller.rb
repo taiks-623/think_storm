@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
+  before_action :require_editor!
   before_action :set_group, only: [ :update, :destroy ]
 
   def cluster
@@ -8,6 +9,10 @@ class GroupsController < ApplicationController
     result = service.cluster_ideas
 
     if result[:success]
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "group_updated"
+      )
       redirect_to brainstorm_path(@brainstorm), notice: result[:message]
     else
       redirect_to brainstorm_path(@brainstorm), alert: result[:message]
@@ -16,10 +21,13 @@ class GroupsController < ApplicationController
 
   def create
     @group = @brainstorm.groups.build(group_params)
-    # 最後のpositionの次の番号を設定
     @group.position = @brainstorm.groups.maximum(:position).to_i + 1
 
     if @group.save
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "group_updated"
+      )
       redirect_to brainstorm_path(@brainstorm), notice: "グループを作成しました"
     else
       redirect_to brainstorm_path(@brainstorm), alert: "グループの作成に失敗しました"
@@ -28,6 +36,10 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "group_updated"
+      )
       redirect_to brainstorm_path(@brainstorm), notice: "グループ名を更新しました"
     else
       redirect_to brainstorm_path(@brainstorm), alert: "グループ名の更新に失敗しました"
@@ -36,6 +48,10 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
+    BrainstormChannel.broadcast_to(
+      @brainstorm,
+      event: "group_updated"
+    )
     redirect_to brainstorm_path(@brainstorm), notice: "グループを削除しました"
   end
 
@@ -49,6 +65,10 @@ class GroupsController < ApplicationController
     result = service.cluster_ideas
 
     if result[:success]
+      BrainstormChannel.broadcast_to(
+        @brainstorm,
+        event: "group_updated"
+      )
       redirect_to brainstorm_path(@brainstorm), notice: "クラスタリングをやり直しました"
     else
       redirect_to brainstorm_path(@brainstorm), alert: "やり直しに失敗しました: #{result[:message]}"
@@ -58,7 +78,16 @@ class GroupsController < ApplicationController
   private
 
   def set_brainstorm
-    @brainstorm = current_user.brainstorms.find(params[:brainstorm_id])
+    @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])
+    unless @brainstorm && (@brainstorm.owner?(current_user) || @brainstorm.member?(current_user))
+      redirect_to brainstorms_path, alert: "ブレストが見つかりません"
+    end
+  end
+
+  def require_editor!
+    unless @brainstorm.editor?(current_user)
+      redirect_to @brainstorm, alert: "編集権限がありません"
+    end
   end
 
   def set_group
