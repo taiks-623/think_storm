@@ -1,0 +1,9 @@
+<%= turbo_stream.replace "vote-#{@idea.id}" do %>
+  <div id="vote-<%= @idea.id %>">
+    <%= button_to "👍 #{@idea.votes.size}",
+          brainstorm_idea_vote_path(@brainstorm, @idea),
+          method: :post,
+          data: { turbo_stream: true },
+          class: "px-3 py-1 bg-gray-100 text-gray-600 rounded text-sm cursor-pointer hover:bg-gray-200 transition" %>
+  </div>
+<% end %>
