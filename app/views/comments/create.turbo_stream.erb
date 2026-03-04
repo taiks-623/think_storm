@@ -1,0 +1,3 @@
+<%= turbo_stream.append "comment-list-#{@idea.id}" do %>
+  <%= render "comments/comment", comment: @comment, brainstorm: @brainstorm, idea: @idea %>
+<% end %>

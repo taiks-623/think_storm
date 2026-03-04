@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_26_090435) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_143009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_090435) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_brainstorms_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.bigint "idea_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["idea_id"], name: "index_comments_on_idea_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -156,10 +166,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_090435) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "idea_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["idea_id", "user_id"], name: "index_votes_on_idea_id_and_user_id", unique: true
+    t.index ["idea_id"], name: "index_votes_on_idea_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+  end
+
   add_foreign_key "brainstorm_invitations", "brainstorms"
   add_foreign_key "brainstorm_members", "brainstorms"
   add_foreign_key "brainstorm_members", "users"
   add_foreign_key "brainstorms", "users"
+  add_foreign_key "comments", "ideas"
+  add_foreign_key "comments", "users"
   add_foreign_key "conversations", "brainstorms"
   add_foreign_key "conversations", "ideas"
   add_foreign_key "evaluation_axes", "brainstorms"
@@ -174,4 +196,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_090435) do
   add_foreign_key "ideas", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "tags", "brainstorms"
+  add_foreign_key "votes", "ideas"
+  add_foreign_key "votes", "users"
 end
