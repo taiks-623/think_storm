@@ -36,8 +36,13 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods  # 追加
-  config.include Warden::Test::Helpers  # 追加
-  config.after { Warden.test_reset! } 
+  config.include Devise::Test::IntegrationHelpers, type: :request
+  # config.include Warden::Test::Helpers  # 追加
+  # config.after { Warden.test_reset! } 
+  config.before(:suite) do
+    Rails.application.reload_routes!  # 追加
+    Warning[:deprecated] = false
+  end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [

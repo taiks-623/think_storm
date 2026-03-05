@@ -45,8 +45,8 @@ Rails.application.routes.draw do
   end
 
   # ユーザー設定
-  resource :profile, only: [:show, :edit, :update]
-  delete "profile/cancel", to: "profiles#cancel", as: :cancel_profile
+  # resource :profile, only: [:show, :edit, :update]
+  # delete "profile/cancel", to: "profiles#cancel", as: :cancel_profile
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
@@ -62,6 +62,12 @@ Rails.application.routes.draw do
   # 招待リンクからの参加
   get  '/join/:token', to: 'brainstorm_invitations#show', as: :join_brainstorm
   post '/join/:token', to: 'brainstorm_invitations#join', as: :join_brainstorm_confirm
+
+  namespace :users do
+    resource :profile, only: [:edit, :update]
+    resource :email, only: [:edit, :update]
+    resource :account, only: [:show, :destroy]
+  end
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"

@@ -43,7 +43,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # 認証
-gem "devise"
+gem "devise", "~> 5.0"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"  # CSRF対策（Rails必須）
