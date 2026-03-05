@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :votes, dependent: :destroy
   has_many :comments, dependent: :destroy
 
+  validates :name, length: { maximum: 50 }, allow_blank: true
+
   def self.from_omniauth(auth)
     user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
       u.email = auth.info.email.presence || "#{auth.uid}@line.thinkstorm.jp"

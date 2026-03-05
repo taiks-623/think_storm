@@ -9,7 +9,7 @@
     <div class="flex items-center space-x-4">
       <% if user_signed_in? %>
         <%= link_to "ダッシュボード", dashboard_path, class: "text-gray-700 hover:text-indigo-600" %>
-        <%= link_to "アカウント設定", profile_path, class: "text-gray-700 hover:text-indigo-600" %>
+        <%= link_to "アカウント設定", edit_users_profile_path, class: "text-gray-700 hover:text-indigo-600" %>
         <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300" %>
       <% else %>
         <%= link_to "ログイン", new_user_session_path, class: "text-gray-700 hover:text-indigo-600" %>
