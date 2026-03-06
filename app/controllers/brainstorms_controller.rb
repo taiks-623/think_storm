@@ -102,6 +102,12 @@ class BrainstormsController < ApplicationController
     redirect_to invite_brainstorm_path(@brainstorm), notice: "#{role == 'editor' ? '編集者' : '閲覧者'}用の招待リンクを生成しました"
   end
 
+  def online_members
+    online_key = "brainstorm_#{@brainstorm.id}_online"
+    members = Rails.cache.read(online_key) || []
+    render json: { online_members: members }
+  end
+
   private
 
   def set_brainstorm

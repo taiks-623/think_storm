@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   # ブレストのCRUD
   resources :brainstorms do
     get 'export_markdown', on: :member
+    get :online_members, on: :member
     resources :ideas, only: [:create, :edit, :update, :destroy] do
       post 'generate', on: :collection
       resources :tags, only: [:create, :destroy]

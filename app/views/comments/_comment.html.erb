@@ -1,6 +1,6 @@
 <div class="flex justify-between items-start bg-gray-50 rounded p-2" id="comment-<%= comment.id %>">
   <div>
-    <span class="text-xs font-medium text-gray-700"><%= comment.user.email %></span>
+    <span class="text-xs font-medium text-gray-700"><%= comment.user.display_name %></span>
     <p class="text-sm text-gray-600 mt-0.5"><%= comment.content %></p>
     <span class="text-xs text-gray-400"><%= comment.created_at.strftime("%m/%d %H:%M") %></span>
   </div>
