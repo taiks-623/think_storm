@@ -426,10 +426,12 @@
       };
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('turbo:load', function() {
       const sortableContainers = document.querySelectorAll('.sortable-ideas');
       
       sortableContainers.forEach(function(container) {
+        if (container.dataset.sortableInitialized) return
+        container.dataset.sortableInitialized = 'true'
         new Sortable(container, {
           group: 'ideas',
           animation: 150,
