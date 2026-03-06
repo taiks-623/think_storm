@@ -1,9 +1,9 @@
 class BrainstormsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown ]
+  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown, :online_members ]
   before_action :require_editor!, only: [ :edit, :update ]
   before_action :require_owner!, only: [ :destroy ]
-  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown, :invite, :create_invitation ]
+  before_action :set_brainstorm, only: [ :show, :edit, :update, :destroy, :export_markdown, :invite, :create_invitation, :online_members ]
   before_action :require_owner!, only: [ :destroy, :invite, :create_invitation ]
 
   def index
