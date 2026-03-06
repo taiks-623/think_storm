@@ -1,25 +1,35 @@
-<h2>Change your password</h2>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4">
+  <div class="max-w-md w-full">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">パスワードの再設定</h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
+        <div class="mb-6">
+          <%= f.label :password, "新しいパスワード", class: "block text-gray-700 font-semibold mb-2" %>
+          <% if @minimum_password_length %>
+            <p class="text-sm text-gray-500 mb-2"><%= @minimum_password_length %>文字以上</p>
+          <% end %>
+          <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+        </div>
+
+        <div class="mb-6">
+          <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "block text-gray-700 font-semibold mb-2" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+        </div>
+
+        <div class="mb-6">
+          <%= f.submit "パスワードを変更する", class: "w-full px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer font-semibold" %>
+        </div>
+      <% end %>
+
+      <div class="text-center space-x-4">
+        <%= link_to "ログイン", new_session_path(resource_name), class: "text-indigo-600 hover:text-indigo-800" %>
+        <span class="text-gray-400">|</span>
+        <%= link_to "新規登録", new_registration_path(resource_name), class: "text-indigo-600 hover:text-indigo-800" %>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
