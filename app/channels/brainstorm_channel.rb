@@ -8,7 +8,7 @@ class BrainstormChannel < ApplicationCable::Channel
       online_key = "brainstorm_#{params[:brainstorm_id]}_online"
       online_members = (Rails.cache.read(online_key) || [])
       unless online_members.any? { |m| m[:id] == current_user.id }
-        online_members << { id: current_user.id, email: current_user.email }
+        online_members << { id: current_user.id, name: current_user.display_name }
         Rails.cache.write(online_key, online_members, expires_in: 1.hour)
       end
 
@@ -16,7 +16,7 @@ class BrainstormChannel < ApplicationCable::Channel
         brainstorm,
         event: "member_connected",
         user_id: current_user.id,
-        email: current_user.email,
+        name: current_user.display_name,
         online_members: online_members
       )
     else
@@ -37,7 +37,7 @@ class BrainstormChannel < ApplicationCable::Channel
       brainstorm,
       event: "member_disconnected",
       user_id: current_user.id,
-      email: current_user.email,
+      name: current_user.display_name,
       online_members: online_members
     )
 

@@ -17,13 +17,13 @@
           <span class="text-sm text-gray-500">メンバー：</span>
           <%# オーナー %>
           <span class="inline-flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">
-            <%= @brainstorm.user.email %>
+            <%= @brainstorm.user.display_name %>
             <span class="bg-indigo-600 text-white px-1 rounded text-xs">オーナー</span>
           </span>
           <%# 招待メンバー %>
           <% @brainstorm.brainstorm_members.includes(:user).each do |member| %>
             <span class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
-              <%= member.user.email %>
+              <%= member.user.display_name %>
               <span class="<%= member.role == 'editor' ? 'bg-green-500' : 'bg-gray-400' %> text-white px-1 rounded text-xs">
                 <%= member.role == 'editor' ? '編集者' : '閲覧者' %>
               </span>

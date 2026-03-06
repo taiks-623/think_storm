@@ -11,6 +11,9 @@ function subscribeToBrainstorm(brainstormId) {
     {
       connected() {
         console.log(`Connected to BrainstormChannel (brainstorm: ${brainstormId})`)
+        fetch(`/brainstorms/${brainstormId}/online_members`)
+          .then(res => res.json())
+          .then(data => handleMemberPresence(data))
       },
 
       disconnected() {
@@ -88,7 +91,7 @@ function handleMemberPresence(data) {
     badge.dataset.userId = member.id
     badge.innerHTML = `
       <span class="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-      ${member.email}
+      ${member.name}
     `
     container.appendChild(badge)
   })
@@ -97,8 +100,23 @@ function handleMemberPresence(data) {
 document.addEventListener('turbo:load', () => {
   const brainstormEl = document.querySelector('[data-brainstorm-id]')
   if (brainstormEl) {
-    subscribeToBrainstorm(brainstormEl.dataset.brainstormId)
+    const brainstormId = brainstormEl.dataset.brainstormId
+
+    // 既存サブスクリプションを解除して再接続
+    if (brainstormChannelSubscriptions[brainstormId]) {
+      brainstormChannelSubscriptions[brainstormId].unsubscribe()
+      delete brainstormChannelSubscriptions[brainstormId]
+    }
+
+    subscribeToBrainstorm(brainstormId)
   }
+})
+
+document.addEventListener('turbo:before-cache', () => {
+  Object.keys(brainstormChannelSubscriptions).forEach(id => {
+    brainstormChannelSubscriptions[id].unsubscribe()
+    delete brainstormChannelSubscriptions[id]
+  })
 })
 
 export { subscribeToBrainstorm }

@@ -24,4 +24,8 @@ class User < ApplicationRecord
     user.save if user.confirmed_at_changed?
     user
   end
+
+  def display_name
+    name.presence || email
+  end
 end
