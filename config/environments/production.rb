@@ -53,6 +53,9 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
+  config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
+  config.active_job.queue_adapter = :solid_queue
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
@@ -63,11 +66,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: "smtp.resend.com",
-    port: 465,
+    port: 587,
     user_name: "resend",
     password: ENV["RESEND_API_KEY"],
     authentication: :plain,
-    ssl: true
+    enable_starttls_auto: true
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
