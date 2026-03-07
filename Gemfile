@@ -48,6 +48,8 @@ gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"  # CSRF対策（Rails必須）
 
+gem "resend"
+
 # AI API連携
 gem "anthropic", "~> 0.3.0"
 gem "dotenv-rails", groups: [ :development, :test ]
