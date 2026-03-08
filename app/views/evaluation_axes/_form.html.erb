@@ -1,13 +1,16 @@
-<div id="evaluation_axis_form">
+<%# app/views/evaluation_axes/_form.html.erb %>
+<%# locals: brainstorm, evaluation_axis %>
+
+<% if brainstorm.owner?(current_user) || brainstorm.editor?(current_user) %>
   <%= form_with url: brainstorm_evaluation_axes_path(brainstorm),
-        data: { turbo_stream: true } do |f| %>
-    <div class="flex space-x-2">
-      <%= f.text_field :name,
-            name: "evaluation_axis[name]",
-            placeholder: "例：実現可能性、収益性、独自性",
-            class: "flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
-      <%= f.submit "追加",
-            class: "px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm cursor-pointer" %>
-    </div>
+        method: :post,
+        html: { class: "ts-axis-form" } do |f| %>
+    <%= f.text_field :name,
+          class: "ts-axis-input",
+          placeholder: "例：実現可能性、収益性、独自性",
+          maxlength: 30 %>
+    <%= f.submit "追加",
+          class: "ts-btn ts-btn-mint ts-btn-sm cursor-pointer",
+          style: "flex-shrink:0;" %>
   <% end %>
-</div>
+<% end %>

@@ -3,28 +3,29 @@
 <% content_for :og_type, "article" %>
 <span id="chart-reinit-flag"></span>
 
-<div class="container mx-auto px-4 py-8" data-brainstorm-id="<%= @brainstorm.id %>">
-  <!-- ヘッダー部分 -->
-  <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <div class="flex justify-between items-start mb-4">
+<div class="ts-brainstorm-show" data-brainstorm-id="<%= @brainstorm.id %>">
+
+  <%# ─── ブレストヘッダー ─── %>
+  <div class="ts-section-card">
+    <div class="ts-brainstorm-header">
       <div class="flex-grow">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2"><%= @brainstorm.title %></h1>
+        <h1 class="ts-brainstorm-title"><%= @brainstorm.title %></h1>
         <% if @brainstorm.description.present? %>
-          <p class="text-gray-600 mb-4"><%= @brainstorm.description %></p>
+          <p class="ts-brainstorm-desc"><%= @brainstorm.description %></p>
         <% end %>
-        <p class="text-sm text-gray-500">作成日: <%= @brainstorm.created_at.strftime("%Y年%m月%d日") %></p>
-        <div class="mt-3 flex flex-wrap gap-2 items-center">
-          <span class="text-sm text-gray-500">メンバー：</span>
-          <%# オーナー %>
-          <span class="inline-flex items-center gap-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs">
+        <p class="ts-brainstorm-date">作成日: <%= @brainstorm.created_at.strftime("%Y年%m月%d日") %></p>
+
+        <%# メンバー %>
+        <div class="ts-members-row">
+          <span class="ts-members-label">メンバー：</span>
+          <span class="ts-member-badge ts-member-badge-owner">
             <%= @brainstorm.user.display_name %>
-            <span class="bg-indigo-600 text-white px-1 rounded text-xs">オーナー</span>
+            <span class="ts-member-role ts-role-owner">オーナー</span>
           </span>
-          <%# 招待メンバー %>
           <% @brainstorm.brainstorm_members.includes(:user).each do |member| %>
-            <span class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
+            <span class="ts-member-badge <%= member.role == 'editor' ? 'ts-member-badge-editor' : 'ts-member-badge-viewer' %>">
               <%= member.user.display_name %>
-              <span class="<%= member.role == 'editor' ? 'bg-green-500' : 'bg-gray-400' %> text-white px-1 rounded text-xs">
+              <span class="ts-member-role <%= member.role == 'editor' ? 'ts-role-editor' : 'ts-role-viewer' %>">
                 <%= member.role == 'editor' ? '編集者' : '閲覧者' %>
               </span>
             </span>
@@ -32,200 +33,203 @@
         </div>
       </div>
 
-      <div class="mt-2 flex flex-wrap gap-2 items-center">
-        <span class="text-sm text-gray-500">オンライン：</span>
-        <div id="online-members" class="flex flex-wrap gap-2">
-          <%# JavaScriptで動的に追加される %>
+      <div class="flex flex-col items-end gap-3">
+        <%# オンラインメンバー %>
+        <div class="ts-online-row">
+          <span class="ts-online-label">オンライン：</span>
+          <div id="online-members" class="flex flex-wrap gap-2"></div>
         </div>
-      </div>
-            
-      <div class="flex space-x-2">
-        <%# 招待ボタン：オーナーのみ %>
-        <% if @brainstorm.owner?(current_user) %>
-          <%= link_to "招待", invite_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
-          <%= link_to "編集", edit_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition" %>
-          <%= link_to "MDエクスポート", export_markdown_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition" %>
-          <%= button_to "削除", brainstorm_path(@brainstorm), method: :delete, form: { onsubmit: "return confirm('本当に削除しますか？')" }, class: "px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition" %>
-        <% elsif @brainstorm.editor?(current_user) %>
-          <%= link_to "MDエクスポート", export_markdown_brainstorm_path(@brainstorm), class: "px-4 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition" %>
-        <% else %>
-          <%# viewerは閲覧のみ - ボタンなし %>
-        <% end %>
+
+        <%# アクション %>
+        <div class="ts-header-actions">
+          <% if @brainstorm.owner?(current_user) %>
+            <%= link_to "招待", invite_brainstorm_path(@brainstorm), class: "ts-btn ts-btn-ghost ts-btn-sm" %>
+            <%= link_to "編集", edit_brainstorm_path(@brainstorm), class: "ts-btn ts-btn-ghost ts-btn-sm" %>
+            <%= link_to "MDエクスポート", export_markdown_brainstorm_path(@brainstorm), class: "ts-btn ts-btn-green ts-btn-sm" %>
+            <%= button_to "削除", brainstorm_path(@brainstorm), method: :delete,
+                  form: { onsubmit: "return confirm('本当に削除しますか？')" },
+                  class: "ts-btn ts-btn-danger ts-btn-sm" %>
+          <% elsif @brainstorm.editor?(current_user) %>
+            <%= link_to "MDエクスポート", export_markdown_brainstorm_path(@brainstorm), class: "ts-btn ts-btn-green ts-btn-sm" %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
 
-  <%# 評価軸管理 %>
-  <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">📊 評価軸</h2>
-    
-    <div id="evaluation_axes" class="space-y-2 mb-4">
+  <%# ─── 評価軸 ─── %>
+  <div class="ts-section-card">
+    <h2 class="ts-section-heading">📊 評価軸</h2>
+    <div id="evaluation_axes" class="mb-4">
       <% @brainstorm.evaluation_axes.order(:position, :created_at).each do |axis| %>
         <%= render "evaluation_axes/evaluation_axis", evaluation_axis: axis, brainstorm: @brainstorm %>
       <% end %>
     </div>
-
     <%= render "evaluation_axes/form", brainstorm: @brainstorm, evaluation_axis: EvaluationAxis.new %>
   </div>
 
-  <%# 評価結果の可視化 %>
+  <%# ─── 評価結果 ─── %>
   <%= render "brainstorms/evaluation_panel", brainstorm: @brainstorm %>
 
-  <!-- アイデア一覧セクション -->
-  <div class="bg-white rounded-lg shadow p-6">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-800">アイデア一覧</h2>
+  <%# ─── アイデア一覧 ─── %>
+  <div class="ts-section-card">
+    <div class="ts-ideas-header">
+      <h2 class="ts-ideas-title">アイデア一覧</h2>
+
       <%# タグ絞り込み %>
       <% if @tags.any? %>
-        <div class="flex flex-wrap gap-2 mb-4">
-          <span class="text-sm text-gray-500 self-center">タグで絞り込み：</span>
+        <div class="ts-tag-filter">
+          <span class="ts-tag-filter-label">タグ：</span>
           <% if @selected_tag %>
-            <%= link_to "すべて表示", brainstorm_path(@brainstorm),
-                  class: "px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200 transition" %>
+            <%= link_to "すべて", brainstorm_path(@brainstorm), class: "ts-tag-pill ts-tag-pill-all" %>
           <% end %>
           <% @tags.each do |tag| %>
             <%= link_to tag.name, brainstorm_path(@brainstorm, tag_id: tag.id),
-                  class: "px-3 py-1 rounded-full text-sm transition #{@selected_tag&.id == tag.id ? 'bg-indigo-600 text-white' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}" %>
+                  class: "ts-tag-pill #{@selected_tag&.id == tag.id ? 'ts-tag-pill-active' : ''}" %>
           <% end %>
         </div>
       <% end %>
-      <div class="space-x-2">
-        <% if @brainstorm.editor?(current_user) %>
-          <button onclick="document.getElementById('add-idea-form').classList.toggle('hidden')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition">
+
+      <% if @brainstorm.editor?(current_user) %>
+        <div class="ts-ideas-actions">
+          <button onclick="document.getElementById('add-idea-form').classList.toggle('hidden')"
+              class="ts-btn ts-btn-ghost ts-btn-sm">
             アイデアを手動追加
           </button>
-
-          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block", id: "generate-form", data: { turbo: false } do |f| %>
-            <button type="submit"
-                class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer"
+          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post,
+                class: "inline-block", id: "generate-form", data: { turbo: false } do |f| %>
+            <button type="submit" class="ts-btn ts-btn-mint ts-btn-sm"
                 onclick="showLoading('AIがアイデアを生成中です...')">
               AIでアイデア生成
             </button>
           <% end %>
-
           <% if @brainstorm.ideas.any? %>
-            <%= form_with url: cluster_brainstorm_groups_path(@brainstorm), method: :post, class: "inline-block", id: "cluster-form", data: { turbo: false } do |f| %>
-              <button type="submit"
-                  class="px-4 py-2 rounded transition cursor-pointer"
-                  style="background-color: #9333ea; color: white; border: none;"
+            <%= form_with url: cluster_brainstorm_groups_path(@brainstorm), method: :post,
+                  class: "inline-block", id: "cluster-form", data: { turbo: false } do |f| %>
+              <button type="submit" class="ts-btn ts-btn-purple ts-btn-sm"
                   onclick="showLoading('AIがアイデアを分類中です...')">
                 AIクラスタリング実行
               </button>
             <% end %>
           <% end %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
 
-    <!-- 手動追加フォーム -->
-    <div id="add-idea-form" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
+    <%# 手動追加フォーム %>
+    <div id="add-idea-form" class="hidden ts-add-idea-form">
       <%= form_with(model: [@brainstorm, @brainstorm.ideas.build], local: true) do |f| %>
         <div class="mb-4">
-          <%= f.label :content, "アイデア内容", class: "block text-gray-700 font-semibold mb-2" %>
-          <%= f.text_area :content, rows: 3, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "アイデアを入力してください" %>
+          <%= f.label :content, "アイデア内容", class: "ts-form-label" %>
+          <%= f.text_area :content, rows: 3, class: "ts-form-textarea",
+                placeholder: "アイデアを入力してください" %>
         </div>
         <div class="mb-4">
-          <%= f.label :memo, "メモ（任意）", class: "block text-gray-700 font-semibold mb-2" %>
-          <%= f.text_area :memo, rows: 2, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "補足や詳細など" %>
+          <%= f.label :memo, "メモ（任意）", class: "ts-form-label" %>
+          <%= f.text_area :memo, rows: 2, class: "ts-form-textarea",
+                placeholder: "補足や詳細など" %>
         </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" onclick="document.getElementById('add-idea-form').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+        <div class="flex justify-end gap-2">
+          <button type="button"
+              onclick="document.getElementById('add-idea-form').classList.add('hidden')"
+              class="ts-btn ts-btn-ghost ts-btn-sm">
             キャンセル
           </button>
-          <%= f.submit "追加", class: "px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition cursor-pointer" %>
+          <%= f.submit "追加", class: "ts-btn ts-btn-mint ts-btn-sm cursor-pointer" %>
         </div>
       <% end %>
     </div>
 
     <% if @brainstorm.ideas.where.not(id: nil).any? %>
       <% if @brainstorm.groups.any? && @selected_tag.nil? %>
-        <!-- グループ操作ボタン -->
-        <div class="flex justify-between items-center mb-4">
-          <button onclick="document.getElementById('new-group-form').classList.toggle('hidden')"
-              class="px-4 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 transition">
-            + 新しいグループを作成
-          </button>
 
+        <%# グループ操作 %>
+        <div class="ts-group-actions">
+          <button onclick="document.getElementById('new-group-form').classList.toggle('hidden')"
+              class="ts-btn ts-btn-green ts-btn-sm">
+            ＋ 新しいグループを作成
+          </button>
           <%= form_with url: reset_clustering_brainstorm_groups_path(@brainstorm),
-                method: :delete,
-                id: "reset-clustering-form",
-                data: { turbo: false } do |f| %>
+                method: :delete, id: "reset-clustering-form", data: { turbo: false } do |f| %>
             <button type="submit"
-                class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition cursor-pointer"
-                onclick="if(!confirm('クラスタリングをやり直します。\n現在のグループ分けはすべて削除され、AIが再度グループ分けを行います。\nよろしいですか？')) { return false; } showLoading('AIがアイデアを分類中です...')">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                class="ts-btn ts-btn-ghost ts-btn-sm"
+                onclick="if(!confirm('クラスタリングをやり直します。現在のグループ分けはすべて削除されます。よろしいですか？')) { return false; } showLoading('AIがアイデアを分類中です...')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
               </svg>
               やり直し
             </button>
           <% end %>
         </div>
 
-        <!-- 新規グループ作成フォーム（デフォルトは非表示） -->
-        <div id="new-group-form" class="hidden mb-6 bg-gray-50 rounded-lg p-4">
+        <%# 新規グループ作成フォーム %>
+        <div id="new-group-form" class="hidden ts-new-group-form">
           <%= form_with(model: [@brainstorm, @brainstorm.groups.build], local: true) do |f| %>
             <div class="mb-4">
-              <%= f.label :name, "グループ名", class: "block text-gray-700 font-semibold mb-2" %>
-              <%= f.text_field :name, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500", placeholder: "例：その他のアイデア", maxlength: 50 %>
+              <%= f.label :name, "グループ名", class: "ts-form-label" %>
+              <%= f.text_field :name, class: "ts-axis-input w-full",
+                    placeholder: "例：その他のアイデア", maxlength: 50 %>
             </div>
-            <div class="flex justify-end space-x-2">
-              <button type="button" onclick="document.getElementById('new-group-form').classList.add('hidden')" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+            <div class="flex justify-end gap-2">
+              <button type="button"
+                  onclick="document.getElementById('new-group-form').classList.add('hidden')"
+                  class="ts-btn ts-btn-ghost ts-btn-sm">
                 キャンセル
               </button>
-              <%= f.submit "作成", 
-                class: "px-6 py-2 rounded cursor-pointer",
-                style: "background-color: #16a34a; color: white; border: none;",
-                onmouseover: "this.style.backgroundColor='#15803d'",
-                onmouseout: "this.style.backgroundColor='#16a34a'" %>
+              <%= f.submit "作成", class: "ts-btn ts-btn-mint ts-btn-sm cursor-pointer" %>
             </div>
           <% end %>
         </div>
 
-        <!-- グループ表示 -->
-        <div class="space-y-6">
+        <%# グループ表示 %>
+        <div class="space-y-4">
           <% @brainstorm.groups.order(:position).each do |group| %>
-            <div class="border-2 border-gray-300 rounded-lg p-4">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800"><%= group.name %></h3>
-                <div class="space-x-2">
-                  <button onclick="document.getElementById('edit-group-<%= group.id %>').classList.toggle('hidden')" class="text-indigo-600 hover:text-indigo-800 text-sm">
+            <div class="ts-group-block">
+              <div class="ts-group-header">
+                <h3 class="ts-group-name"><%= group.name %></h3>
+                <div class="ts-group-actions-right">
+                  <button onclick="document.getElementById('edit-group-<%= group.id %>').classList.toggle('hidden')"
+                      class="ts-btn ts-btn-ghost ts-btn-xs">
                     グループ名編集
                   </button>
-                  <%= button_to "削除", brainstorm_group_path(@brainstorm, group), method: :delete, data: { turbo_confirm: "グループを削除しますか？" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+                  <%= button_to "削除", brainstorm_group_path(@brainstorm, group),
+                        method: :delete,
+                        data: { turbo_confirm: "グループを削除しますか？" },
+                        class: "ts-btn ts-btn-danger ts-btn-xs" %>
                 </div>
               </div>
-              
-              <!-- グループ名編集フォーム -->
-              <div id="edit-group-<%= group.id %>" class="hidden mb-4 bg-gray-50 p-3 rounded">
-                <%= form_with(model: [@brainstorm, group], local: true, class: "flex items-center space-x-2") do |f| %>
-                  <%= f.text_field :name, class: "flex-grow px-3 py-2 border rounded" %>
-                  <%= f.submit "更新", 
-                    class: "px-4 py-2 rounded cursor-pointer",
-                    style: "background-color: #4f46e5; color: white; border: none;",
-                    onmouseover: "this.style.backgroundColor='#4338ca'",
-                    onmouseout: "this.style.backgroundColor='#4f46e5'" %>
-                  <button type="button" onclick="document.getElementById('edit-group-<%= group.id %>').classList.add('hidden')" class="px-4 py-2 text-gray-600">
+
+              <div id="edit-group-<%= group.id %>" class="hidden ts-group-edit-form">
+                <%= form_with(model: [@brainstorm, group], local: true, class: "flex items-center gap-2 w-full") do |f| %>
+                  <%= f.text_field :name, class: "ts-group-edit-input" %>
+                  <%= f.submit "更新", class: "ts-btn ts-btn-mint ts-btn-sm cursor-pointer" %>
+                  <button type="button"
+                      onclick="document.getElementById('edit-group-<%= group.id %>').classList.add('hidden')"
+                      class="ts-btn ts-btn-ghost ts-btn-sm">
                     キャンセル
                   </button>
                 <% end %>
               </div>
-              
-              <!-- グループ内のアイデア -->
-              <div class="space-y-3 sortable-ideas" data-group-id="<%= group.id %>" data-brainstorm-id="<%= @brainstorm.id %>">
+
+              <div class="space-y-2 sortable-ideas"
+                  data-group-id="<%= group.id %>"
+                  data-brainstorm-id="<%= @brainstorm.id %>">
                 <% group.ideas.each do |idea| %>
                   <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group %>
                 <% end %>
               </div>
             </div>
           <% end %>
-          
-          <!-- グループ化されていないアイデア -->
+
+          <%# 未分類 %>
           <% ungrouped_ideas = @brainstorm.ideas.where.not(id: nil).left_joins(:idea_groups).where(idea_groups: { id: nil }) %>
           <% if ungrouped_ideas.any? %>
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
-              <h3 class="text-xl font-bold text-gray-600 mb-4">未分類のアイデア</h3>
-              <div class="space-y-3 sortable-ideas" data-group-id="" data-brainstorm-id="<%= @brainstorm.id %>">
+            <div class="ts-group-block ts-group-block-ungrouped">
+              <h3 class="ts-group-name ts-group-name-ungrouped">未分類のアイデア</h3>
+              <div class="space-y-2 sortable-ideas"
+                  data-group-id=""
+                  data-brainstorm-id="<%= @brainstorm.id %>">
                 <% ungrouped_ideas.each do |idea| %>
                   <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
                 <% end %>
@@ -233,29 +237,30 @@
             </div>
           <% end %>
         </div>
+
       <% else %>
-        <!-- グループがない場合は通常表示 -->
-        <div class="space-y-4" id="ideas-list">
+        <div class="space-y-3" id="ideas-list">
           <% ideas_to_show = @filtered_ideas || @brainstorm.ideas.where.not(id: nil) %>
           <% ideas_to_show.each do |idea| %>
             <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
           <% end %>
         </div>
       <% end %>
+
     <% else %>
-      <div id="empty-state" class="text-center py-12 bg-gray-50 rounded-lg">
-        <p class="text-gray-600 mb-4">まだアイデアがありません</p>
-        <p class="text-gray-500 text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
-        <div class="space-x-4">
-          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post, class: "inline-block", id: "generate-form-bottom", data: { turbo: false } do |f| %>
-            <button type="submit"
-                class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer"
+      <div class="ts-empty-ideas">
+        <p class="font-semibold text-lg mb-2">まだアイデアがありません</p>
+        <p class="text-sm mb-6">AIにアイデアを生成させるか、手動でアイデアを追加してください</p>
+        <div class="flex justify-center gap-3 flex-wrap">
+          <%= form_with url: generate_brainstorm_ideas_path(@brainstorm), method: :post,
+                class: "inline-block", id: "generate-form-bottom", data: { turbo: false } do |f| %>
+            <button type="submit" class="ts-btn ts-btn-mint"
                 onclick="showLoading('AIがアイデアを生成中です...')">
               AIでアイデア生成
             </button>
           <% end %>
-          
-          <button onclick="document.getElementById('add-idea-form').classList.remove('hidden')" class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+          <button onclick="document.getElementById('add-idea-form').classList.remove('hidden')"
+              class="ts-btn ts-btn-ghost">
             手動で追加
           </button>
         </div>
@@ -263,215 +268,201 @@
     <% end %>
   </div>
 
-  <!-- 戻るボタン -->
-  <div class="mt-6">
-    <%= link_to "← ダッシュボードに戻る", dashboard_path, class: "text-indigo-600 hover:text-indigo-800" %>
-  </div>
+  <%= link_to "← ダッシュボードに戻る", dashboard_path, class: "ts-back-link" %>
 
-  <script>
-    var charts = {};
+</div>
 
-    function initCharts() {
-      document.querySelectorAll('canvas[id^="radar-chart-"]').forEach(function(canvas) {
-        const ideaId = canvas.id.replace('radar-chart-', '');
-        const axisIds = canvas.dataset.axisIds ? canvas.dataset.axisIds.split(',') : [];
-        const axisLabels = canvas.dataset.axisLabels ? canvas.dataset.axisLabels.split(',') : [];
-        if (axisIds.length < 2) return;
+<%# Chart.js + Sortable.js のスクリプトは元のままコピー %>
+<script>
+  var charts = {};
 
-        const card = document.querySelector(`.chart-card[data-idea-id="${ideaId}"]`);
-        const scores = axisIds.map(axisId => {
-          if (!card) return 0;
-          const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
-          const found = axisScores.find(([aId]) => aId === axisId);
-          return found ? parseInt(found[1]) : 0;
-        });
+  function initCharts() {
+    document.querySelectorAll('canvas[id^="radar-chart-"]').forEach(function(canvas) {
+      const ideaId = canvas.id.replace('radar-chart-', '');
+      const axisIds = canvas.dataset.axisIds ? canvas.dataset.axisIds.split(',') : [];
+      const axisLabels = canvas.dataset.axisLabels ? canvas.dataset.axisLabels.split(',') : [];
+      if (axisIds.length < 2) return;
 
-        if (charts[ideaId]) charts[ideaId].destroy();
+      const card = document.querySelector(`.chart-card[data-idea-id="${ideaId}"]`);
+      const scores = axisIds.map(axisId => {
+        if (!card) return 0;
+        const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
+        const found = axisScores.find(([aId]) => aId === axisId);
+        return found ? parseInt(found[1]) : 0;
+      });
 
-        charts[ideaId] = new Chart(canvas, {
-          type: 'radar',
-          data: {
-            labels: axisLabels,
-            datasets: [{
-              data: scores,
-              backgroundColor: 'rgba(99, 102, 241, 0.2)',
-              borderColor: 'rgba(99, 102, 241, 1)',
-              borderWidth: 2,
-              pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              r: {
-                min: 0, max: 5,
-                ticks: { stepSize: 1, font: { size: 10 } },
-                pointLabels: { font: { size: 11 } }
-              }
+      if (charts[ideaId]) charts[ideaId].destroy();
+
+      charts[ideaId] = new Chart(canvas, {
+        type: 'radar',
+        data: {
+          labels: axisLabels,
+          datasets: [{
+            data: scores,
+            backgroundColor: 'rgba(10, 191, 163, 0.15)',
+            borderColor: 'rgba(10, 191, 163, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(10, 191, 163, 1)',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            r: {
+              min: 0, max: 5,
+              ticks: { stepSize: 1, font: { size: 10 } },
+              pointLabels: { font: { size: 11 } }
             }
           }
-        });
+        }
+      });
+    });
+  }
+
+  function updateChart(ideaId, axisId, score) {
+    const canvas = document.getElementById(`radar-chart-${ideaId}`);
+    if (!canvas) return;
+
+    const axisIds = canvas.dataset.axisIds.split(',');
+    const axisIndex = axisIds.indexOf(String(axisId));
+    if (axisIndex === -1) return;
+
+    if (charts[ideaId]) {
+      charts[ideaId].data.datasets[0].data[axisIndex] = parseInt(score);
+      charts[ideaId].update();
+    } else {
+      const labels = canvas.dataset.axisLabels ? canvas.dataset.axisLabels.split(',') : axisIds;
+      const scores = axisIds.map((id, i) => i === axisIndex ? parseInt(score) : 0);
+      charts[ideaId] = new Chart(canvas, {
+        type: 'radar',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: scores,
+            backgroundColor: 'rgba(10, 191, 163, 0.15)',
+            borderColor: 'rgba(10, 191, 163, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(10, 191, 163, 1)',
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            r: {
+              min: 0, max: 5,
+              ticks: { stepSize: 1, font: { size: 10 } },
+              pointLabels: { font: { size: 11 } }
+            }
+          }
+        }
       });
     }
 
-    function updateChart(ideaId, axisId, score) {
-      const canvas = document.getElementById(`radar-chart-${ideaId}`);
-      if (!canvas) return;
-
-      const axisIds = canvas.dataset.axisIds.split(',');
-      const axisIndex = axisIds.indexOf(String(axisId));
-      if (axisIndex === -1) return;
-
-      if (charts[ideaId]) {
-        charts[ideaId].data.datasets[0].data[axisIndex] = parseInt(score);
-        charts[ideaId].update();
-      } else {
-        const labels = canvas.dataset.axisLabels ? canvas.dataset.axisLabels.split(',') : axisIds;
-        const scores = axisIds.map((id, i) => i === axisIndex ? parseInt(score) : 0);
-
-        charts[ideaId] = new Chart(canvas, {
-          type: 'radar',
-          data: {
-            labels: labels,
-            datasets: [{
-              data: scores,
-              backgroundColor: 'rgba(99, 102, 241, 0.2)',
-              borderColor: 'rgba(99, 102, 241, 1)',
-              borderWidth: 2,
-              pointBackgroundColor: 'rgba(99, 102, 241, 1)',
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              r: {
-                min: 0, max: 5,
-                ticks: { stepSize: 1, font: { size: 10 } },
-                pointLabels: { font: { size: 11 } }
-              }
-            }
-          }
-        });
-      }
-
-      const card = document.querySelector(`.chart-card[data-idea-id="${ideaId}"]`);
-      if (card) {
-        const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
-        const updated = axisScores.map(([aId, aScore]) => [aId, aId === String(axisId) ? parseInt(score) : parseInt(aScore)]);
-        const total = updated.reduce((sum, [, s]) => sum + s, 0);
-        card.dataset.totalScore = total;
-        card.dataset.axisScores = updated.map(([aId, aScore]) => `${aId}:${aScore}`).join(',');
-        const label = card.querySelector('.total-score-label');
-        if (label) label.textContent = total;
-      }
+    const card = document.querySelector(`.chart-card[data-idea-id="${ideaId}"]`);
+    if (card) {
+      const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
+      const updated = axisScores.map(([aId, aScore]) => [aId, aId === String(axisId) ? parseInt(score) : parseInt(aScore)]);
+      const total = updated.reduce((sum, [, s]) => sum + s, 0);
+      card.dataset.totalScore = total;
+      card.dataset.axisScores = updated.map(([aId, aScore]) => `${aId}:${aScore}`).join(',');
+      const label = card.querySelector('.total-score-label');
+      if (label) label.textContent = total;
     }
+  }
 
-    function applyFilter() {
-      const axisId = document.getElementById('sort-axis')?.value;
-      const order = document.getElementById('sort-order')?.value || 'desc';
-      const minScore = parseInt(document.getElementById('min-score')?.value || '0');
-      const hideUnevaluated = document.getElementById('hide-unevaluated')?.checked || false;
+  function applyFilter() {
+    const axisId = document.getElementById('sort-axis')?.value;
+    const order = document.getElementById('sort-order')?.value || 'desc';
+    const minScore = parseInt(document.getElementById('min-score')?.value || '0');
+    const hideUnevaluated = document.getElementById('hide-unevaluated')?.checked || false;
 
-      const grid = document.getElementById('chart-grid');
-      if (!grid) return;
-      const cards = Array.from(grid.querySelectorAll('.chart-card'));
+    const grid = document.getElementById('chart-grid');
+    if (!grid) return;
+    const cards = Array.from(grid.querySelectorAll('.chart-card'));
 
-      cards.forEach(card => {
-        const hasEvaluation = card.dataset.hasEvaluation === 'true';
-        let score = 0;
+    cards.forEach(card => {
+      const hasEvaluation = card.dataset.hasEvaluation === 'true';
+      let score = 0;
+      if (axisId) {
+        const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
+        const found = axisScores.find(([aId]) => aId === axisId);
+        score = found ? parseInt(found[1]) : 0;
+      } else {
+        score = parseInt(card.dataset.totalScore);
+      }
+      const hidden = (hideUnevaluated && !hasEvaluation) || (score < minScore);
+      card.style.display = hidden ? 'none' : '';
+    });
+
+    const visibleCards = cards.filter(c => c.style.display !== 'none');
+    visibleCards.sort((a, b) => {
+      const getScore = (card) => {
         if (axisId) {
           const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
           const found = axisScores.find(([aId]) => aId === axisId);
-          score = found ? parseInt(found[1]) : 0;
-        } else {
-          score = parseInt(card.dataset.totalScore);
+          return found ? parseInt(found[1]) : 0;
         }
-        const hidden = (hideUnevaluated && !hasEvaluation) || (score < minScore);
-        card.style.display = hidden ? 'none' : '';
-      });
-
-      const visibleCards = cards.filter(c => c.style.display !== 'none');
-      visibleCards.sort((a, b) => {
-        const getScore = (card) => {
-          if (axisId) {
-            const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
-            const found = axisScores.find(([aId]) => aId === axisId);
-            return found ? parseInt(found[1]) : 0;
-          }
-          return parseInt(card.dataset.totalScore);
-        };
-        return order === 'desc' ? getScore(b) - getScore(a) : getScore(a) - getScore(b);
-      });
-
-      visibleCards.forEach(card => grid.appendChild(card));
-    }
-
-    document.addEventListener('turbo:load', initCharts);
-
-    document.addEventListener('turbo:before-stream-render', function(event) {
-      const originalRender = event.detail.render;
-      event.detail.render = function(streamElement) {
-        originalRender(streamElement);
-        if (streamElement.target === 'chart-reinit-flag') {
-          setTimeout(function() {
-            Object.values(charts).forEach(chart => chart.destroy());
-            Object.keys(charts).forEach(key => delete charts[key]);
-            initCharts();
-          }, 100);
-        }
+        return parseInt(card.dataset.totalScore);
       };
+      return order === 'desc' ? getScore(b) - getScore(a) : getScore(a) - getScore(b);
     });
 
-    document.addEventListener('turbo:load', function() {
-      const sortableContainers = document.querySelectorAll('.sortable-ideas');
-      
-      sortableContainers.forEach(function(container) {
-        if (container.dataset.sortableInitialized) return
-        container.dataset.sortableInitialized = 'true'
-        new Sortable(container, {
-          group: 'ideas',
-          animation: 150,
-          ghostClass: 'opacity-50',
-          draggable: '.idea-card',
-          onEnd: function(evt) {
-            const ideaId = evt.item.dataset.ideaId;
-            const newGroupId = evt.to.dataset.groupId;
-            const brainstormId = evt.to.dataset.brainstormId;
-            
-            console.log('Idea ID:', ideaId, 'New Group:', newGroupId, 'Brainstorm:', brainstormId);
-            
-            // URLを文字列連結で構築
-            const url = '/brainstorms/' + brainstormId + '/ideas/' + ideaId + '/update_group';
-            
-            // サーバーに更新を送信
-            fetch(url, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-              },
-              body: JSON.stringify({ group_id: newGroupId })
-            })
-            .then(response => {
-              if (response.ok) {
-                // 204の場合はJSONパースをスキップ
-                console.log('アイデアを移動しました');
-                // プルダウンの選択肢を更新
-                const selectElement = evt.item.querySelector('select');
-                if (selectElement) {
-                  selectElement.value = newGroupId || '';
-                }
-              }
-            })
-            .catch(error => console.error('Error:', error));
-          }
-        });
+    visibleCards.forEach(card => grid.appendChild(card));
+  }
+
+  document.addEventListener('turbo:load', initCharts);
+
+  document.addEventListener('turbo:before-stream-render', function(event) {
+    const originalRender = event.detail.render;
+    event.detail.render = function(streamElement) {
+      originalRender(streamElement);
+      if (streamElement.target === 'chart-reinit-flag') {
+        setTimeout(function() {
+          Object.values(charts).forEach(chart => chart.destroy());
+          Object.keys(charts).forEach(key => delete charts[key]);
+          initCharts();
+        }, 100);
+      }
+    };
+  });
+
+  document.addEventListener('turbo:load', function() {
+    const sortableContainers = document.querySelectorAll('.sortable-ideas');
+    sortableContainers.forEach(function(container) {
+      if (container.dataset.sortableInitialized) return;
+      container.dataset.sortableInitialized = 'true';
+      new Sortable(container, {
+        group: 'ideas',
+        animation: 150,
+        ghostClass: 'opacity-50',
+        draggable: '.idea-card',
+        onEnd: function(evt) {
+          const ideaId = evt.item.dataset.ideaId;
+          const newGroupId = evt.to.dataset.groupId;
+          const brainstormId = evt.to.dataset.brainstormId;
+          const url = '/brainstorms/' + brainstormId + '/ideas/' + ideaId + '/update_group';
+          fetch(url, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ group_id: newGroupId })
+          })
+          .then(response => {
+            if (response.ok) {
+              const selectElement = evt.item.querySelector('select');
+              if (selectElement) selectElement.value = newGroupId || '';
+            }
+          })
+          .catch(error => console.error('Error:', error));
+        }
       });
     });
-  </script>
-</div>
+  });
+</script>

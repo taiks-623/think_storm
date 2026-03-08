@@ -1,58 +1,129 @@
-<% if brainstorm.evaluation_axes.count >= 2 %>
-  <% ideas_with_evaluations = brainstorm.ideas.select { |idea| idea.evaluations.any? } %>
-  <% if ideas_with_evaluations.any? %>
-    <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
-      <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
+<%# app/views/brainstorms/_evaluation_panel.html.erb %>
+<%# 既存の評価パネルを折りたたみ対応ラッパーで囲む %>
 
-      <div class="flex flex-wrap gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
-        <div class="flex items-center space-x-2">
-          <label class="text-sm text-gray-600">評価軸：</label>
-          <select id="sort-axis" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
-            <option value="">すべて（合計）</option>
-            <% brainstorm.evaluation_axes.order(:created_at).each do |axis| %>
-              <option value="<%= axis.id %>"><%= axis.name %></option>
-            <% end %>
-          </select>
-        </div>
-        <div class="flex items-center space-x-2">
-          <label class="text-sm text-gray-600">並び順：</label>
-          <select id="sort-order" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
-            <option value="desc">スコア高い順</option>
-            <option value="asc">スコア低い順</option>
-          </select>
-        </div>
-        <div class="flex items-center space-x-2">
-          <label class="text-sm text-gray-600">最低スコア：</label>
-          <select id="min-score" class="text-sm border border-gray-300 rounded px-2 py-1" onchange="applyFilter()">
-            <option value="0">指定なし</option>
-            <option value="1">1以上</option>
-            <option value="2">2以上</option>
-            <option value="3">3以上</option>
-            <option value="4">4以上</option>
-            <option value="5">5のみ</option>
-          </select>
-        </div>
-        <div class="flex items-center space-x-2">
-          <label class="text-sm text-gray-600 flex items-center space-x-1">
-            <input type="checkbox" id="hide-unevaluated" onchange="applyFilter()" class="rounded">
-            <span>未評価を除外</span>
-          </label>
-        </div>
-      </div>
+<div class="ts-section-card" id="ts-eval-panel">
 
-      <%= render "brainstorms/chart_grid", brainstorm: brainstorm %>
-    </div>
-  <% else %>
-    <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
-      <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
-      <p class="text-sm text-gray-500">評価軸を設定してアイデアを評価すると、ここにレーダーチャートが表示されます。</p>
-      <div id="chart-grid"></div>
-    </div>
-  <% end %>
-<% else %>
-  <div id="evaluation-panel" class="bg-white rounded-lg shadow p-6 mb-6">
-    <h2 class="text-lg font-bold text-gray-800 mb-4">📈 評価結果</h2>
-    <p class="text-sm text-gray-500">評価軸を2つ以上設定すると、ここにレーダーチャートが表示されます。</p>
-    <div id="chart-grid"></div>
+  <%# ─── ヘッダー（クリックで折りたたみ） ─── %>
+  <div class="ts-eval-panel-header" onclick="toggleEvalPanel()">
+    <h2 class="ts-section-heading" style="margin-bottom: 0;">📈 評価結果</h2>
+    <span class="ts-eval-toggle-icon" id="ts-eval-toggle-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transition: transform 0.25s;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+      <span id="ts-eval-toggle-label" style="font-size: 12px; font-weight: 600;">閉じる</span>
+    </span>
   </div>
-<% end %>
+
+  <%# ─── 折りたたみボディ ─── %>
+  <div class="ts-eval-panel-body" id="ts-eval-panel-body" style="margin-top: 20px;">
+
+    <%#
+      ここに既存の評価結果コンテンツをそのまま貼り付ける
+      （フィルター行、chart-grid など）
+    %>
+
+    <%# ── フィルター ── %>
+    <div class="flex flex-wrap items-center gap-3 mb-5" style="font-size: 13px; color: #4A6972;">
+      <span>評価軸：</span>
+      <select id="sort-axis" onchange="applyFilter()"
+              class="ts-axis-input" style="padding: 6px 10px; font-size: 13px; width: auto;">
+        <option value="">すべて（合計）</option>
+        <% @brainstorm.evaluation_axes.order(:position, :created_at).each do |axis| %>
+          <option value="<%= axis.id %>"><%= axis.name %></option>
+        <% end %>
+      </select>
+      <span>並び順：</span>
+      <select id="sort-order" onchange="applyFilter()"
+              class="ts-axis-input" style="padding: 6px 10px; font-size: 13px; width: auto;">
+        <option value="desc">スコア高い順</option>
+        <option value="asc">スコア低い順</option>
+      </select>
+      <span>最低スコア：</span>
+      <select id="min-score" onchange="applyFilter()"
+              class="ts-axis-input" style="padding: 6px 10px; font-size: 13px; width: auto;">
+        <option value="0">指定なし</option>
+        <% (1..5).each do |s| %>
+          <option value="<%= s %>"><%= s %>以上</option>
+        <% end %>
+      </select>
+      <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+        <input type="checkbox" id="hide-unevaluated" onchange="applyFilter()">
+        未評価を除外
+      </label>
+    </div>
+
+    <%# ── チャートグリッド ── %>
+    <div id="chart-grid" class="grid grid-cols-2 gap-4">
+      <% axes = @brainstorm.evaluation_axes.order(:position, :created_at).to_a %>
+      <% @brainstorm.ideas.includes(:evaluations, :votes, :comments).each do |idea| %>
+        <% evaluations = idea.evaluations.select { |e| axes.map(&:id).include?(e.evaluation_axis_id) } %>
+        <% axis_scores = axes.map { |a| [a.id, evaluations.find { |e| e.evaluation_axis_id == a.id }&.score || 0] } %>
+        <% total_score = axis_scores.sum { |_, s| s } %>
+        <% has_evaluation = evaluations.any? { |e| e.score > 0 } %>
+        <div class="chart-card"
+             data-idea-id="<%= idea.id %>"
+             data-total-score="<%= total_score %>"
+             data-has-evaluation="<%= has_evaluation %>"
+             data-axis-scores="<%= axis_scores.map { |id, s| "#{id}:#{s}" }.join(',') %>"
+             style="background: white; border: 1.5px solid #C8EFEB; border-radius: 12px; padding: 16px;">
+          <p style="font-size: 13px; color: #0F2027; line-height: 1.5; margin-bottom: 4px;">
+            <%= truncate(idea.content, length: 60) %>
+          </p>
+          <p style="font-size: 11px; color: #9BB5BC; margin-bottom: 10px;">
+            合計スコア：<span class="total-score-label"><%= total_score %></span>
+          </p>
+          <% if axes.size >= 2 %>
+            <div style="height: 180px;">
+              <canvas id="radar-chart-<%= idea.id %>"
+                      data-axis-ids="<%= axes.map(&:id).join(',') %>"
+                      data-axis-labels="<%= axes.map(&:name).join(',') %>">
+              </canvas>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  </div><%# /ts-eval-panel-body %>
+</div>
+
+<script>
+  (function() {
+    // 展開時にコンテンツ高さを測ってスクロールが必要か判断
+    function initEvalPanel() {
+      const body = document.getElementById('ts-eval-panel-body');
+      if (!body) return;
+      // スクロール必要かチェック（自然高さ > 600px なら scrollable クラス付与）
+      body.style.maxHeight = 'none';
+      const naturalH = body.scrollHeight;
+      body.style.maxHeight = '';
+      if (naturalH > 600) {
+        body.classList.add('ts-scrollable');
+      }
+    }
+
+    function toggleEvalPanel() {
+      const body  = document.getElementById('ts-eval-panel-body');
+      const icon  = document.getElementById('ts-eval-toggle-icon');
+      const label = document.getElementById('ts-eval-toggle-label');
+      const svg   = icon.querySelector('svg');
+      const collapsed = body.classList.toggle('ts-collapsed');
+      svg.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+      label.textContent   = collapsed ? '開く' : '閉じる';
+      // 閉じるとき scrollable を外す（高さ0のときスクロールバーが見えないように）
+      if (collapsed) {
+        body.classList.remove('ts-scrollable');
+      } else {
+        // 再展開時に再チェック
+        setTimeout(() => initEvalPanel(), 350);
+      }
+    }
+
+    // グローバルに公開
+    window.toggleEvalPanel = toggleEvalPanel;
+
+    // ページ読み込み・Turbo遷移後に初期化
+    document.addEventListener('turbo:load', initEvalPanel);
+    document.addEventListener('DOMContentLoaded', initEvalPanel);
+  })();
+</script>

@@ -40,21 +40,21 @@ RSpec.describe "EvaluationAxes", type: :request do
 
       it "評価軸を削除できる" do
         expect {
-          delete brainstorm_evaluation_ax_path(brainstorm, axis)
+          delete brainstorm_evaluation_axis_path(brainstorm, axis)
         }.to change(EvaluationAxis, :count).by(-1)
       end
 
       it "他ユーザーの評価軸は削除できない" do
         other_brainstorm = create(:brainstorm)
         other_axis = create(:evaluation_axis, brainstorm: other_brainstorm)
-        delete brainstorm_evaluation_ax_path(other_brainstorm, other_axis)
+        delete brainstorm_evaluation_axis_path(other_brainstorm, other_axis)
         expect(response).to have_http_status(:not_found)
       end
     end
 
     context "未ログイン" do
       it "リダイレクトされる" do
-        delete brainstorm_evaluation_ax_path(brainstorm, axis)
+        delete brainstorm_evaluation_axis_path(brainstorm, axis)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
