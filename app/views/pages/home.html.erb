@@ -1,14 +1,260 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-  <div class="text-center">
-    <h1 class="text-5xl font-bold text-gray-800 mb-4">
-      ThinkStorm
+<div class="ts-home-page">
+
+  <%# 浮遊オーブ %>
+  <div class="ts-orb ts-orb-1"></div>
+  <div class="ts-orb ts-orb-2"></div>
+  <div class="ts-orb ts-orb-3"></div>
+
+  <section class="ts-hero">
+    <div class="ts-hero-badge">AI × ブレインストーミング</div>
+
+    <h1 class="ts-hero-title">
+      アイデアの嵐を、<br>
+      <span class="ts-hero-title-highlight">構造</span>に変える。
     </h1>
-    <p class="text-xl text-gray-600 mb-8">
-      AIと協働するブレインストーミング支援プラットフォーム
+
+    <p class="ts-hero-sub">
+      AIが多角的な視点からアイデアを提案し、<br>
+      類似アイデアを自動でグルーピング。<br>
+      発散から収束まで、一気通貫で支援します。
     </p>
-    <div class="space-x-4">
-      <%= link_to "ログイン", new_user_session_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition" %>
-      <%= link_to "新規登録", new_user_registration_path, class: "px-6 py-3 bg-white text-indigo-600 border-2 border-indigo-600 rounded-lg hover:bg-indigo-50 transition" %>
+
+    <div class="ts-hero-actions">
+      <%= link_to "無料でブレストを始める →", new_user_registration_path, class: "ts-btn-primary" %>
+      <%= link_to "使い方を見る", "#", class: "ts-btn-secondary" %>
     </div>
-  </div>
-</div>
+
+    <p class="ts-hero-meta">登録無料 · クレジットカード不要</p>
+  </section>
+
+  <%# ─── HOW IT WORKS ─── %>
+  <section class="ts-section">
+    <div class="ts-section-label">How it works</div>
+    <h2 class="ts-section-title">発散→収束まで、<br>シームレスなフロー</h2>
+    <p class="ts-section-sub">
+      課題を入力するだけで、AIが全プロセスをガイド。<br>
+      思考の流れを止めずに、最高のアイデアへ。
+    </p>
+
+    <div class="ts-flow-grid">
+      <div class="ts-flow-step">
+        <div class="ts-flow-icon ts-flow-icon-1">📝</div>
+        <div class="ts-flow-num">Step 01</div>
+        <div class="ts-flow-name">課題を入力</div>
+        <div class="ts-flow-desc">解決したいテーマや課題を入力するだけでOK</div>
+      </div>
+      <div class="ts-flow-step">
+        <div class="ts-flow-icon ts-flow-icon-2">🤖</div>
+        <div class="ts-flow-num">Step 02</div>
+        <div class="ts-flow-name">AIが発散</div>
+        <div class="ts-flow-desc">AIが多角的な視点から15〜20個のアイデアを自動生成</div>
+      </div>
+      <div class="ts-flow-step">
+        <div class="ts-flow-icon ts-flow-icon-3">🗂️</div>
+        <div class="ts-flow-num">Step 03</div>
+        <div class="ts-flow-name">AIが収束</div>
+        <div class="ts-flow-desc">類似アイデアを自動グルーピング・カテゴリ名を付与</div>
+      </div>
+      <div class="ts-flow-step">
+        <div class="ts-flow-icon ts-flow-icon-4">📊</div>
+        <div class="ts-flow-num">Step 04</div>
+        <div class="ts-flow-name">評価・分析</div>
+        <div class="ts-flow-desc">自分で設定した評価軸でスコアリング・可視化</div>
+      </div>
+      <div class="ts-flow-step">
+        <div class="ts-flow-icon ts-flow-icon-5">✅</div>
+        <div class="ts-flow-num">Step 05</div>
+        <div class="ts-flow-name">意思決定</div>
+        <div class="ts-flow-desc">投票・コメントでチームの合意形成をサポート</div>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── FEATURES ─── %>
+  <div class="ts-features-bg">
+    <section class="ts-section" style="padding-top: 60px;">
+      <div class="ts-section-label">Features</div>
+      <h2 class="ts-section-title">一人でも、チームでも<br>使える機能群</h2>
+
+      <div class="ts-features-wrap">
+
+        <%# Feature 1: AI発散 %>
+        <div class="ts-feature-row">
+          <div class="ts-feature-text">
+            <span class="ts-feature-tag ts-tag-purple">AI 発散</span>
+            <h3>AIが15〜20個の<br>アイデアを即座に生成</h3>
+            <p>課題を入力するだけで、AIが多角的な視点からアイデアを大量生成。思考の偏りをなくし、思いがけないアイデアとの出会いを作ります。</p>
+          </div>
+          <div class="ts-feature-visual">
+            <div class="ts-mock-card">
+              <div class="ts-mock-card-title">AIが生成中...</div>
+              <div class="ts-mock-idea ts-idea-ai">🤖 サブスク型の月額プラン</div>
+              <div class="ts-mock-idea ts-idea-ai">🤖 フリーミアム＋広告モデル</div>
+              <div class="ts-mock-idea">💡 コミュニティ運営で差別化</div>
+              <div class="ts-mock-idea">💡 BtoB向けエンタープライズ</div>
+            </div>
+          </div>
+        </div>
+
+        <%# Feature 2: AI収束 %>
+        <div class="ts-feature-row ts-feature-row-reverse">
+          <div class="ts-feature-text">
+            <span class="ts-feature-tag ts-tag-mint">AI 収束</span>
+            <h3>類似アイデアを<br>ワンクリックで整理</h3>
+            <p>AIが類似アイデアを自動でグルーピングし、カテゴリ名を付与。大量のアイデアを短時間で構造化できます。ドラッグ&ドロップで手動調整も自由自在。</p>
+          </div>
+          <div class="ts-feature-visual">
+            <div class="ts-mock-card" style="max-width: 260px;">
+              <div class="ts-mock-card-title">収益モデル (4)</div>
+              <div class="ts-mock-idea" style="font-size: 11px; margin-bottom: 4px;">サブスク型月額プラン</div>
+              <div class="ts-mock-idea" style="font-size: 11px; margin-bottom: 4px;">フリーミアム＋広告</div>
+              <div class="ts-mock-idea ts-idea-cyan" style="font-size: 11px;">エンタープライズ向け</div>
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #C8EFEB;">
+                <div class="ts-mock-card-title">マーケティング (3)</div>
+                <div class="ts-mock-idea" style="font-size: 11px;">SNS戦略</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# Feature 3: 評価・分析 %>
+        <div class="ts-feature-row">
+          <div class="ts-feature-text">
+            <span class="ts-feature-tag ts-tag-cyan">評価・分析</span>
+            <h3>スコアで可視化、<br>最良のアイデアを選ぶ</h3>
+            <p>独自の評価軸を設定して1〜5点でスコアリング。レーダーチャートでアイデアを比較し、根拠のある意思決定をサポートします。</p>
+          </div>
+          <div class="ts-feature-visual">
+            <div class="ts-mock-card">
+              <div class="ts-mock-card-title">アイデアA のスコア</div>
+              <svg viewBox="0 0 160 150" width="190" style="display: block; margin: 0 auto;">
+                <defs>
+                  <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0ABFA3"/>
+                    <stop offset="100%" stop-color="#00C8D7"/>
+                  </linearGradient>
+                </defs>
+                <%# グリッド 40% %>
+                <polygon points="80,52.8 99.2,65.6 91.2,87.2 68.8,87.2 60.8,65.6" fill="none" stroke="#D8F3EF" stroke-width="1"/>
+                <%# グリッド 70% %>
+                <polygon points="80,38.4 113.9,61.2 101.7,98.1 58.3,98.1 46.1,61.2" fill="none" stroke="#D8F3EF" stroke-width="1"/>
+                <%# 外枠 %>
+                <polygon points="80,24 125.6,58.9 108.1,110.1 51.9,110.1 34.4,58.9" fill="none" stroke="#C8EFEB" stroke-width="1.2"/>
+                <%# 軸線 %>
+                <line x1="80" y1="72" x2="80"    y2="24"    stroke="#C8EFEB" stroke-width="0.8"/>
+                <line x1="80" y1="72" x2="125.6" y2="58.9"  stroke="#C8EFEB" stroke-width="0.8"/>
+                <line x1="80" y1="72" x2="108.1" y2="110.1" stroke="#C8EFEB" stroke-width="0.8"/>
+                <line x1="80" y1="72" x2="51.9"  y2="110.1" stroke="#C8EFEB" stroke-width="0.8"/>
+                <line x1="80" y1="72" x2="34.4"  y2="58.9"  stroke="#C8EFEB" stroke-width="0.8"/>
+                <%# データ %>
+                <polygon points="80,31.7 125.6,58.9 99.7,98.7 56.4,104.0 52.6,64.1"
+                  fill="rgba(10,191,163,0.15)" stroke="url(#radarGradient)" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="80"    cy="31.7"  r="3" fill="#0ABFA3"/>
+                <circle cx="125.6" cy="58.9"  r="3" fill="#0ABFA3"/>
+                <circle cx="99.7"  cy="98.7"  r="3" fill="#00C8D7"/>
+                <circle cx="56.4"  cy="104.0" r="3" fill="#00C8D7"/>
+                <circle cx="52.6"  cy="64.1"  r="3" fill="#0ABFA3"/>
+                <%# ラベル %>
+                <text x="80"  y="15"  text-anchor="middle" font-size="9" fill="#4A6972">実現性</text>
+                <text x="134" y="57"  text-anchor="start"  font-size="9" fill="#4A6972">革新性</text>
+                <text x="112" y="123" text-anchor="middle" font-size="9" fill="#4A6972">市場性</text>
+                <text x="48"  y="123" text-anchor="middle" font-size="9" fill="#4A6972">収益性</text>
+                <text x="26"  y="57"  text-anchor="end"    font-size="9" fill="#4A6972">競合性</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <%# Feature 4: チーム %>
+        <div class="ts-feature-row ts-feature-row-reverse">
+          <div class="ts-feature-text">
+            <span class="ts-feature-tag ts-tag-mint">チーム</span>
+            <h3>リアルタイムで<br>チームと一緒に考える</h3>
+            <p>招待リンクを共有するだけで、複数人がリアルタイムで同じブレストに参加。投票・コメント機能でチームの合意形成もスムーズに。</p>
+          </div>
+          <div class="ts-feature-visual">
+            <div class="ts-mock-card">
+              <div class="ts-mock-card-title">オンラインメンバー</div>
+              <div class="ts-mock-members">
+                <div class="ts-avatar ts-av-mint">T</div>
+                <div class="ts-avatar ts-av-purple">A</div>
+                <div class="ts-avatar ts-av-pink">K</div>
+                <div class="ts-avatar ts-av-gray">+2</div>
+              </div>
+              <div style="margin-top: 8px; font-size: 12px; color: #4A6972;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #2ECC71; margin-right: 4px;"></span>
+                5人が接続中
+              </div>
+              <div style="margin-top: 10px; padding: 8px; background: #D6F5F0; border-radius: 8px; font-size: 11px; color: #0ABFA3;">
+                👍 サブスク案 に3票
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><%# /ts-features-wrap %>
+    </section>
+  </div><%# /ts-features-bg %>
+
+  <%# ─── COMPARISON ─── %>
+  <section class="ts-section">
+    <div class="ts-section-label">Comparison</div>
+    <h2 class="ts-section-title">他のツールとの違い</h2>
+
+    <div class="ts-table-wrap">
+      <table class="ts-comparison-table">
+        <thead>
+          <tr>
+            <th>機能</th>
+            <th>ホワイトボード系</th>
+            <th>AIチャット</th>
+            <th class="ts-th-ours">ThinkStorm ✦</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AIアイデア自動生成</td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-check">△</span></td>
+            <td><span class="ts-check">✓</span></td>
+          </tr>
+          <tr>
+            <td>AI自動クラスタリング</td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-check">✓</span></td>
+          </tr>
+          <tr>
+            <td>評価・スコアリング</td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-check">✓</span></td>
+          </tr>
+          <tr>
+            <td>プロセスの構造化記録</td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-cross">△</span></td>
+            <td><span class="ts-check">✓</span></td>
+          </tr>
+          <tr>
+            <td>リアルタイム共同編集</td>
+            <td><span class="ts-check">✓</span></td>
+            <td><span class="ts-cross">✕</span></td>
+            <td><span class="ts-check">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <%# ─── CTA ─── %>
+  <section class="ts-cta-section">
+    <h2 class="ts-cta-title">今すぐ、アイデアを<br>解き放とう。</h2>
+    <p class="ts-cta-sub">
+      登録無料・クレジットカード不要。<br>
+      あなたの次のブレストをAIと一緒に。
+    </p>
+    <%= link_to "無料でブレストを始める →", new_user_registration_path, class: "ts-btn-primary ts-btn-lg" %>
+  </section>
+
+</div><%# /ts-home-page %>
