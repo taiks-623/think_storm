@@ -1,20 +1,21 @@
-<footer class="bg-gray-800 text-white py-8 mt-auto">
-  <div class="container mx-auto px-4">
-    <div class="flex flex-col md:flex-row justify-between items-center">
-      <div class="mb-4 md:mb-0">
-        <p class="text-lg font-bold">ThinkStorm</p>
-        <p class="text-sm text-gray-400">AIと協働するブレインストーミング</p>
-      </div>
-      
-      <div class="flex space-x-6">
-        <%= link_to "利用規約", terms_path, class: "text-gray-400 hover:text-white text-sm" %>
-        <%= link_to "プライバシーポリシー", privacy_path, class: "text-gray-400 hover:text-white text-sm" %>
-        <%= link_to "お問い合わせ", "https://forms.gle/zmjN5X99cQP9BFzE7", class: "text-gray-400 hover:text-white text-sm", target: "_blank", rel: "noopener noreferrer" %>
-      </div>
+<footer class="ts-footer">
+  <div class="ts-footer-inner">
+
+    <div class="ts-footer-brand">
+      <p class="ts-footer-logo">ThinkStorm</p>
+      <p class="ts-footer-tagline">AIと協働するブレインストーミング</p>
     </div>
-    
-    <div class="text-center mt-6 text-sm text-gray-400">
-      © 2026 ThinkStorm. All rights reserved.
+
+    <div class="ts-footer-links">
+      <%= link_to "利用規約", terms_path, class: "ts-footer-link" %>
+      <%= link_to "プライバシーポリシー", privacy_path, class: "ts-footer-link" %>
+      <%= link_to "お問い合わせ", "https://forms.gle/zmjN5X99cQP9BFzE7",
+            class: "ts-footer-link", target: "_blank", rel: "noopener noreferrer" %>
     </div>
+
+  </div>
+
+  <div class="ts-footer-copy">
+    © 2026 ThinkStorm. All rights reserved.
   </div>
 </footer>
