@@ -101,6 +101,8 @@
   background: #0F2027;
   color: rgba(255, 255, 255, 0.5);
   padding: 40px 32px 28px;
+  margin-top: 0;
+  flex-shrink: 0;
 }
 
 .ts-footer-inner {
@@ -158,4 +160,11 @@
 /* ─── body上部の余白（fixed headerの分） ─── */
 body:has(.ts-header) main {
   padding-top: 64px;
+}
+
+.ts-main-content {
+  flex: 1 0 auto;
+  background-color: #F7FFFE;
+  /* コンテンツ分だけの高さにする */
+  align-self: stretch;
 }

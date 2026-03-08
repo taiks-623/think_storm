@@ -1,76 +1,104 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-800">マイブレスト</h1>
-    <%= link_to "新規作成", new_brainstorm_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition" %>
+<div class="ts-dashboard">
+
+  <%# ─── ページヘッダー ─── %>
+  <div class="ts-dashboard-header">
+    <div>
+      <h1 class="ts-dashboard-title">マイブレスト</h1>
+      <p class="ts-dashboard-sub">あなたのブレインストーミングセッション一覧</p>
+    </div>
+    <%= link_to new_brainstorm_path, class: "ts-btn-primary" do %>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      新規作成
+    <% end %>
   </div>
 
-  <%# 検索フォーム %>
-  <div data-controller="autocomplete"
+  <%# ─── 検索フォーム ─── %>
+  <div class="ts-search-wrap"
+      data-controller="autocomplete"
       data-action="click@window->autocomplete#clickOutside">
-    <%= form_with url: dashboard_path, method: :get, local: true do |f| %>
-      <div class="flex gap-2">
-        <div class="relative flex-grow">
-          <%= f.text_field :q,
-                value: params[:q],
-                placeholder: "ブレストを検索...",
-                autocomplete: "off",
-                data: {
-                  autocomplete_target: "input",
-                  action: "input->autocomplete#search"
-                },
-                class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
-
-          <%# 候補ドロップダウン %>
-          <div data-autocomplete-target="suggestions"
-              class="hidden absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1">
-          </div>
+    <%= form_with url: dashboard_path, method: :get, local: true, class: "ts-search-form" do |f| %>
+      <div class="ts-search-input-wrap">
+        <svg class="ts-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <%= f.text_field :q,
+              value: params[:q],
+              placeholder: "ブレストを検索...",
+              autocomplete: "off",
+              data: {
+                autocomplete_target: "input",
+                action: "input->autocomplete#search"
+              },
+              class: "ts-search-input" %>
+        <div data-autocomplete-target="suggestions"
+            class="hidden absolute z-10 w-full bg-white border border-[#C8EFEB] rounded-xl shadow-lg mt-1 top-full left-0">
         </div>
-
-        <%= f.submit "検索",
-              class: "px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+      </div>
+      <div class="ts-search-actions">
+        <%= f.submit "検索", class: "ts-btn-search" %>
         <% if params[:q].present? %>
-          <%= link_to "クリア", dashboard_path,
-                class: "px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition" %>
+          <%= link_to "クリア", dashboard_path, class: "ts-btn-clear" %>
         <% end %>
       </div>
     <% end %>
   </div>
 
-  <%# 検索結果のメッセージ %>
+  <%# ─── 検索結果件数 ─── %>
   <% if params[:q].present? %>
-    <p class="text-sm text-gray-500 mb-4">
-      「<%= params[:q] %>」の検索結果：<%= @brainstorms.count %>件
+    <p class="ts-search-result-meta">
+      「<%= params[:q] %>」の検索結果：<strong><%= @brainstorms.count %>件</strong>
     </p>
   <% end %>
 
+  <%# ─── カードグリッド ─── %>
   <% if @brainstorms.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="ts-card-grid">
       <% @brainstorms.each do |brainstorm| %>
-        <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2">
-            <%= link_to brainstorm.title, brainstorm_path(brainstorm), class: "hover:text-indigo-600" %>
-          </h2>
-          
-          <% if brainstorm.description.present? %>
-            <p class="text-gray-600 mb-4 line-clamp-2">
-              <%= brainstorm.description %>
-            </p>
-          <% end %>
-          
-          <div class="flex justify-between items-center text-sm text-gray-500">
-            <span><%= brainstorm.created_at.strftime("%Y/%m/%d") %></span>
-            <div class="space-x-2">
-              <%= link_to "詳細", brainstorm_path(brainstorm), class: "text-indigo-600 hover:text-indigo-800" %>
-              <%= button_to "削除", brainstorm_path(brainstorm), method: :delete, form: { onsubmit: "return confirm('本当に削除しますか？')" }, class: "text-red-600 hover:text-red-800 text-sm" %>
+        <div class="ts-brainstorm-card">
+          <%# アクセントライン %>
+          <div class="ts-card-accent"></div>
+
+          <div class="ts-card-body">
+            <h2 class="ts-card-title">
+              <%= link_to brainstorm.title, brainstorm_path(brainstorm), class: "ts-card-title-link" %>
+            </h2>
+
+            <% if brainstorm.description.present? %>
+              <p class="ts-card-desc"><%= brainstorm.description %></p>
+            <% else %>
+              <p class="ts-card-desc ts-card-desc-empty">説明なし</p>
+            <% end %>
+          </div>
+
+          <div class="ts-card-footer">
+            <span class="ts-card-date">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <%= brainstorm.created_at.strftime("%Y/%m/%d") %>
+            </span>
+            <div class="ts-card-actions">
+              <%= link_to brainstorm_path(brainstorm), class: "ts-card-btn-detail" do %>
+                詳細を見る →
+              <% end %>
+              <%= button_to brainstorm_path(brainstorm),
+                    method: :delete,
+                    form: { onsubmit: "return confirm('本当に削除しますか？')" },
+                    class: "ts-card-btn-delete" do %>
+                削除
+              <% end %>
             </div>
           </div>
         </div>
       <% end %>
     </div>
+
+  <%# ─── 空状態 ─── %>
   <% else %>
-    <div class="bg-gray-50 rounded-lg p-12 text-center">
-      <p class="text-gray-600 text-lg mb-4">まだブレストがありません</p>
-      <%= link_to "最初のブレストを作成", new_brainstorm_path, class: "px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition inline-block" %>
+    <div class="ts-empty-state">
+      <div class="ts-empty-icon">🌱</div>
+      <h3 class="ts-empty-title">まだブレストがありません</h3>
+      <p class="ts-empty-desc">最初のブレインストーミングを始めましょう。<br>AIがアイデア出しをサポートします。</p>
+      <%= link_to "最初のブレストを作成する →", new_brainstorm_path, class: "ts-btn-primary" %>
     </div>
   <% end %>
+
 </div>
