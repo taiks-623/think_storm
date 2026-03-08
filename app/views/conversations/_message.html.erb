@@ -1,6 +1,22 @@
-<div class="flex <%= message.role == 'user' ? 'justify-end' : 'justify-start' %>">
-  <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm
-              <%= message.role == 'user' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-800' %>">
-    <%= simple_format message.content %>
-  </div>
+<%# app/views/conversations/_message.html.erb %>
+
+<div style="display: flex; justify-content: <%= message.role == 'user' ? 'flex-end' : 'flex-start' %>;">
+  <% if message.role == 'user' %>
+    <div style="max-width: 72%; padding: 10px 14px;
+                border-radius: 14px 14px 4px 14px;
+                font-size: 13px; line-height: 1.6;
+                background: linear-gradient(135deg, #6C47FF, #8B6FFF);
+                color: white;">
+      <%= simple_format message.content %>
+    </div>
+  <% else %>
+    <div style="max-width: 72%; padding: 10px 14px;
+                border-radius: 14px 14px 14px 4px;
+                font-size: 13px; line-height: 1.6;
+                background: #F0FAFA;
+                color: #0F2027;
+                border: 1px solid #C8EFEB;">
+      <%= simple_format message.content %>
+    </div>
+  <% end %>
 </div>

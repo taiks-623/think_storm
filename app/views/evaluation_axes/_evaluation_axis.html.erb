@@ -1,10 +1,10 @@
-<div id="<%= dom_id(evaluation_axis) %>" class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-  <span class="text-sm font-medium text-gray-700"><%= evaluation_axis.name %></span>
-  <div class="flex space-x-2">
+<div class="ts-axis-item" id="evaluation_axis_<%= evaluation_axis.id %>">
+  <span><%= evaluation_axis.name %></span>
+  <% if brainstorm.owner?(current_user) || brainstorm.editor?(current_user) %>
     <%= button_to "削除",
-          brainstorm_evaluation_ax_path(brainstorm, evaluation_axis),
+          "/brainstorms/#{brainstorm.id}/evaluation_axes/#{evaluation_axis.id}",
           method: :delete,
-          data: { turbo_stream: true, confirm: "削除しますか？" },
-          class: "text-xs text-red-500 hover:text-red-700" %>
-  </div>
+          data: { turbo_confirm: "評価軸「#{evaluation_axis.name}」を削除しますか？" },
+          class: "ts-btn ts-btn-danger ts-btn-xs" %>
+  <% end %>
 </div>

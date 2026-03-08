@@ -1,0 +1,704 @@
+/* ============================================================
+   app/assets/stylesheets/pages/brainstorm_show.css
+   ブレスト詳細ページ専用スタイル
+   ============================================================ */
+
+/* ─── ページ全体 ─── */
+.ts-brainstorm-show {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ─── セクションカード共通 ─── */
+.ts-section-card {
+  background: #FFFFFF;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+
+/* ─── ブレストヘッダー ─── */
+.ts-brainstorm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ts-brainstorm-title {
+  font-family: 'Noto Sans JP', 'DM Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #0F2027;
+  margin-bottom: 6px;
+}
+.ts-brainstorm-desc {
+  font-size: 15px;
+  color: #4A6972;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.ts-brainstorm-date {
+  font-size: 13px;
+  color: #9BB5BC;
+}
+
+/* ─── メンバーバッジ ─── */
+.ts-members-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.ts-members-label {
+  font-size: 13px;
+  color: #4A6972;
+}
+.ts-member-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ts-member-badge-owner {
+  background: #EDE9FF;
+  color: #6C47FF;
+}
+.ts-member-badge-editor {
+  background: #D6F5F0;
+  color: #0ABFA3;
+}
+.ts-member-badge-viewer {
+  background: #F0F4F5;
+  color: #4A6972;
+}
+.ts-member-role {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: white;
+}
+.ts-role-owner  { background: #6C47FF; }
+.ts-role-editor { background: #0ABFA3; }
+.ts-role-viewer { background: #9BB5BC; }
+
+/* ─── オンラインメンバー ─── */
+.ts-online-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ts-online-label {
+  font-size: 13px;
+  color: #4A6972;
+}
+/* JSで生成されるオンラインバッジのスタイル上書き用 */
+#online-members .online-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: #D6F5F0;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0ABFA3;
+}
+#online-members .online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2ECC71;
+  display: inline-block;
+}
+
+/* ─── ヘッダーボタン群 ─── */
+.ts-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* ─── ボタン定義（全ページ共通） ─── */
+/* プライマリ（mint gradient） */
+.ts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.ts-btn-mint {
+  background: linear-gradient(135deg, #0ABFA3, #00C8D7);
+  color: white !important;
+  box-shadow: 0 2px 12px rgba(10,191,163,0.28);
+}
+.ts-btn-mint:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(10,191,163,0.40);
+}
+.ts-btn-purple {
+  background: linear-gradient(135deg, #6C47FF, #9B6FFF);
+  color: white !important;
+  box-shadow: 0 2px 12px rgba(108,71,255,0.25);
+}
+.ts-btn-purple:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(108,71,255,0.38);
+}
+.ts-btn-ghost {
+  background: #F0FAFA;
+  color: #2D4A52;
+  border: 1.5px solid #C8EFEB;
+}
+.ts-btn-ghost:hover { background: #D6F5F0; color: #0ABFA3; }
+.ts-btn-danger {
+  background: #FEF2F2;
+  color: #EF4444;
+  border: 1.5px solid #FCA5A5;
+}
+.ts-btn-danger:hover { background: #EF4444; color: white; }
+.ts-btn-green {
+  background: #DCFCE7;
+  color: #16A34A;
+  border: 1.5px solid #86EFAC;
+}
+.ts-btn-green:hover { background: #16A34A; color: white; }
+.ts-btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 7px;
+}
+.ts-btn-xs {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* ─── 評価軸セクション ─── */
+.ts-section-heading {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F2027;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ts-axis-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #F7FFFE;
+  border: 1px solid #C8EFEB;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #2D4A52;
+  font-weight: 500;
+}
+
+/* 評価軸入力フォーム */
+.ts-axis-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.ts-axis-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 9px;
+  font-size: 14px;
+  color: #0F2027;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  background: #FFFFFF;
+}
+.ts-axis-input:focus {
+  border-color: #0ABFA3;
+  box-shadow: 0 0 0 3px rgba(10,191,163,0.12);
+}
+.ts-axis-input::placeholder { color: #9BB5BC; }
+
+/* ─── アイデア一覧セクション ─── */
+.ts-ideas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.ts-ideas-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0F2027;
+}
+.ts-ideas-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* タグフィルター */
+.ts-tag-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.ts-tag-filter-label { font-size: 13px; color: #4A6972; }
+.ts-tag-pill {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  background: #D6F5F0;
+  color: #0ABFA3;
+}
+.ts-tag-pill:hover { background: #0ABFA3; color: white; }
+.ts-tag-pill-active { background: #0ABFA3; color: white; }
+.ts-tag-pill-all {
+  background: #F0F4F5;
+  color: #4A6972;
+}
+.ts-tag-pill-all:hover { background: #4A6972; color: white; }
+
+/* ─── グループ ─── */
+.ts-group-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ts-group-block {
+  border: 1.5px solid #C8EFEB;
+  border-radius: 14px;
+  padding: 20px 20px;
+  margin-bottom: 16px;
+  background: #FFFFFF;
+  transition: border-color 0.2s;
+}
+.ts-group-block:hover { border-color: #0ABFA3; }
+
+.ts-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.ts-group-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0F2027;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ts-group-name::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background: linear-gradient(180deg, #0ABFA3, #00C8D7);
+  border-radius: 2px;
+}
+.ts-group-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 未分類グループ */
+.ts-group-block-ungrouped {
+  border: 1.5px dashed #C8EFEB;
+  background: #F7FFFE;
+}
+.ts-group-name-ungrouped {
+  color: #4A6972;
+}
+.ts-group-name-ungrouped::before {
+  background: linear-gradient(180deg, #9BB5BC, #C8EFEB);
+}
+
+/* グループ編集フォーム */
+.ts-group-edit-form {
+  background: #F7FFFE;
+  border: 1px solid #C8EFEB;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  align-items: center;
+  gap: 8px;
+}
+/* hidden クラスが外れたときだけ flex を適用 */
+.ts-group-edit-form:not(.hidden) {
+  display: flex;
+}
+.ts-group-edit-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+.ts-group-edit-input:focus { border-color: #0ABFA3; }
+
+/* 新規グループ作成フォーム */
+.ts-new-group-form {
+  background: #F7FFFE;
+  border: 1px solid #C8EFEB;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* ─── アイデアカード ─── */
+/* ─── アイデアカード（パターンC：本文強調 + 下部バー） ─── */
+.ts-idea-card {
+  background: #FFFFFF;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ts-idea-card:hover {
+  border-color: #0ABFA3;
+  box-shadow: 0 2px 14px rgba(10,191,163,0.10);
+}
+
+/* 上部：本文エリア */
+.ts-idea-top {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid #EEF9F8;
+}
+.ts-idea-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ts-idea-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ts-idea-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ts-idea-content {
+  font-size: 14px;
+  color: #0F2027;
+  line-height: 1.7;
+}
+.ts-idea-memo {
+  font-size: 12px;
+  color: #4A6972;
+  background: #F0FAFA;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.ts-tag-chip {
+  display: inline-block;
+  padding: 2px 9px;
+  background: #D6F5F0;
+  color: #0ABFA3;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* 下部：評価 + 操作バー */
+.ts-idea-bottom {
+  display: flex;
+  align-items: stretch;
+  background: #F7FFFE;
+}
+.ts-idea-scores {
+  flex: 1;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 1px solid #C8EFEB;
+}
+.ts-idea-actions-col {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 170px;
+}
+.ts-idea-actions-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* AI生成バッジ */
+.ts-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ts-source-ai  { background: #EDE9FF; color: #6C47FF; }
+.ts-source-user{ background: #D6F5F0; color: #0ABFA3; }
+
+/* グループ選択プルダウン */
+.ts-idea-group-select {
+  padding: 5px 10px;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 7px;
+  font-size: 12px;
+  color: #2D4A52;
+  background: #FFFFFF;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.ts-idea-group-select:focus { border-color: #0ABFA3; }
+
+/* 評価スコアボタン */
+.ts-score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.ts-score-label {
+  min-width: 60px;
+  color: #4A6972;
+  font-size: 12px;
+}
+.ts-score-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1.5px solid #C8EFEB;
+  background: #FFFFFF;
+  color: #4A6972;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+.ts-score-btn:hover {
+  border-color: #0ABFA3;
+  background: #D6F5F0;
+  color: #0ABFA3;
+}
+.ts-score-btn-active {
+  background: linear-gradient(135deg, #0ABFA3, #00C8D7) !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+/* いいね・コメント */
+.ts-vote-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 13px;
+  background: #F7FFFE;
+  border: 1.5px solid #C8EFEB;
+  color: #4A6972;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+.ts-vote-btn:hover { background: #D6F5F0; border-color: #0ABFA3; }
+.ts-vote-btn-active { background: #D6F5F0; border-color: #0ABFA3; color: #0ABFA3; }
+
+.ts-comment-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #4A6972;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+.ts-comment-toggle:hover { background: #EEF9F8; color: #0ABFA3; }
+
+/* コメントエリア */
+.ts-comment-area {
+  padding: 12px 18px;
+  border-top: 1px solid #EEF9F8;
+  background: #FFFFFF;
+}
+
+/* ─── 手動追加フォーム ─── */
+.ts-add-idea-form {
+  background: #F7FFFE;
+  border: 1px solid #C8EFEB;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.ts-form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2D4A52;
+  margin-bottom: 6px;
+}
+.ts-form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #C8EFEB;
+  border-radius: 9px;
+  font-size: 14px;
+  color: #0F2027;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  background: #FFFFFF;
+}
+.ts-form-textarea:focus {
+  border-color: #0ABFA3;
+  box-shadow: 0 0 0 3px rgba(10,191,163,0.12);
+}
+.ts-form-textarea::placeholder { color: #9BB5BC; }
+
+/* ─── 空状態 ─── */
+.ts-empty-ideas {
+  background: #F7FFFE;
+  border: 1.5px dashed #C8EFEB;
+  border-radius: 14px;
+  padding: 56px 24px;
+  text-align: center;
+}
+.ts-empty-ideas p { color: #4A6972; line-height: 1.7; margin-bottom: 8px; }
+
+/* ─── 戻るリンク ─── */
+.ts-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #4A6972;
+  text-decoration: none;
+  margin-top: 24px;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+.ts-back-link:hover { color: #0ABFA3; }
+
+/* ─── レーダーチャートカラー上書き（Chart.js） ─── */
+/* JS側で色指定しているのでCSSからは制御不可だが、
+   将来的にCSS変数で渡すリファクタリング用メモとして残す */
+
+/* ─── 評価結果セクション折りたたみ ─── */
+.ts-eval-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.ts-eval-panel-header:hover .ts-eval-toggle-icon {
+  color: #0ABFA3;
+}
+.ts-eval-toggle-icon {
+  font-size: 13px;
+  color: #9BB5BC;
+  transition: transform 0.25s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ts-eval-panel-body {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  max-height: 600px;        /* 展開時の最大高さ */
+  opacity: 1;
+}
+.ts-eval-panel-body.ts-scrollable {
+  overflow-y: auto;
+  /* カスタムスクロールバー */
+  scrollbar-width: thin;
+  scrollbar-color: #C8EFEB transparent;
+}
+.ts-eval-panel-body.ts-scrollable::-webkit-scrollbar {
+  width: 5px;
+}
+.ts-eval-panel-body.ts-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ts-eval-panel-body.ts-scrollable::-webkit-scrollbar-thumb {
+  background: #C8EFEB;
+  border-radius: 10px;
+}
+.ts-eval-panel-body.ts-collapsed {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.ts-eval-toggle-icon.ts-collapsed svg {
+  transform: rotate(-90deg);
+}

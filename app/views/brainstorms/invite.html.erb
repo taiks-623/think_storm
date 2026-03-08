@@ -1,62 +1,107 @@
-<div class="max-w-2xl mx-auto p-6">
-  <h1 class="text-2xl font-bold mb-6">招待リンク管理</h1>
-  <p class="text-gray-600 mb-8"><%= @brainstorm.title %></p>
+<%# app/views/brainstorms/invite.html.erb %>
 
-  <%# 編集者用リンク %>
-  <div class="bg-white rounded-lg border p-6 mb-4">
-    <h2 class="font-semibold text-lg mb-2">編集者用リンク</h2>
-    <p class="text-sm text-gray-500 mb-4">アイデアの追加・編集ができます</p>
+<div style="background-color: #F7FFFE; min-height: calc(100vh - 120px); padding: 48px 16px;">
+  <div style="max-width: 640px; margin: 0 auto;">
 
-    <% if @editor_invitation.persisted? %>
-      <div class="flex items-center gap-2 mb-4">
-        <input type="text"
-               value="<%= join_brainstorm_url(@editor_invitation.token) %>"
-               readonly
-               class="flex-1 border rounded px-3 py-2 text-sm bg-gray-50"
-               id="editor-link">
-        <button onclick="copyToClipboard('editor-link')"
-                class="px-4 py-2 bg-blue-600 text-white rounded text-sm">
-          コピー
-        </button>
+    <%# ─── ページヘッダー ─── %>
+    <div style="margin-bottom: 32px;">
+      <%= link_to brainstorm_path(@brainstorm),
+            style: "display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #4A6972; text-decoration: none; margin-bottom: 20px;" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        ブレストに戻る
+      <% end %>
+      <h1 style="font-size: 24px; font-weight: 700; color: #0F2027; margin: 0 0 6px;">
+        🔗 招待リンク管理
+      </h1>
+      <p style="font-size: 14px; color: #4A6972; margin: 0;">
+        <%= @brainstorm.title %>
+      </p>
+    </div>
+
+    <%# ─── 編集者用リンク ─── %>
+    <div class="ts-section-card" style="margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <span style="display: inline-flex; align-items: center; padding: 2px 10px; background: #EDE9FF; color: #6C47FF; border-radius: 100px; font-size: 12px; font-weight: 700;">
+          ✎ 編集者
+        </span>
+        <h2 style="font-size: 16px; font-weight: 700; color: #0F2027; margin: 0;">編集者用リンク</h2>
       </div>
-    <% else %>
-      <%= button_to "リンクを生成する", invite_brainstorm_path(@brainstorm),
-            params: { role: "editor" },
-            class: "px-4 py-2 bg-blue-600 text-white rounded text-sm" %>
-    <% end %>
-  </div>
+      <p style="font-size: 13px; color: #4A6972; margin: 0 0 18px;">
+        招待されたユーザーはアイデアの追加・編集ができます
+      </p>
 
-  <%# 閲覧者用リンク %>
-  <div class="bg-white rounded-lg border p-6 mb-4">
-    <h2 class="font-semibold text-lg mb-2">閲覧者用リンク</h2>
-    <p class="text-sm text-gray-500 mb-4">アイデアの閲覧のみできます</p>
+      <% if @editor_invitation.persisted? %>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text"
+                 value="<%= join_brainstorm_url(@editor_invitation.token) %>"
+                 readonly
+                 id="editor-link"
+                 style="flex: 1; border: 1.5px solid #C8EFEB; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #2D4A52; background: #F0FAFA; outline: none; font-family: monospace;">
+          <button onclick="copyToClipboard('editor-link', this)"
+                  class="ts-btn ts-btn-purple"
+                  style="flex-shrink: 0; white-space: nowrap;">
+            コピー
+          </button>
+        </div>
+      <% else %>
+        <%= button_to invite_brainstorm_path(@brainstorm),
+              params: { role: "editor" },
+              class: "ts-btn ts-btn-purple cursor-pointer" do %>
+          🔗 リンクを生成する
+        <% end %>
+      <% end %>
+    </div>
 
-    <% if @viewer_invitation.persisted? %>
-      <div class="flex items-center gap-2 mb-4">
-        <input type="text"
-               value="<%= join_brainstorm_url(@viewer_invitation.token) %>"
-               readonly
-               class="flex-1 border rounded px-3 py-2 text-sm bg-gray-50"
-               id="viewer-link">
-        <button onclick="copyToClipboard('viewer-link')"
-                class="px-4 py-2 bg-gray-600 text-white rounded text-sm">
-          コピー
-        </button>
+    <%# ─── 閲覧者用リンク ─── %>
+    <div class="ts-section-card" style="margin-bottom: 32px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+        <span style="display: inline-flex; align-items: center; padding: 2px 10px; background: #D6F5F0; color: #0ABFA3; border-radius: 100px; font-size: 12px; font-weight: 700;">
+          👁 閲覧者
+        </span>
+        <h2 style="font-size: 16px; font-weight: 700; color: #0F2027; margin: 0;">閲覧者用リンク</h2>
       </div>
-    <% else %>
-      <%= button_to "リンクを生成する", invite_brainstorm_path(@brainstorm),
-            params: { role: "viewer" },
-            class: "px-4 py-2 bg-gray-600 text-white rounded text-sm" %>
-    <% end %>
-  </div>
+      <p style="font-size: 13px; color: #4A6972; margin: 0 0 18px;">
+        招待されたユーザーはアイデアの閲覧のみできます
+      </p>
 
-  <%= link_to "← ブレストに戻る", @brainstorm, class: "text-sm text-gray-500 hover:underline" %>
+      <% if @viewer_invitation.persisted? %>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text"
+                 value="<%= join_brainstorm_url(@viewer_invitation.token) %>"
+                 readonly
+                 id="viewer-link"
+                 style="flex: 1; border: 1.5px solid #C8EFEB; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #2D4A52; background: #F0FAFA; outline: none; font-family: monospace;">
+          <button onclick="copyToClipboard('viewer-link', this)"
+                  class="ts-btn ts-btn-mint"
+                  style="flex-shrink: 0; white-space: nowrap;">
+            コピー
+          </button>
+        </div>
+      <% else %>
+        <%= button_to invite_brainstorm_path(@brainstorm),
+              params: { role: "viewer" },
+              class: "ts-btn ts-btn-mint cursor-pointer" do %>
+          🔗 リンクを生成する
+        <% end %>
+      <% end %>
+    </div>
+
+  </div>
 </div>
 
 <script>
-  function copyToClipboard(inputId) {
+  function copyToClipboard(inputId, btn) {
     const input = document.getElementById(inputId);
-    navigator.clipboard.writeText(input.value);
-    alert("コピーしました");
+    navigator.clipboard.writeText(input.value).then(() => {
+      const original = btn.textContent;
+      btn.textContent = '✓ コピーしました';
+      btn.style.opacity = '0.75';
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.opacity = '';
+      }, 2000);
+    });
   }
 </script>
