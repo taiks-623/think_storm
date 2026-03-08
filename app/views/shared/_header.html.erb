@@ -1,20 +1,27 @@
-<header class="bg-white shadow">
-  <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-    <div class="flex items-center">
-      <%= link_to user_signed_in? ? dashboard_path : root_path, class: "text-2xl font-bold text-indigo-600" do %>
+<% is_top = current_page?(root_path) %>
+
+<header class="ts-header <%= is_top ? 'ts-header-top' : 'ts-header-default' %>">
+  <nav class="ts-header-inner">
+
+    <%# ロゴ %>
+    <div class="ts-header-logo">
+      <%= link_to user_signed_in? ? dashboard_path : root_path, class: "ts-logo-link" do %>
         ThinkStorm
       <% end %>
     </div>
-    
-    <div class="flex items-center space-x-4">
+
+    <%# ナビ %>
+    <div class="ts-header-nav">
       <% if user_signed_in? %>
-        <%= link_to "ダッシュボード", dashboard_path, class: "text-gray-700 hover:text-indigo-600" %>
-        <%= link_to "アカウント設定", edit_users_profile_path, class: "text-gray-700 hover:text-indigo-600" %>
-        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300" %>
+        <%= link_to "ダッシュボード", dashboard_path, class: "ts-nav-link" %>
+        <%= link_to "アカウント設定", edit_users_profile_path, class: "ts-nav-link" %>
+        <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+              class: "ts-nav-link ts-nav-logout" %>
       <% else %>
-        <%= link_to "ログイン", new_user_session_path, class: "text-gray-700 hover:text-indigo-600" %>
-        <%= link_to "新規登録", new_user_registration_path, class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" %>
+        <%= link_to "ログイン", new_user_session_path, class: "ts-nav-link" %>
+        <%= link_to "新規登録", new_user_registration_path, class: "ts-btn-nav-cta" %>
       <% end %>
     </div>
+
   </nav>
 </header>
