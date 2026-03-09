@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get "pages/home"
   get "terms", to: "pages#terms"
   get "privacy", to: "pages#privacy"
+  get "guide", to: "pages#guide"
+  
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     registrations: "users/registrations"

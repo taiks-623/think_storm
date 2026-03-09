@@ -1,0 +1,163 @@
+<%# app/views/pages/guide.html.erb %>
+
+<div style="background-color: #F7FFFE; min-height: calc(100vh - 120px); padding: 48px 16px;">
+  <div style="max-width: 820px; margin: 0 auto;">
+
+    <%# ─── ヒーロー ─── %>
+    <div style="text-align: center; margin-bottom: 52px;">
+      <div style="display: inline-flex; align-items: center; gap: 6px; background: #C8EFEB; color: #0ABFA3; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 1px;">
+        📖 HOW TO USE
+      </div>
+      <h1 style="font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.2;">ThinkStormの使い方</h1>
+      <p style="font-size: 16px; color: #4A6972; margin: 0; line-height: 1.7;">課題入力からAI生成・整理・評価まで、5ステップで完結します。</p>
+    </div>
+
+    <%# ─── ステップ一覧 ─── %>
+    <div style="display: flex; flex-direction: column; gap: 0;">
+
+      <%# ─── STEP 01 ─── %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 44px 0; border-bottom: 1.5px solid #C8EFEB;">
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: #0ABFA3; letter-spacing: 2px; margin-bottom: 10px;">STEP 01</div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.4;">課題・テーマを<br>入力する</h2>
+          <p style="font-size: 14px; color: #4A6972; line-height: 1.8; margin: 0;">解決したい課題やブレストのテーマを入力してブレストを作成します。具体的なテーマほどAIが質の高いアイデアを生成します。</p>
+        </div>
+        <%# モックUI %>
+        <div style="background: #FFFFFF; border: 1.5px solid #C8EFEB; border-radius: 14px; padding: 18px; box-shadow: 0 4px 16px rgba(10,191,163,0.08);">
+          <div style="font-size: 11px; font-weight: 700; color: #4A6972; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #EEF8F7;">✦ 新しいブレストを作成</div>
+          <div style="font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;">テーマ・課題</div>
+          <div style="background: #F7FFFE; border: 1.5px solid #C8EFEB; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #0F2027; margin-bottom: 12px;">20代向けの健康管理アプリのアイデア</div>
+          <div style="font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;">詳細・背景 <span style="font-weight: 400; color: #9BB5BC;">（任意）</span></div>
+          <div style="background: #F7FFFE; border: 1.5px solid #C8EFEB; border-radius: 8px; padding: 10px 12px; font-size: 12px; color: #9BB5BC; margin-bottom: 14px; min-height: 48px;">競合との差別化、ターゲット像など...</div>
+          <div style="background: linear-gradient(135deg, #0ABFA3, #00C8D7); color: white; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">✦ ブレストを作成する</div>
+        </div>
+      </div>
+
+      <%# ─── STEP 02 ─── %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 44px 0; border-bottom: 1.5px solid #C8EFEB; direction: rtl;">
+        <div style="direction: ltr;">
+          <div style="font-size: 11px; font-weight: 700; color: #0ABFA3; letter-spacing: 2px; margin-bottom: 10px;">STEP 02</div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.4;">AIにアイデアを<br>生成させる</h2>
+          <p style="font-size: 14px; color: #4A6972; line-height: 1.8; margin: 0;">「AIでアイデアを生成」ボタンを押すと、AIが多角的な視点から15〜20個のアイデアを自動生成します。自分でアイデアを追加することも可能です。</p>
+        </div>
+        <div style="direction: ltr; background: #FFFFFF; border: 1.5px solid #C8EFEB; border-radius: 14px; padding: 18px; box-shadow: 0 4px 16px rgba(10,191,163,0.08);">
+          <div style="font-size: 11px; font-weight: 700; color: #4A6972; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #EEF8F7; display: flex; justify-content: space-between; align-items: center;">
+            <span>🤖 AIが生成中...</span>
+            <span style="color: #0ABFA3;">15個生成済み</span>
+          </div>
+          <div style="background: #EDF9F7; border: 1.5px solid #0ABFA3; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #0F2027; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><span>🤖</span> ウェアラブル連携の睡眠管理</div>
+          <div style="background: #EDF9F7; border: 1.5px solid #0ABFA3; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #0F2027; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><span>🤖</span> AIパーソナルコーチ機能</div>
+          <div style="background: #EDF9F7; border: 1.5px solid #0ABFA3; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #0F2027; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;"><span>🤖</span> ゲーミフィケーションで継続促進</div>
+          <div style="font-size: 11px; color: #9BB5BC; text-align: right; margin-top: 4px;">+ さらに12個...</div>
+        </div>
+      </div>
+
+      <%# ─── STEP 03 ─── %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 44px 0; border-bottom: 1.5px solid #C8EFEB;">
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: #0ABFA3; letter-spacing: 2px; margin-bottom: 10px;">STEP 03</div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.4;">AIクラスタリングで<br>アイデアを整理</h2>
+          <p style="font-size: 14px; color: #4A6972; line-height: 1.8; margin: 0;">「AIでグルーピング」ボタンで、類似アイデアを自動でグループ化。カテゴリ名も自動で付与されます。ドラッグ&ドロップで自由に調整できます。</p>
+        </div>
+        <div style="background: #FFFFFF; border: 1.5px solid #C8EFEB; border-radius: 14px; padding: 18px; box-shadow: 0 4px 16px rgba(10,191,163,0.08);">
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 12px; font-weight: 700; color: #0ABFA3; padding-left: 8px; border-left: 3px solid #0ABFA3; margin-bottom: 8px;">テクノロジー活用</div>
+            <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 7px 10px; font-size: 11px; color: #0F2027; margin-bottom: 4px;">ウェアラブル連携の睡眠管理</div>
+            <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 7px 10px; font-size: 11px; color: #0F2027;">AIパーソナルコーチ機能</div>
+          </div>
+          <div>
+            <div style="font-size: 12px; font-weight: 700; color: #0ABFA3; padding-left: 8px; border-left: 3px solid #0ABFA3; margin-bottom: 8px;">継続・習慣化</div>
+            <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 7px 10px; font-size: 11px; color: #0F2027; margin-bottom: 4px;">ゲーミフィケーションで継続促進</div>
+            <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 7px 10px; font-size: 11px; color: #0F2027;">コミュニティ機能で仲間と続ける</div>
+          </div>
+        </div>
+      </div>
+
+      <%# ─── STEP 04 ─── %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 44px 0; border-bottom: 1.5px solid #C8EFEB; direction: rtl;">
+        <div style="direction: ltr;">
+          <div style="font-size: 11px; font-weight: 700; color: #0ABFA3; letter-spacing: 2px; margin-bottom: 10px;">STEP 04</div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.4;">評価軸を設定して<br>スコアリング</h2>
+          <p style="font-size: 14px; color: #4A6972; line-height: 1.8; margin: 0;">「実現性」「革新性」「市場性」など独自の評価軸を作成し、各アイデアを1〜5点でスコアリング。レーダーチャートで視覚的に比較できます。</p>
+        </div>
+        <div style="direction: ltr; background: #FFFFFF; border: 1.5px solid #C8EFEB; border-radius: 14px; padding: 18px; box-shadow: 0 4px 16px rgba(10,191,163,0.08);">
+          <div style="font-size: 11px; font-weight: 700; color: #4A6972; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #EEF8F7;">📊 ウェアラブル連携の睡眠管理</div>
+          <div style="font-size: 12px; color: #4A6972; margin-bottom: 6px; font-weight: 700;">実現性</div>
+          <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+            <% [1,2,3,4,5].each do |n| %>
+              <div style="width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid <%= n == 4 ? '#0ABFA3' : '#C8EFEB' %>; background: <%= n == 4 ? '#0ABFA3' : 'white' %>; font-size: 12px; font-weight: 700; color: <%= n == 4 ? 'white' : '#9BB5BC' %>; display: flex; align-items: center; justify-content: center;"><%= n %></div>
+            <% end %>
+          </div>
+          <div style="font-size: 12px; color: #4A6972; margin-bottom: 6px; font-weight: 700;">革新性</div>
+          <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+            <% [1,2,3,4,5].each do |n| %>
+              <div style="width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid <%= n == 5 ? '#0ABFA3' : '#C8EFEB' %>; background: <%= n == 5 ? '#0ABFA3' : 'white' %>; font-size: 12px; font-weight: 700; color: <%= n == 5 ? 'white' : '#9BB5BC' %>; display: flex; align-items: center; justify-content: center;"><%= n %></div>
+            <% end %>
+          </div>
+          <div style="font-size: 12px; color: #4A6972; margin-bottom: 6px; font-weight: 700;">市場性</div>
+          <div style="display: flex; gap: 6px;">
+            <% [1,2,3,4,5].each do |n| %>
+              <div style="width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid <%= n == 3 ? '#0ABFA3' : '#C8EFEB' %>; background: <%= n == 3 ? '#0ABFA3' : 'white' %>; font-size: 12px; font-weight: 700; color: <%= n == 3 ? 'white' : '#9BB5BC' %>; display: flex; align-items: center; justify-content: center;"><%= n %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# ─── STEP 05 ─── %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 44px 0;">
+        <div>
+          <div style="font-size: 11px; font-weight: 700; color: #0ABFA3; letter-spacing: 2px; margin-bottom: 10px;">STEP 05</div>
+          <h2 style="font-size: 22px; font-weight: 800; color: #0F2027; margin: 0 0 12px; line-height: 1.4;">チームで共有・<br>投票する</h2>
+          <p style="font-size: 14px; color: #4A6972; line-height: 1.8; margin: 0;">招待リンクを共有してチームメンバーを招待。リアルタイムで共同編集・投票・コメントができます。意思決定のプロセスを全員で体験しましょう。</p>
+        </div>
+        <div style="background: #FFFFFF; border: 1.5px solid #C8EFEB; border-radius: 14px; padding: 18px; box-shadow: 0 4px 16px rgba(10,191,163,0.08);">
+          <div style="font-size: 11px; font-weight: 700; color: #4A6972; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #EEF8F7;">👥 オンラインメンバー</div>
+          <div style="display: flex; margin-bottom: 12px;">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #0ABFA3; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: -6px;">T</div>
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #6C47FF; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: -6px;">A</div>
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #E74C3C; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; margin-right: -6px;">K</div>
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: #9BB5BC; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white;">+2</div>
+          </div>
+          <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #0F2027; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <span>ウェアラブル連携の睡眠管理</span>
+            <span style="color: #0ABFA3; font-weight: 700;">♥ 4</span>
+          </div>
+          <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #0F2027; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <span>AIパーソナルコーチ機能</span>
+            <span style="color: #9BB5BC; font-weight: 700;">♥ 2</span>
+          </div>
+          <div style="background: #F7FFFE; border: 1px solid #C8EFEB; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #0F2027; display: flex; justify-content: space-between; align-items: center;">
+            <span>コミュニティ機能で仲間と続ける</span>
+            <span style="color: #9BB5BC; font-weight: 700;">♥ 1</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <%# ─── CTAバナー ─── %>
+    <div style="background: linear-gradient(135deg, #0ABFA3, #00C8D7); border-radius: 16px; padding: 36px; text-align: center; margin-top: 48px;">
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 10px;">さっそく試してみましょう</h2>
+      <p style="font-size: 14px; color: rgba(255,255,255,0.85); margin: 0 0 22px;">無料で今すぐ始められます。</p>
+      <% if user_signed_in? %>
+        <%= link_to "ダッシュボードへ", dashboard_path,
+              style: "background: white; color: #0ABFA3; font-size: 15px; font-weight: 700; padding: 12px 28px; border-radius: 10px; text-decoration: none; display: inline-block;" %>
+      <% else %>
+        <%= link_to "無料で始める", new_user_registration_path,
+              style: "background: white; color: #0ABFA3; font-size: 15px; font-weight: 700; padding: 12px 28px; border-radius: 10px; text-decoration: none; display: inline-block;" %>
+      <% end %>
+    </div>
+
+    <%# ─── 戻るリンク ─── %>
+    <div style="margin-top: 24px; text-align: center;">
+      <% if user_signed_in? %>
+        <%= link_to "← ダッシュボードに戻る", dashboard_path,
+              style: "font-size: 13px; color: #0ABFA3; font-weight: 700; text-decoration: none;" %>
+      <% else %>
+        <%= link_to "← トップページに戻る", root_path,
+              style: "font-size: 13px; color: #0ABFA3; font-weight: 700; text-decoration: none;" %>
+      <% end %>
+    </div>
+
+  </div>
+</div>
