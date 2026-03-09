@@ -1,79 +1,129 @@
-<div class="max-w-2xl mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold text-gray-900 mb-8">アカウント設定</h1>
+<%# app/views/users/profiles/edit.html.erb %>
 
-  <%# プロフィール編集 %>
-  <section class="bg-white rounded-lg shadow p-6 mb-6">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">プロフィール</h2>
-    <%= form_with model: current_user, url: users_profile_path, method: :patch do |f| %>
-      <% if current_user.errors.any? %>
-        <div class="mb-4 p-3 bg-red-50 text-red-700 rounded">
-          <% current_user.errors.full_messages.each do |msg| %>
-            <p><%= msg %></p>
+<div style="background-color: #F7FFFE; min-height: calc(100vh - 120px); padding: 48px 16px;">
+  <div style="max-width: 600px; margin: 0 auto;">
+
+    <%# ─── ページヘッダー ─── %>
+    <div style="margin-bottom: 28px;">
+      <h1 style="font-size: 24px; font-weight: 700; color: #0F2027; margin: 0;">
+        ⚙️ アカウント設定
+      </h1>
+    </div>
+
+    <%# ─── プロフィール ─── %>
+    <div class="ts-section-card" style="margin-bottom: 16px;">
+      <h2 style="font-size: 15px; font-weight: 700; color: #0F2027; margin: 0 0 18px;">👤 プロフィール</h2>
+
+      <%= form_with model: current_user, url: users_profile_path, method: :patch do |f| %>
+        <% if current_user.errors.any? %>
+          <div style="background: #FFF0F0; border: 1.5px solid #FFBDBD; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: #C0392B;">
+            <% current_user.errors.full_messages.each do |msg| %>
+              <p style="margin: 0 0 3px;"><%= msg %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div style="margin-bottom: 16px;">
+          <%= f.label :name, "表示名",
+                style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+          <%= f.text_field :name,
+                placeholder: "例：田中太郎",
+                style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                onfocus: "this.style.borderColor='#0ABFA3'",
+                onblur: "this.style.borderColor='#C8EFEB'" %>
+          <p style="font-size: 12px; color: #9BB5BC; margin: 6px 0 0;">未設定の場合はメールアドレスが表示されます</p>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <%= f.label :email, "メールアドレス",
+                style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+          <p style="font-size: 14px; color: #0F2027; margin: 0;"><%= current_user.email %></p>
+          <% if current_user.unconfirmed_email.present? %>
+            <p style="font-size: 12px; color: #E67E22; margin: 4px 0 0;">確認待ち: <%= current_user.unconfirmed_email %></p>
           <% end %>
         </div>
-      <% end %>
-      <div class="mb-4">
-        <%= f.label :name, "表示名", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :name, class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500", placeholder: "名前を入力してください" %>
-        <p class="mt-1 text-sm text-gray-500">未設定の場合はメールアドレスが表示されます</p>
-      </div>
-      <div class="mb-4">
-        <%= f.label :email, "メールアドレス", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <p class="text-gray-800"><%= current_user.email %></p>
-        <% if current_user.unconfirmed_email.present? %>
-          <p class="mt-1 text-sm text-yellow-600">確認待ち: <%= current_user.unconfirmed_email %></p>
-        <% end %>
-      </div>
-      <%= f.submit "保存する", class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 cursor-pointer" %>
-    <% end %>
-  </section>
 
-  <%# メアド変更（メール認証ユーザーのみ） %>
-  <% if current_user.provider.blank? %>
-    <section class="bg-white rounded-lg shadow p-6 mb-6">
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">メールアドレスの変更</h2>
-      <%= form_with model: current_user, url: users_email_path, method: :patch do |f| %>
-        <div class="mb-4">
-          <%= f.label :email, "新しいメールアドレス", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.email_field :email, class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-        </div>
-        <div class="mb-4">
-          <%= f.label :current_password, "現在のパスワード（確認用）", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-        </div>
-        <%= f.submit "変更する", class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 cursor-pointer" %>
+        <%= f.submit "保存する",
+              class: "ts-btn ts-btn-mint cursor-pointer" %>
       <% end %>
-    </section>
+    </div>
 
-    <%# PW変更（メール認証ユーザーのみ） %>
+    <%# ─── メールアドレス変更（メール認証ユーザーのみ） ─── %>
     <% if current_user.provider.blank? %>
-      <section class="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">パスワードの変更</h2>
-        <%= form_with model: current_user, url: user_registration_path, method: :patch do |f| %>
-          <div class="mb-4">
-            <%= f.label :current_password, "現在のパスワード", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-          </div>
-          <div class="mb-4">
-            <%= f.label :password, "新しいパスワード", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= f.password_field :password, autocomplete: "new-password", class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-          </div>
-          <div class="mb-4">
-            <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "block text-sm font-medium text-gray-700 mb-1" %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-          </div>
-          <%= f.submit "変更する", class: "bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 cursor-pointer" %>
-        <% end %>
-      </section>
-    <% end %>
-  <% end %>
+      <div class="ts-section-card" style="margin-bottom: 16px;">
+        <h2 style="font-size: 15px; font-weight: 700; color: #0F2027; margin: 0 0 18px;">✉️ メールアドレスの変更</h2>
 
-  <%# アカウント削除 %>
-  <section class="bg-white rounded-lg shadow p-6 border border-red-200">
-    <h2 class="text-lg font-semibold text-red-700 mb-2">アカウントの削除</h2>
-    <p class="text-sm text-gray-600 mb-4">アカウントを削除すると、すべてのブレストとアイデアが削除されます。この操作は取り消せません。</p>
-    <%= button_to "アカウントを削除する", users_account_path, method: :delete,
-        data: { turbo_confirm: "本当に削除しますか？この操作は取り消せません。" },
-        class: "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 cursor-pointer" %>
-  </section>
+        <%= form_with model: current_user, url: users_email_path, method: :patch do |f| %>
+          <div style="margin-bottom: 14px;">
+            <%= f.label :email, "新しいメールアドレス",
+                  style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+            <%= f.email_field :email,
+                  style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                  onfocus: "this.style.borderColor='#0ABFA3'",
+                  onblur: "this.style.borderColor='#C8EFEB'" %>
+          </div>
+          <div style="margin-bottom: 18px;">
+            <%= f.label :current_password, "現在のパスワード（確認用）",
+                  style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                  style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                  onfocus: "this.style.borderColor='#0ABFA3'",
+                  onblur: "this.style.borderColor='#C8EFEB'" %>
+          </div>
+          <%= f.submit "変更する",
+                class: "ts-btn ts-btn-ghost cursor-pointer" %>
+        <% end %>
+      </div>
+
+      <%# ─── パスワード変更 ─── %>
+      <div class="ts-section-card" style="margin-bottom: 16px;">
+        <h2 style="font-size: 15px; font-weight: 700; color: #0F2027; margin: 0 0 18px;">🔒 パスワードの変更</h2>
+
+        <%= form_with model: current_user, url: user_registration_path, method: :patch do |f| %>
+          <div style="margin-bottom: 14px;">
+            <%= f.label :current_password, "現在のパスワード",
+                  style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                  style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                  onfocus: "this.style.borderColor='#0ABFA3'",
+                  onblur: "this.style.borderColor='#C8EFEB'" %>
+          </div>
+          <div style="margin-bottom: 14px;">
+            <%= f.label :password, "新しいパスワード",
+                  style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+            <%= f.password_field :password, autocomplete: "new-password",
+                  style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                  onfocus: "this.style.borderColor='#0ABFA3'",
+                  onblur: "this.style.borderColor='#C8EFEB'" %>
+          </div>
+          <div style="margin-bottom: 18px;">
+            <%= f.label :password_confirmation, "新しいパスワード（確認）",
+                  style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                  style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
+                  onfocus: "this.style.borderColor='#0ABFA3'",
+                  onblur: "this.style.borderColor='#C8EFEB'" %>
+          </div>
+          <%= f.submit "変更する",
+                class: "ts-btn ts-btn-ghost cursor-pointer" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# ─── アカウント削除 ─── %>
+    <div style="background: #FFFFFF; border: 1.5px solid #FFBDBD; border-radius: 14px; padding: 22px 24px;">
+      <h2 style="font-size: 15px; font-weight: 700; color: #C0392B; margin: 0 0 8px; display: flex; align-items: center; gap: 8px;">
+        <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: #FFF0F0; border-radius: 6px; font-size: 13px;">⚠️</span>
+        アカウントの削除
+      </h2>
+      <p style="font-size: 13px; color: #4A6972; margin: 0 0 18px; line-height: 1.6;">
+        アカウントを削除すると、すべてのブレストとアイデアが削除されます。この操作は取り消せません。
+      </p>
+      <%= button_to "アカウントを削除する", users_account_path,
+            method: :delete,
+            data: { turbo_confirm: "本当に削除しますか？この操作は取り消せません。" },
+            class: "ts-btn ts-btn-danger cursor-pointer" %>
+    </div>
+
+  </div>
 </div>
