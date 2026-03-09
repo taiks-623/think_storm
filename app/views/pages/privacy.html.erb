@@ -1,58 +1,87 @@
-<div class="bg-gray-50 min-h-screen py-12 px-4">
-  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-8">プライバシーポリシー</h1>
+<%# app/views/pages/privacy.html.erb %>
 
-    <p class="text-sm text-gray-500 mb-8">最終更新日：2026年2月17日</p>
+<div style="background-color: #F7FFFE; min-height: calc(100vh - 120px); padding: 48px 16px;">
+  <div style="max-width: 680px; margin: 0 auto;">
 
-    <div class="space-y-8 text-gray-700">
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">1. 収集する情報</h2>
-        <p class="mb-2">本サービスでは、以下の情報を収集します。</p>
-        <ul class="list-disc list-inside space-y-1 text-gray-600">
-          <li>メールアドレス（ユーザー登録時）</li>
-          <li>SNSログイン時のプロフィール情報（名前・メールアドレス）</li>
-          <li>本サービス上で作成したブレストおよびアイデアの内容</li>
-          <li>サービス利用に関するログ情報</li>
-        </ul>
-      </section>
+    <div class="ts-section-card">
 
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">2. 情報の利用目的</h2>
-        <ul class="list-disc list-inside space-y-1 text-gray-600">
-          <li>本サービスの提供・運営のため</li>
-          <li>ユーザーからのお問い合わせに対応するため</li>
-          <li>サービスの改善・新機能開発のため</li>
-          <li>不正利用の防止のため</li>
-        </ul>
-      </section>
+      <%# ─── ヘッダー ─── %>
+      <div style="margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid #C8EFEB;">
+        <h1 style="font-size: 26px; font-weight: 800; color: #0F2027; margin: 0 0 8px;">プライバシーポリシー</h1>
+        <p style="font-size: 13px; color: #9BB5BC; margin: 0;">最終更新日：2026年2月17日</p>
+      </div>
 
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">3. 第三者への提供</h2>
-        <p>本サービスは、法令に基づく場合を除き、ユーザーの個人情報を第三者に提供することはありません。ただし、AIアイデア生成・クラスタリング機能においては、入力された内容をAnthropic社のAPIに送信します。</p>
-      </section>
+      <%# ─── 本文 ─── %>
+      <div style="display: flex; flex-direction: column; gap: 28px;">
 
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">4. Cookieの使用</h2>
-        <p>本サービスでは、ログイン状態の維持のためにCookieを使用しています。ブラウザの設定でCookieを無効にすることも可能ですが、その場合一部機能が利用できなくなることがあります。</p>
-      </section>
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">1. 収集する情報</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0 0 10px; color: #2D4A52;">本サービスでは、以下の情報を収集します。</p>
+          <ul style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <% [
+              "メールアドレス（ユーザー登録時）",
+              "SNSログイン時のプロフィール情報（名前・メールアドレス）",
+              "本サービス上で作成したブレストおよびアイデアの内容",
+              "サービス利用に関するログ情報"
+            ].each do |item| %>
+              <li style="font-size: 14px; color: #2D4A52; display: flex; align-items: baseline; gap: 8px;">
+                <span style="color: #0ABFA3; font-weight: 700; flex-shrink: 0;">•</span>
+                <%= item %>
+              </li>
+            <% end %>
+          </ul>
+        </section>
 
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">5. 情報の管理</h2>
-        <p>本サービスは、収集した情報の漏えい・滅失・毀損の防止のため、適切なセキュリティ対策を実施します。</p>
-      </section>
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">2. 情報の利用目的</h2>
+          <ul style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <% [
+              "本サービスの提供・運営のため",
+              "ユーザーからのお問い合わせに対応するため",
+              "サービスの改善・新機能開発のため",
+              "不正利用の防止のため"
+            ].each do |item| %>
+              <li style="font-size: 14px; color: #2D4A52; display: flex; align-items: baseline; gap: 8px;">
+                <span style="color: #0ABFA3; font-weight: 700; flex-shrink: 0;">•</span>
+                <%= item %>
+              </li>
+            <% end %>
+          </ul>
+        </section>
 
-      <section>
-        <h2 class="text-xl font-bold text-gray-800 mb-3">6. お問い合わせ</h2>
-        <p>プライバシーポリシーに関するお問い合わせは、サービス内のお問い合わせフォームよりご連絡ください。</p>
-      </section>
-    </div>
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">3. 第三者への提供</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスは、法令に基づく場合を除き、ユーザーの個人情報を第三者に提供することはありません。ただし、AIアイデア生成・クラスタリング機能においては、入力された内容をAnthropic社のAPIに送信します。</p>
+        </section>
 
-    <div class="mt-8 pt-6 border-t border-gray-200">
-      <% if user_signed_in? %>
-        <%= link_to "← ダッシュボードに戻る", dashboard_path, class: "text-indigo-600 hover:text-indigo-800" %>
-      <% else %>
-        <%= link_to "← トップページに戻る", root_path, class: "text-indigo-600 hover:text-indigo-800" %>
-      <% end %>
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">4. Cookieの使用</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスでは、ログイン状態の維持のためにCookieを使用しています。ブラウザの設定でCookieを無効にすることも可能ですが、その場合一部機能が利用できなくなることがあります。</p>
+        </section>
+
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">5. 情報の管理</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスは、収集した情報の漏えい・滅失・毀損の防止のため、適切なセキュリティ対策を実施します。</p>
+        </section>
+
+        <section>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">6. お問い合わせ</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">プライバシーポリシーに関するお問い合わせは、サービス内のお問い合わせフォームよりご連絡ください。</p>
+        </section>
+
+      </div>
+
+      <%# ─── フッターリンク ─── %>
+      <div style="margin-top: 32px; padding-top: 20px; border-top: 1.5px solid #C8EFEB;">
+        <% if user_signed_in? %>
+          <%= link_to "← ダッシュボードに戻る", dashboard_path,
+                style: "font-size: 14px; color: #0ABFA3; font-weight: 700; text-decoration: none;" %>
+        <% else %>
+          <%= link_to "← トップページに戻る", root_path,
+                style: "font-size: 14px; color: #0ABFA3; font-weight: 700; text-decoration: none;" %>
+        <% end %>
+      </div>
+
     </div>
   </div>
 </div>
