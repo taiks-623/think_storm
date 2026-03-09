@@ -1,3 +1,4 @@
+<%# app/views/shared/_header.html.erb %>
 <% is_top = current_page?(root_path) %>
 
 <header class="ts-header <%= is_top ? 'ts-header-top' : 'ts-header-default' %>">
@@ -14,10 +15,12 @@
     <div class="ts-header-nav">
       <% if user_signed_in? %>
         <%= link_to "ダッシュボード", dashboard_path, class: "ts-nav-link" %>
+        <%= link_to "使い方", guide_path, class: "ts-nav-link" %>
         <%= link_to "アカウント設定", edit_users_profile_path, class: "ts-nav-link" %>
         <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
               class: "ts-nav-link ts-nav-logout" %>
       <% else %>
+        <%= link_to "使い方", guide_path, class: "ts-nav-link" %>
         <%= link_to "ログイン", new_user_session_path, class: "ts-nav-link" %>
         <%= link_to "新規登録", new_user_registration_path, class: "ts-btn-nav-cta" %>
       <% end %>
