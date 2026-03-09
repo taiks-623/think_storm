@@ -201,7 +201,7 @@
 }
 
 .ts-section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
   letter-spacing: -1px;
@@ -297,7 +297,7 @@
 .ts-tag-purple { background: var(--purple-light); color: var(--purple); }
 
 .ts-feature-text h3 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
   font-size: 24px; font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--ink);
