@@ -31,13 +31,13 @@
                 style: "width: 100%; border: 1.5px solid #C8EFEB; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #0F2027; background: #FFFFFF; outline: none; font-family: inherit; box-sizing: border-box; transition: border-color 0.2s;",
                 onfocus: "this.style.borderColor='#0ABFA3'",
                 onblur: "this.style.borderColor='#C8EFEB'" %>
-          <p style="font-size: 12px; color: #9BB5BC; margin: 6px 0 0;">未設定の場合はメールアドレスが表示されます</p>
+          <p style="font-size: 12px; color: #9BB5BC; margin: 6px 0 0;">未設定の場合は「名前未設定」と表示されます</p>
         </div>
 
         <div style="margin-bottom: 18px;">
           <%= f.label :email, "メールアドレス",
                 style: "display: block; font-size: 13px; font-weight: 700; color: #0F2027; margin-bottom: 6px;" %>
-          <p style="font-size: 14px; color: #0F2027; margin: 0;"><%= current_user.email %></p>
+          <p style="font-size: 14px; color: #0F2027; margin: 0; word-break: break-all;"><%= current_user.email %></p>
           <% if current_user.unconfirmed_email.present? %>
             <p style="font-size: 12px; color: #E67E22; margin: 4px 0 0;">確認待ち: <%= current_user.unconfirmed_email %></p>
           <% end %>
