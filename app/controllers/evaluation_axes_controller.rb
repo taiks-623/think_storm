@@ -53,6 +53,10 @@ class EvaluationAxesController < ApplicationController
   end
 
   def evaluation_axis_params
-    params.require(:evaluation_axis).permit(:name, :position)
+    if params[:evaluation_axis]
+      params.require(:evaluation_axis).permit(:name, :position)
+    else
+      params.permit(:name, :position)
+    end
   end
 end

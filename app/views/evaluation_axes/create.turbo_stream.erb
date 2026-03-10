@@ -8,7 +8,7 @@
 
 <% @brainstorm.ideas.includes(:evaluations, :tags, :groups).each do |idea| %>
   <%= turbo_stream.replace "idea-card-#{idea.id}" do %>
-    <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: idea.groups.first %>
+    <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: idea.groups.first, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
   <% end %>
 <% end %>
 

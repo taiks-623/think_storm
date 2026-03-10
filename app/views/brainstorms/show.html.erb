@@ -1,3 +1,4 @@
+<%= turbo_stream_from @brainstorm %>
 <% content_for :og_title, "#{@brainstorm.title} | ThinkStorm" %>
 <% content_for :og_description, "#{@brainstorm.ideas.count}個のアイデアが生成されました" %>
 <% content_for :og_type, "article" %>
@@ -216,7 +217,7 @@
                   data-group-id="<%= group.id %>"
                   data-brainstorm-id="<%= @brainstorm.id %>">
                 <% group.ideas.each do |idea| %>
-                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group %>
+                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
                 <% end %>
               </div>
             </div>
@@ -231,7 +232,7 @@
                   data-group-id=""
                   data-brainstorm-id="<%= @brainstorm.id %>">
                 <% ungrouped_ideas.each do |idea| %>
-                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
+                  <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
                 <% end %>
               </div>
             </div>
@@ -242,7 +243,7 @@
         <div class="space-y-3" id="ideas-list">
           <% ideas_to_show = @filtered_ideas || @brainstorm.ideas.where.not(id: nil) %>
           <% ideas_to_show.each do |idea| %>
-            <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil %>
+            <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
           <% end %>
         </div>
       <% end %>
@@ -283,7 +284,7 @@
       const axisLabels = canvas.dataset.axisLabels ? canvas.dataset.axisLabels.split(',') : [];
       if (axisIds.length < 2) return;
 
-      const card = document.querySelector(`.chart-card[data-idea-id="${ideaId}"]`);
+      const card = document.querySelector(`.idea-card[data-idea-id="${ideaId}"]`);
       const scores = axisIds.map(axisId => {
         if (!card) return 0;
         const axisScores = card.dataset.axisScores.split(',').map(s => s.split(':'));
@@ -425,7 +426,7 @@
           Object.values(charts).forEach(chart => chart.destroy());
           Object.keys(charts).forEach(key => delete charts[key]);
           initCharts();
-        }, 100);
+        }, 500);
       }
     };
   });

@@ -1,9 +1,17 @@
 <%# app/views/ideas/_idea_card.html.erb %>
 
+<% axis_scores = brainstorm.evaluation_axes.map { |axis|
+  score = idea.evaluations.find { |e| e.evaluation_axis_id == axis.id }&.score || 0
+  "#{axis.id}:#{score}"
+}.join(',') %>
+<% total_score = idea.evaluations.sum(&:score) %>
+
 <div class="ts-idea-card idea-card"
      id="idea-card-<%= idea.id %>"
-     data-idea-id="<%= idea.id %>">
-
+     data-idea-id="<%= idea.id %>"
+     data-axis-scores="<%= axis_scores %>"
+     data-total-score="<%= total_score %>"
+     data-has-evaluation="<%= idea.evaluations.any? %>">
   <%# ─── 上部：本文エリア ─── %>
   <div class="ts-idea-top">
 
@@ -22,7 +30,7 @@
       <div class="ts-idea-meta-right">
         <%# 投票（turbo_stream） %>
         <div id="vote-<%= idea.id %>">
-          <% voted = idea.votes.any? { |v| v.user_id == current_user.id } %>
+          <% voted = idea.votes.any? { |v| v.user_id == current_user_id } %>
           <% if voted %>
             <%= button_to "👍 #{idea.votes.size}",
                   brainstorm_idea_vote_path(brainstorm, idea),
@@ -56,7 +64,7 @@
   </div>
 
   <%# ─── 下部：評価スコア左 + グループ・操作右 ─── %>
-  <% show_bottom = brainstorm.evaluation_axes.any? || brainstorm.groups.any? || brainstorm.editor?(current_user) %>
+  <% show_bottom = brainstorm.evaluation_axes.any? || brainstorm.groups.any? || is_editor %>
   <% if show_bottom %>
     <div class="ts-idea-bottom">
 
@@ -108,7 +116,7 @@
                 brainstorm_idea_conversation_path(brainstorm, idea),
                 class: "ts-btn ts-btn-ghost ts-btn-xs",
                 data: { turbo_frame: "modal" } %>
-          <% if brainstorm.editor?(current_user) %>
+          <% if is_editor %>
             <%= link_to "編集",
                   edit_brainstorm_idea_path(brainstorm, idea),
                   class: "ts-btn ts-btn-ghost ts-btn-xs" %>
@@ -128,7 +136,7 @@
   <div id="comments-<%= idea.id %>" class="hidden ts-comment-area">
     <div id="comment-list-<%= idea.id %>" class="space-y-2 mb-3">
       <% idea.comments.includes(:user).order(:created_at).each do |comment| %>
-        <%= render "comments/comment", comment: comment, brainstorm: brainstorm, idea: idea %>
+        <%= render "comments/comment", comment: comment, brainstorm: brainstorm, idea: idea, current_user_id: current_user_id, is_owner: is_editor %>
       <% end %>
     </div>
     <%= form_with url: brainstorm_idea_comments_path(brainstorm, idea),

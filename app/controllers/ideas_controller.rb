@@ -14,7 +14,7 @@ class IdeasController < ApplicationController
       BrainstormChannel.broadcast_to(
         @brainstorm,
         event: "idea_created",
-        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil })
+        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) })
       )
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを追加しました"
     else
@@ -53,7 +53,7 @@ class IdeasController < ApplicationController
         @brainstorm,
         event: "idea_updated",
         idea_id: @idea.id.to_s,
-        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil })
+        html: render_to_string(partial: "ideas/idea_card", locals: { idea: @idea, brainstorm: @brainstorm, current_group: nil, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) })
       )
       redirect_to brainstorm_path(@brainstorm), notice: "アイデアを更新しました"
     else
