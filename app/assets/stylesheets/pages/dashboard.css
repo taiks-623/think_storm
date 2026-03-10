@@ -296,3 +296,58 @@
 .ts-footer {
   margin-top: auto;
 }
+
+/* ─── タブレット（〜768px） ─── */
+@media (max-width: 768px) {
+  .ts-dashboard {
+    padding: 32px 20px 60px;
+  }
+  .ts-dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .ts-dashboard-title {
+    font-size: 22px;
+  }
+  .ts-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ts-search-input-wrap {
+    min-width: 0;
+  }
+  .ts-search-actions {
+    width: 100%;
+  }
+  .ts-btn-search,
+  .ts-btn-clear {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+  .ts-card-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+/* ─── スマホ（〜480px） ─── */
+@media (max-width: 480px) {
+  .ts-dashboard {
+    padding: 24px 16px 48px;
+  }
+  .ts-dashboard-title {
+    font-size: 20px;
+  }
+  .ts-card-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .ts-empty-state {
+    padding: 48px 16px;
+  }
+  .ts-empty-title {
+    font-size: 18px;
+  }
+}

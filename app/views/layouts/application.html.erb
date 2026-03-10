@@ -27,6 +27,43 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Syne:wght@700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+    (function() {
+      function initHamburger() {
+        var btn = document.getElementById('ts-hamburger');
+        var menu = document.getElementById('ts-mobile-menu');
+        if (!btn || !menu || btn.dataset.initialized) return;
+        btn.dataset.initialized = 'true';
+
+        btn.addEventListener('click', function() {
+          var open = menu.classList.toggle('ts-mobile-menu-open');
+          btn.classList.toggle('ts-hamburger-open', open);
+          btn.setAttribute('aria-expanded', String(open));
+          menu.setAttribute('aria-hidden', String(!open));
+        });
+      }
+
+      // turbo:load と DOMContentLoaded 両方に対応
+      document.addEventListener('turbo:load', function() {
+        // 初期化フラグをリセットしてから再初期化
+        var btn = document.getElementById('ts-hamburger');
+        if (btn) delete btn.dataset.initialized;
+        initHamburger();
+      });
+
+      document.addEventListener('turbo:before-visit', function() {
+        var btn = document.getElementById('ts-hamburger');
+        var menu = document.getElementById('ts-mobile-menu');
+        if (menu) menu.classList.remove('ts-mobile-menu-open');
+        if (btn) {
+          btn.classList.remove('ts-hamburger-open');
+          btn.setAttribute('aria-expanded', 'false');
+          delete btn.dataset.initialized;
+        }
+      });
+    })();
+    </script>
   </head>
 
   <body class="flex flex-col min-h-screen" style="background-color: #0F2027;">
