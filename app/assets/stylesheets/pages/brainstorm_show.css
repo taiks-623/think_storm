@@ -26,6 +26,7 @@
   align-items: flex-start;
   gap: 24px;
   flex-wrap: wrap;
+  margin-bottom: 24px;
 }
 
 .ts-brainstorm-title {
