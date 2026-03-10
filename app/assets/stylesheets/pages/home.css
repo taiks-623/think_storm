@@ -48,6 +48,7 @@
   padding: 100px 24px 60px;
   position: relative;
   text-align: center;
+  overflow: hidden; 
 }
 .ts-hero::before {
   content: '';
@@ -431,4 +432,146 @@
 @keyframes ts-fade-up {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── タブレット（〜768px） ─── */
+@media (max-width: 768px) {
+  .ts-hero {
+    padding: 80px 20px 48px;
+    min-height: auto;
+  }
+  .ts-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+  }
+  .ts-btn-primary,
+  .ts-btn-secondary {
+    justify-content: center;
+    text-align: center;
+  }
+  /* フロー：5列→横スクロール */
+  .ts-flow-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ts-flow-grid::before {
+    display: none;
+  }
+  /* 機能紹介：2列→1列 */
+  .ts-feature-row {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .ts-feature-row-reverse {
+    direction: ltr;
+  }
+  .ts-feature-text {
+    padding: 32px 24px;
+    order: 1;
+  }
+  .ts-feature-visual {
+    min-height: 220px;
+    order: 2;
+  }
+  /* 比較表 */
+  .ts-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ts-comparison-table th,
+  .ts-comparison-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  /* CTA */
+  .ts-cta-section {
+    padding: 72px 20px;
+  }
+  .ts-section {
+    padding: 72px 20px;
+  }
+}
+
+/* ─── スマホ（〜480px） ─── */
+@media (max-width: 480px) {
+  .ts-hero {
+    padding: 72px 16px 40px;
+  }
+  .ts-hero-badge {
+    font-size: 11px;
+    margin-bottom: 20px;
+  }
+  .ts-hero-sub {
+    font-size: 15px;
+  }
+  .ts-hero-actions {
+    margin-top: 28px;
+    max-width: 100%;
+  }
+  /* フロー：2列 */
+  .ts-flow-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .ts-flow-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+  }
+  .ts-flow-name {
+    font-size: 13px;
+  }
+  .ts-flow-desc {
+    font-size: 12px;
+  }
+  /* 機能紹介 */
+  .ts-feature-text {
+    padding: 24px 16px;
+  }
+  .ts-feature-text h3 {
+    font-size: 20px;
+  }
+  .ts-feature-text p {
+    font-size: 14px;
+  }
+  .ts-feature-visual {
+    min-height: 180px;
+  }
+  /* mock card */
+  .ts-mock-card {
+    max-width: 200px;
+    padding: 12px 14px;
+  }
+  /* セクション */
+  .ts-section {
+    padding: 56px 16px;
+  }
+  .ts-section-sub {
+    font-size: 15px;
+  }
+  /* CTA */
+  .ts-cta-section {
+    padding: 56px 16px;
+  }
+  .ts-cta-sub {
+    font-size: 16px;
+  }
+  /* 比較表フォントサイズ */
+  .ts-comparison-table th,
+  .ts-comparison-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .ts-orb {
+    display: none;
+  }
 }

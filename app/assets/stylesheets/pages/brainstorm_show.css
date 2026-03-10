@@ -702,3 +702,117 @@
 .ts-eval-toggle-icon.ts-collapsed svg {
   transform: rotate(-90deg);
 }
+
+/* ─── タブレット（〜768px） ─── */
+@media (max-width: 768px) {
+  .ts-brainstorm-show {
+    padding: 24px 16px 60px;
+  }
+  .ts-section-card {
+    padding: 20px 18px;
+  }
+  .ts-brainstorm-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .ts-brainstorm-title {
+    font-size: 22px;
+  }
+  .ts-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .ts-ideas-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ts-ideas-actions {
+    width: 100%;
+  }
+  /* アイデアカード下部：縦積みに */
+  .ts-idea-bottom {
+    flex-direction: column;
+  }
+  .ts-idea-scores {
+    border-right: none;
+    border-bottom: 1px solid #C8EFEB;
+  }
+  .ts-idea-actions-col {
+    min-width: 0;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+  .ts-idea-actions-btns {
+    justify-content: flex-start;
+  }
+  /* グループ名フォントサイズ縮小 */
+  .ts-group-name {
+    font-size: 15px;
+  }
+  .ts-axis-form {
+    flex-direction: column;
+  }
+  /* 評価軸 */
+  .ts-score-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .ts-score-label {
+    min-width: 56px;
+    font-size: 11px;
+  }
+}
+
+/* ─── スマホ（〜480px） ─── */
+@media (max-width: 480px) {
+  .ts-brainstorm-show {
+    padding: 16px 12px 48px;
+  }
+  .ts-section-card {
+    padding: 16px 14px;
+  }
+  .ts-brainstorm-title {
+    font-size: 19px;
+  }
+  .ts-section-heading {
+    font-size: 16px;
+  }
+  .ts-ideas-title {
+    font-size: 17px;
+  }
+  .ts-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .ts-btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  /* アイデアカード上部のメタ行 */
+  .ts-idea-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .ts-idea-meta-right {
+    align-self: flex-end;
+  }
+  /* グループヘッダー */
+  .ts-group-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ts-group-actions-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  /* ボタン群 */
+  .ts-header-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}

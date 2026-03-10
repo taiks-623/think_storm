@@ -4,15 +4,14 @@
 <header class="ts-header <%= is_top ? 'ts-header-top' : 'ts-header-default' %>">
   <nav class="ts-header-inner">
 
-    <%# ロゴ %>
     <div class="ts-header-logo">
       <%= link_to user_signed_in? ? dashboard_path : root_path, class: "ts-logo-link" do %>
         ThinkStorm
       <% end %>
     </div>
 
-    <%# ナビ %>
-    <div class="ts-header-nav">
+    <%# PC ナビ %>
+    <div class="ts-header-nav ts-nav-desktop">
       <% if user_signed_in? %>
         <%= link_to "ダッシュボード", dashboard_path, class: "ts-nav-link" %>
         <%= link_to "使い方", guide_path, class: "ts-nav-link" %>
@@ -26,5 +25,29 @@
       <% end %>
     </div>
 
+    <%# ハンバーガーボタン %>
+    <button class="ts-hamburger" id="ts-hamburger" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
   </nav>
 </header>
+
+<%# モバイルメニュー：ヘッダーの外、position:fixed で重ねる %>
+<div class="ts-mobile-menu" id="ts-mobile-menu" aria-hidden="true">
+  <div class="ts-mobile-menu-inner">
+    <% if user_signed_in? %>
+      <%= link_to "ダッシュボード", dashboard_path, class: "ts-mobile-link" %>
+      <%= link_to "使い方", guide_path, class: "ts-mobile-link" %>
+      <%= link_to "アカウント設定", edit_users_profile_path, class: "ts-mobile-link" %>
+      <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+            class: "ts-mobile-link ts-mobile-logout" %>
+    <% else %>
+      <%= link_to "使い方", guide_path, class: "ts-mobile-link" %>
+      <%= link_to "ログイン", new_user_session_path, class: "ts-mobile-link" %>
+      <%= link_to "新規登録", new_user_registration_path, class: "ts-mobile-cta" %>
+    <% end %>
+  </div>
+</div>
+
+
