@@ -1,15 +1,19 @@
-  <div class="bg-white rounded-lg border p-8 text-center">
-    <h1 class="text-2xl font-bold mb-2">ブレストへの招待</h1>
-    <p class="text-gray-600 mb-6">
-      <span class="font-semibold"><%= @invitation.brainstorm.title %></span>
+<div class="min-h-screen flex items-center justify-center" style="background-color: #f0fdfb;">
+  <div class="bg-white rounded-2xl border p-10 text-center max-w-md w-full mx-4" style="border-color: #C8EFEB;">
+    <div class="text-4xl mb-4">🌊</div>
+    <h1 class="text-2xl font-bold mb-2" style="color: #0F2027; font-family: 'Syne', sans-serif;">ブレストへの招待</h1>
+    <p class="mb-6" style="color: #4B5563;">
+      <span class="font-semibold" style="color: #0ABFA3;"><%= @invitation.brainstorm.title %></span>
       に<%= @invitation.role == "editor" ? "編集者" : "閲覧者" %>として招待されています
     </p>
 
     <%= button_to "参加する", join_brainstorm_confirm_path(@invitation.token),
           method: :post,
-          class: "w-full py-3 bg-blue-600 text-white rounded-lg font-semibold mb-3" %>
+          class: "w-full py-3 rounded-xl font-semibold mb-3 text-white transition-opacity hover:opacity-90",
+          style: "background: linear-gradient(135deg, #0ABFA3, #00C8D7);" %>
 
     <%= link_to "キャンセル", brainstorms_path,
-          class: "block text-sm text-gray-500 hover:underline" %>
+          class: "block text-sm hover:underline",
+          style: "color: #9CA3AF;" %>
   </div>
 </div>
