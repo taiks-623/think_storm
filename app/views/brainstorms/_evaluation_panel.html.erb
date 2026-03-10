@@ -28,7 +28,7 @@
       <select id="sort-axis" onchange="applyFilter()"
               class="ts-axis-input" style="padding: 6px 10px; font-size: 13px; width: auto;">
         <option value="">すべて（合計）</option>
-        <% @brainstorm.evaluation_axes.order(:position, :created_at).each do |axis| %>
+        <% brainstorm.evaluation_axes.order(:position, :created_at).each do |axis| %>
           <option value="<%= axis.id %>"><%= axis.name %></option>
         <% end %>
       </select>
@@ -54,8 +54,8 @@
 
     <%# ── チャートグリッド ── %>
     <div id="chart-grid" class="grid grid-cols-2 gap-4">
-      <% axes = @brainstorm.evaluation_axes.order(:position, :created_at).to_a %>
-      <% @brainstorm.ideas.includes(:evaluations, :votes, :comments).each do |idea| %>
+      <% axes = brainstorm.evaluation_axes.order(:position, :created_at).to_a %>
+      <% brainstorm.ideas.includes(:evaluations, :votes, :comments).each do |idea| %>
         <% evaluations = idea.evaluations.select { |e| axes.map(&:id).include?(e.evaluation_axis_id) } %>
         <% axis_scores = axes.map { |a| [a.id, evaluations.find { |e| e.evaluation_axis_id == a.id }&.score || 0] } %>
         <% total_score = axis_scores.sum { |_, s| s } %>

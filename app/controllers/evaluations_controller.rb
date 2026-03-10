@@ -10,7 +10,7 @@ class EvaluationsController < ApplicationController
       score: params[:score]
     )
     if @evaluation.save
-      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
+      broadcast_evaluation_update
       respond_to do |format|
         format.turbo_stream
       end
@@ -22,7 +22,7 @@ class EvaluationsController < ApplicationController
   def update
     @evaluation = @idea.evaluations.find(params[:id])
     if @evaluation.update(score: params[:score])
-      BrainstormChannel.broadcast_to(@brainstorm, event: "group_updated")
+      broadcast_evaluation_update
       respond_to do |format|
         format.turbo_stream
       end
@@ -32,6 +32,32 @@ class EvaluationsController < ApplicationController
   end
 
   private
+
+  def broadcast_evaluation_update
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @brainstorm,
+      target: "idea-card-#{@idea.id}",
+      partial: "ideas/idea_card",
+      locals: {
+        idea: @idea.reload,
+        brainstorm: @brainstorm,
+        current_group: @idea.groups.first,
+        current_user_id: nil,
+        is_editor: false
+      }
+    )
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @brainstorm,
+      target: "evaluation-panel",
+      partial: "brainstorms/evaluation_panel",
+      locals: { brainstorm: @brainstorm.reload }
+    )
+    Turbo::StreamsChannel.broadcast_replace_to(
+      @brainstorm,
+      target: "chart-reinit-flag",
+      html: '<span id="chart-reinit-flag" data-reinit="true"></span>'
+    )
+  end
 
   def set_brainstorm
     @brainstorm = Brainstorm.find_by(id: params[:brainstorm_id])

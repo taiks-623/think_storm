@@ -4,7 +4,7 @@
     <p class="text-sm text-gray-600 mt-0.5"><%= comment.content %></p>
     <span class="text-xs text-gray-400"><%= comment.created_at.strftime("%m/%d %H:%M") %></span>
   </div>
-  <% if comment.user == current_user || brainstorm.owner?(current_user) %>
+  <% if current_user_id && (comment.user_id == current_user_id || brainstorm.owner_id == current_user_id) %>
     <%= button_to "×",
           brainstorm_idea_comment_path(brainstorm, idea, comment),
           method: :delete,
