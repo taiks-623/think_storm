@@ -2,6 +2,7 @@ class EvaluationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_brainstorm
   before_action :set_idea
+  before_action :require_editor
 
   def create
     @evaluation_axis = @brainstorm.evaluation_axes.find(params[:evaluation_axis_id])
@@ -70,5 +71,11 @@ class EvaluationsController < ApplicationController
     @idea = @brainstorm.ideas.find(params[:idea_id])
   rescue ActiveRecord::RecordNotFound
     render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
+  end
+
+  def require_editor
+    unless @brainstorm.owner?(current_user) || @brainstorm.editor?(current_user)
+      head :forbidden
+    end
   end
 end
