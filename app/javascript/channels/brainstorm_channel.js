@@ -78,25 +78,42 @@ function handleGroupUpdated(data) {
   window.location.reload()
 }
 
+function getAvatarColor(userId) {
+  const colors = [
+    '#0ABFA3', '#00C8D7', '#6C47FF', '#F59E0B',
+    '#EF4444', '#10B981', '#3B82F6', '#EC4899'
+  ]
+  return colors[userId % colors.length]
+}
+
+function getInitial(name) {
+  if (!name || name === '名前未設定') return '?'
+  // 日本語対応：最初の1文字
+  return Array.from(name)[0].toUpperCase()
+}
+
 function handleMemberPresence(data) {
   const container = document.querySelector('#online-members')
   if (!container) return
 
-  // 全バッジを一旦削除して再描画
   container.innerHTML = ''
 
   data.online_members.forEach(member => {
-    const badge = document.createElement('span')
-    badge.className = 'online-member-badge inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs'
-    badge.dataset.userId = member.id
-    badge.innerHTML = `
-      <span class="w-2 h-2 bg-green-500 rounded-full inline-block"></span>
-      ${member.name}
+    const color = getAvatarColor(member.id)
+    const initial = getInitial(member.name)
+
+    const wrapper = document.createElement('div')
+    wrapper.className = 'online-member-avatar'
+    wrapper.dataset.userId = member.id
+    wrapper.title = member.name
+    wrapper.innerHTML = `
+      <div class="ts-avatar-circle" style="background-color: ${color};">
+        ${initial}
+      </div>
     `
-    container.appendChild(badge)
+    container.appendChild(wrapper)
   })
 }
-
 document.addEventListener('turbo:load', () => {
   const brainstormEl = document.querySelector('[data-brainstorm-id]')
   if (brainstormEl) {
