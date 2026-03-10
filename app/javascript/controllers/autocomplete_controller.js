@@ -34,7 +34,7 @@ export default class extends Controller {
     }
 
     this.suggestionsTarget.innerHTML = suggestions.map(title => `
-      <div class="suggestion-item px-4 py-2 hover:bg-indigo-50 cursor-pointer text-gray-700 text-sm"
+      <div class="suggestion-item px-4 py-2 hover:bg-teal-50 cursor-pointer text-gray-700 text-sm"
            data-action="click->autocomplete#select"
            data-title="${title}">
         ${title}
