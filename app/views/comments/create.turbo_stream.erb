@@ -1,3 +1,8 @@
 <%= turbo_stream.append "comment-list-#{@idea.id}" do %>
-  <%= render "comments/comment", comment: @comment, brainstorm: @brainstorm, idea: @idea %>
+  <%= render "comments/comment",
+             comment: @comment,
+             brainstorm: @brainstorm,
+             idea: @idea,
+             current_user_id: current_user.id,
+             is_editor: @brainstorm.editor?(current_user) %>
 <% end %>
