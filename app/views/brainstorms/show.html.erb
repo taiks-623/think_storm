@@ -21,18 +21,23 @@
           <span class="ts-members-label">メンバー：</span>
           <span class="ts-member-badge ts-member-badge-owner">
             <%= @brainstorm.user.display_name %>
+            <% if @brainstorm.user == current_user && current_user.name.blank? %>
+              <%= link_to "設定する", edit_users_profile_path, class: "ts-set-name-link" %>
+            <% end %>
             <span class="ts-member-role ts-role-owner">オーナー</span>
           </span>
           <% @brainstorm.brainstorm_members.includes(:user).each do |member| %>
             <span class="ts-member-badge <%= member.role == 'editor' ? 'ts-member-badge-editor' : 'ts-member-badge-viewer' %>">
               <%= member.user.display_name %>
+              <% if member.user == current_user && current_user.name.blank? %>
+                <%= link_to "設定する", edit_users_profile_path, class: "ts-set-name-link" %>
+              <% end %>
               <span class="ts-member-role <%= member.role == 'editor' ? 'ts-role-editor' : 'ts-role-viewer' %>">
                 <%= member.role == 'editor' ? '編集者' : '閲覧者' %>
               </span>
             </span>
           <% end %>
         </div>
-      </div>
 
       <div class="flex flex-col items-end gap-3">
         <%# オンラインメンバー %>

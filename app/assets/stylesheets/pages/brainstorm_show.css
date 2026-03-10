@@ -816,3 +816,15 @@
     gap: 6px;
   }
 }
+
+.ts-set-name-link {
+  font-size: 0.7rem;
+  color: #0ABFA3;
+  text-decoration: underline;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.ts-set-name-link:hover {
+  color: #00C8D7;
+}
