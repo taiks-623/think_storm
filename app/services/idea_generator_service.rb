@@ -4,7 +4,7 @@ class IdeaGeneratorService
     @client = Anthropic::Client.new
   end
 
-  def generate_ideas(count: 15)
+  def generate_ideas(count: 20)
     prompt = build_prompt(count)
 
     begin
@@ -41,6 +41,7 @@ class IdeaGeneratorService
       - 各アイデアは具体的で実現可能なものにしてください
       - 多様な視点からアイデアを出してください
       - 各アイデアは1-2文程度の簡潔な説明にしてください
+      - マークダウン記法（**や#など）は使わず、プレーンテキストで出力してください
       - 以下の形式で出力してください（番号付きリスト）:
 
       1. [アイデア内容]
