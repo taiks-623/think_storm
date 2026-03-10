@@ -248,7 +248,7 @@
         <div class="space-y-3" id="ideas-list">
           <% ideas_to_show = @filtered_ideas || @brainstorm.ideas.where.not(id: nil) %>
           <% ideas_to_show.each do |idea| %>
-            <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: group, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
+            <%= render "ideas/idea_card", idea: idea, brainstorm: @brainstorm, current_group: nil, current_user_id: current_user.id, is_editor: @brainstorm.editor?(current_user) %>
           <% end %>
         </div>
       <% end %>

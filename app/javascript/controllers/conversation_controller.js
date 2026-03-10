@@ -35,7 +35,7 @@ export default class extends Controller {
     const div = document.createElement("div")
     div.classList.add("flex", "justify-end")
     div.innerHTML = `
-      <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm bg-indigo-600 text-white">
+      <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg text-sm bg-teal-600 text-white">
         <p>${this.escapeHtml(message)}</p>
       </div>
     `
