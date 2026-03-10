@@ -828,3 +828,44 @@
 .ts-set-name-link:hover {
   color: #00C8D7;
 }
+
+.online-member-avatar {
+  position: relative;
+  cursor: default;
+}
+
+.ts-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* ホバーで名前を表示 */
+.online-member-avatar::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0F2027;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.online-member-avatar:hover::after {
+  opacity: 1;
+}
