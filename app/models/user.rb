@@ -26,6 +26,6 @@ class User < ApplicationRecord
   end
 
   def display_name
-    name.presence || email
+    name.presence || "名前未設定"
   end
 end
