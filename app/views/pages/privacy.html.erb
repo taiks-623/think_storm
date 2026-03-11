@@ -8,21 +8,20 @@
       <%# ─── ヘッダー ─── %>
       <div style="margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1.5px solid #C8EFEB;">
         <h1 style="font-size: 26px; font-weight: 800; color: #0F2027; margin: 0 0 8px;">プライバシーポリシー</h1>
-        <p style="font-size: 13px; color: #9BB5BC; margin: 0;">最終更新日：2026年2月17日</p>
+        <p style="font-size: 13px; color: #9BB5BC; margin: 0;">制定日：2026年03月11日</p>
       </div>
 
       <%# ─── 本文 ─── %>
       <div style="display: flex; flex-direction: column; gap: 28px;">
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">1. 収集する情報</h2>
-          <p style="font-size: 14px; line-height: 1.8; margin: 0 0 10px; color: #2D4A52;">本サービスでは、以下の情報を収集します。</p>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">お客様から取得する情報</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0 0 10px; color: #2D4A52;">当社は、お客様から以下の情報を取得します。</p>
           <ul style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
             <% [
-              "メールアドレス（ユーザー登録時）",
-              "SNSログイン時のプロフィール情報（名前・メールアドレス）",
-              "本サービス上で作成したブレストおよびアイデアの内容",
-              "サービス利用に関するログ情報"
+              "氏名（ニックネームやペンネームも含む）",
+              "メールアドレス",
+              "外部サービスでお客様が利用するID、その他外部サービスのプライバシー設定によりお客様が連携先に開示を認めた情報"
             ].each do |item| %>
               <li style="font-size: 14px; color: #2D4A52; display: flex; align-items: baseline; gap: 8px;">
                 <span style="color: #0ABFA3; font-weight: 700; flex-shrink: 0;">•</span>
@@ -33,13 +32,16 @@
         </section>
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">2. 情報の利用目的</h2>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">お客様の情報を利用する目的</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0 0 10px; color: #2D4A52;">当社は、お客様から取得した情報を、以下の目的のために利用します。</p>
           <ul style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
             <% [
-              "本サービスの提供・運営のため",
-              "ユーザーからのお問い合わせに対応するため",
-              "サービスの改善・新機能開発のため",
-              "不正利用の防止のため"
+              "当社サービスに関する登録の受付、お客様の本人確認、認証のため",
+              "お客様からのお問い合わせに対応するため",
+              "当社の規約や法令に違反する行為に対応するため",
+              "当社サービスの変更、提供中止、終了、契約解除をご連絡するため",
+              "当社規約の変更等を通知するため",
+              "以上の他、当社サービスの提供、維持、保護及び改善のため"
             ].each do |item| %>
               <li style="font-size: 14px; color: #2D4A52; display: flex; align-items: baseline; gap: 8px;">
                 <span style="color: #0ABFA3; font-weight: 700; flex-shrink: 0;">•</span>
@@ -50,23 +52,41 @@
         </section>
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">3. 第三者への提供</h2>
-          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスは、法令に基づく場合を除き、ユーザーの個人情報を第三者に提供することはありません。ただし、AIアイデア生成・クラスタリング機能においては、入力された内容をAnthropic社のAPIに送信します。</p>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">安全管理のために講じた措置</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">当社が、お客様から取得した情報に関して安全管理のために講じた措置につきましては、末尾記載のお問い合わせ先にご連絡をいただきましたら、法令の定めに従い個別にご回答させていただきます。</p>
         </section>
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">4. Cookieの使用</h2>
-          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスでは、ログイン状態の維持のためにCookieを使用しています。ブラウザの設定でCookieを無効にすることも可能ですが、その場合一部機能が利用できなくなることがあります。</p>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">第三者提供</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0 0 10px; color: #2D4A52;">当社は、お客様から取得する情報のうち、個人データ（個人情報保護法第１６条第３項）に該当するものについては、あらかじめお客様の同意を得ずに、第三者（日本国外にある者を含みます。）に提供しません。但し、次の場合は除きます。</p>
+          <ul style="margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <% [
+              "個人データの取扱いを外部に委託する場合",
+              "当社や当社サービスが買収された場合",
+              "事業パートナーと共同利用する場合（具体的な共同利用がある場合は、その内容を別途公表します。）",
+              "その他、法律によって合法的に第三者提供が許されている場合"
+            ].each do |item| %>
+              <li style="font-size: 14px; color: #2D4A52; display: flex; align-items: baseline; gap: 8px;">
+                <span style="color: #0ABFA3; font-weight: 700; flex-shrink: 0;">•</span>
+                <%= item %>
+              </li>
+            <% end %>
+          </ul>
         </section>
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">5. 情報の管理</h2>
-          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">本サービスは、収集した情報の漏えい・滅失・毀損の防止のため、適切なセキュリティ対策を実施します。</p>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">プライバシーポリシーの変更</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">当社は、必要に応じて、このプライバシーポリシーの内容を変更します。この場合、変更後のプライバシーポリシーの施行時期と内容を適切な方法により周知または通知します。</p>
         </section>
 
         <section>
-          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">6. お問い合わせ</h2>
-          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">プライバシーポリシーに関するお問い合わせは、サービス内のお問い合わせフォームよりご連絡ください。</p>
+          <h2 style="font-size: 16px; font-weight: 700; color: #0ABFA3; margin: 0 0 10px;">お問い合わせ</h2>
+          <p style="font-size: 14px; line-height: 1.8; margin: 0; color: #2D4A52;">お客様の情報の開示、情報の訂正、利用停止、削除をご希望の場合は、以下のフォームよりご連絡ください。</p>
+          <p style="font-size: 14px; line-height: 1.8; margin: 8px 0 0; color: #2D4A52;">
+            <%= link_to "お問い合わせフォーム", "https://forms.gle/zmjN5X99cQP9BFzE7",
+                  target: "_blank", rel: "noopener noreferrer",
+                  style: "color: #0ABFA3; font-weight: 700; text-decoration: none;" %>
+          </p>
         </section>
 
       </div>
