@@ -132,5 +132,8 @@ AIと協働してアイデアを創出・整理・評価できるブレインス
 ## 画面遷移図
 Figma : https://www.figma.com/design/wIib6ZhpG9hTQKP8SNA10p/ThinkStorm-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=DitdSVw428CpQz2L-1
 
-## ER図
+## ER図(MVPリリース)
 [![Image from Gyazo](https://i.gyazo.com/d6c5cf5e8765580bd20f88ce29387c15.png)](https://gyazo.com/d6c5cf5e8765580bd20f88ce29387c15)
+
+## ER図(本リリース)
+[![Image from Gyazo](https://i.gyazo.com/534314bda3344f134f008194d80a5b22.png)](https://gyazo.com/534314bda3344f134f008194d80a5b22)

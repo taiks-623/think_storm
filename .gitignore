@@ -40,6 +40,8 @@
 /node_modules
 
 /ER図.drawio
+/ER図_本リリース.drawio
+/ER図_本リリース.png
 
 # .github/workflows/*
 .github/dependabot.yml
