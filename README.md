@@ -104,7 +104,7 @@ AIと協働してアイデアを創出・整理・評価できるブレインス
   - 評価結果の可視化（グラフ/チャート）
   - 評価スコアでのソート・フィルタ
   - AI深掘り対話機能（アイデアについて詳しく聞ける）
-  - エクスポート機能（PDF/Markdown）
+  - エクスポート機能（Markdown）
 
 * ユーザー体験向上
   - ユーザー設定ページ（プロフィール編集、メールアドレス変更、パスワード変更）
@@ -116,18 +116,46 @@ AIと協働してアイデアを創出・整理・評価できるブレインス
   - 招待機能（URL共有）
   - リアルタイム共同編集（Action Cable）
   - メンバー一覧表示
-  - 誰が追加したアイデアかの表示
-  - チーム投票機能
-  - 投票結果の集計・可視化
+  - 投票機能
   - コメント機能
 
-## 使用する技術スタック(暫定)
-* フロントエンド : TailwindCSS/Hotwire (Turbo + Stimulus)
-* バックエンド : Ruby on Rails 8.1.1/Ruby 3.3.6
-* データベース : PostgreSQL
-* 認証 : Devise
-* AI連携 : OpenAI API
-* デプロイ : Render
+## 使用技術スタック
+
+### フロントエンド
+* TailwindCSS v4
+* Hotwire（Turbo + Stimulus）
+* Sortable.js（ドラッグ＆ドロップ）
+* Chart.js（レーダーチャート）
+
+### バックエンド
+* Ruby on Rails 8.1.2 / Ruby 3.2.2
+* PostgreSQL
+* Solid Cable（WebSocket）
+* Solid Queue（バックグラウンドジョブ）
+* Solid Cache（キャッシュ）
+
+### 認証
+* Devise 5.0.2
+* Google OAuth / LINE Login（OmniAuth）
+
+### AI連携
+* Claude API（anthropic gem）- アイデア生成・クラスタリング・深掘り対話
+
+### メール配信
+* Resend gem（HTTPS API経由）
+
+### 開発・インフラ
+* Docker（開発環境）
+* esbuild（JSバンドル）
+* Render（ホスティング）
+* GitHub Actions（CI：RSpec / Rubocop / Brakeman / bundler-audit）
+
+### テスト・品質
+* RSpec / FactoryBot
+* Rubocop
+* Brakeman
+* bundler-audit
+
 
 ## 画面遷移図
 Figma : https://www.figma.com/design/wIib6ZhpG9hTQKP8SNA10p/ThinkStorm-%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=DitdSVw428CpQz2L-1
