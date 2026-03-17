@@ -128,7 +128,7 @@ AIと協働してアイデアを創出・整理・評価できるブレインス
 * Chart.js（レーダーチャート）
 
 ### バックエンド
-* Ruby on Rails 8.1.2 / Ruby 3.2.2
+* Ruby on Rails 8.1.2 / Ruby 3.3.6
 * PostgreSQL
 * Solid Cable（WebSocket）
 * Solid Queue（バックグラウンドジョブ）
